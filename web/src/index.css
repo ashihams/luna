@@ -12,31 +12,38 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   user-select: none;
-  background-color: #fcfbf9;
-  color: #171717;
+  background-color: #030303;
+  color: #ffffff;
 }
 
-.ease-premium {
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+.ease-snappy {
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.font-serif-italic {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-style: italic;
+.text-shimmer {
+  background: linear-gradient(90deg, #a78bfa 0%, #ffffff 40%, #ffffff 60%, #22d3ee 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
 }
 
-/* Custom scrollbar */
+.shiny-border-conic {
+  background: conic-gradient(from 0deg, transparent 0%, #8b5cf6 40%, #06b6d4 50%, transparent 60%);
+}
+
+/* Custom dark scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f5f3ef;
+  background: #080808;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d4d0c7;
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4338ca;
+  background: #8b5cf6;
 }

@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
 import {
   ArrowRight,
-  Compass,
-  ChevronDown,
   Sparkles,
   Mountain,
   Radio,
@@ -13,500 +11,479 @@ import {
   Globe,
   Layers,
   ExternalLink,
+  Code2,
+  Copy,
+  Check,
+  Compass,
+  Terminal,
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { setActiveTab } = usePlannerStore();
-  const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
+  const [copied, setCopied] = useState(false);
 
-  const capabilities = [
-    {
-      id: '01',
-      title: '720-Azimuth LOLA Horizons',
-      tag: '[TOPOGRAPHIC RAY TRACING]',
-      desc: 'Standard flat geometric spheres overestimate lunar south pole illumination by up to 18%. Slip Planner evaluates real lunar topography from LOLA 80 m polar stereographic DEMs out to 300 km, subtracting spherical curvature (d²/2R) at 0.5° azimuthal steps.',
-    },
-    {
-      id: '02',
-      title: 'Sub-Second Slip Matrix',
-      tag: '[TYPEDARRAY PREFIX SUMS]',
-      desc: 'Evaluate over 10,200 landing windows (14 candidate sites × 731 dates in 2027–2028) in under 25 milliseconds. Instant slip tolerance computation flags fragile landing windows (<3 days) and immediately identifies recovery windows.',
-    },
-    {
-      id: '03',
-      title: 'SPICE DE421 Ephemeris Engine',
-      tag: '[LUNAR BODY-FIXED MOON_ME]',
-      desc: 'Precision topocentric solar and Earth positions computed at 30-minute intervals across 35,088 timesteps using official NAIF SPICE DE421 kernels and pck00011.tpc. Verified to Δ = 0.0000° against the independent NASA JPL Horizons REST API.',
-    },
-    {
-      id: '04',
-      title: '3D Surface Scene & 19 km Occlusion Ring',
-      tag: '[THREE.JS FIRST-PERSON EYE LEVEL]',
-      desc: 'Stand 2.0 meters above the lunar regolith in interactive 3D. A 513×513 local mesh paired with a procedural 19 km horizon occlusion cylinder physically cuts off grazing solar rays and Earth direct LOS when they sink behind distant rim crests.',
-    },
-    {
-      id: '05',
-      title: 'Sub-Earth Libration Tracking',
-      tag: '[±8.5° NODAL OSCILLATION]',
-      desc: 'Models the Moon’s complex 14-day libration cycle where Earth wobbles by ±8.5° in topocentric elevation. Automatically evaluates antenna elevation masks from 0° to 5° to prevent multipath and terrain signal blockage.',
-    },
+  const handleCopyCode = () => {
+    const codeSnippet = `import { SiteMetricsHelper } from './workers/metrics';
+import { fetchTracks, fetchHorizon } from './data/loader';
+
+// Compute 6.5-day Artemis sortie viability under LOLA 720-azimuth occlusion
+const helper = new SiteMetricsHelper('connecting-ridge', tracks, horizon);
+const metrics = helper.evaluateWindow(plannedDayIndex + slipDays, {
+  stay_days: 6.5,
+  min_sun_fraction: 0.85,
+  max_dark_gap_hours: 24.0,
+  min_earth_fraction: 0.80,
+  antenna_mask_deg: 0.0,
+});
+
+console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipToleranceDays}d\`);`;
+
+    navigator.clipboard.writeText(codeSnippet);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const tickerItems = [
+    { label: 'CANDIDATE SITES', value: '14 ARTEMIS SITES' },
+    { label: 'AZIMUTHAL RESOLUTION', value: '720 AZIMUTHS (0.5°)' },
+    { label: 'COMPUTATION SPEED', value: '<25MS MATRIX ENGINE' },
+    { label: 'EPHEMERIS RANGE', value: '35,088 SPICE INTERVALS' },
+    { label: 'JPL HORIZONS DELTA', value: 'Δ = 0.0000° VERIFIED' },
+    { label: 'SUB-EARTH LIBRATION', value: '±8.5° NODAL BOUNDS' },
+    { label: 'PHYSICAL HORIZON', value: '19 KM OCCLUSION CYLINDER' },
+    { label: 'DATA RUNTIME', value: 'ZERO-RUNTIME OFFLINE' },
   ];
 
-  const workCards = [
+  const featureCards = [
     {
-      title: 'Connecting Ridge (Site 01)',
-      subtitle: 'Artemis III Candidate Crest',
-      tag: 'LAT -89.305° • LON +123.623° • +1304M ELEV',
-      bg: 'from-indigo-100/80 to-purple-100/60',
-      orb: 'bg-indigo-500/25',
-      preview: 'Ridge crest between Shackleton and de Gerlache craters with 71.3% annual illumination.',
-      action: () => setActiveTab('planner'),
-    },
-    {
-      title: '720-Azimuth LOLA Horizon Engine',
-      subtitle: 'Rigorous Topographic Occlusion',
-      tag: '0.5° AZIMUTHAL RESOLUTION • 300KM RAY CAST',
-      bg: 'from-purple-100/80 to-blue-100/60',
-      orb: 'bg-purple-500/25',
-      preview: 'Eliminates flat-horizon errors that conceal 24-hour battery depletion blackout periods.',
+      icon: Mountain,
+      title: '720-Azimuth LOLA Horizons',
+      desc: 'Standard spherical approximations underestimate dark blackout gaps by up to 18%. Slip Planner traces LOLA 80 m polar stereographic DEMs across 300 km, subtracting spherical curvature at 0.5° intervals.',
+      tag: '0.5° TOPOGRAPHIC RAY TRACE',
+      accent: 'text-violet-400',
       action: () => setActiveTab('site'),
     },
     {
-      title: 'Sub-Second Slip Tolerance Matrix',
-      subtitle: 'Instant Rescue Alternatives',
-      tag: '10,234 WINDOWS • <25MS RECOMPUTATION',
-      bg: 'from-blue-100/80 to-indigo-100/60',
-      orb: 'bg-blue-500/25',
-      preview: 'Calculates continuous viable days and generates ranked alternative dates and sites in real time.',
+      icon: Zap,
+      title: 'Sub-Second Slip Matrix',
+      desc: 'Evaluate over 10,234 landing windows (14 candidate sites × 731 dates in 2027–2028) in under 25 milliseconds using typed prefix sums. Immediately alerts on fragile launch windows with less than 3 days of slip tolerance.',
+      tag: '<25MS PREFIX-SUM PIPELINE',
+      accent: 'text-cyan-400',
       action: () => setActiveTab('planner'),
     },
     {
-      title: 'First-Person 3D Surface Scene',
-      subtitle: 'Three.js Regolith Perspective',
-      tag: '2.0M OBSERVER • 19KM OCCLUSION RING',
-      bg: 'from-slate-200/80 to-indigo-100/60',
-      orb: 'bg-indigo-600/20',
-      preview: 'True grazing solar shadows, procedural Rayleigh Earth sprite, and physical obstacle diagnostics.',
+      icon: Globe,
+      title: 'SPICE DE421 Ephemeris Engine',
+      desc: 'Topocentric solar and Earth positions precomputed at 30-minute intervals across 35,088 timesteps using official NAIF SPICE DE421 kernels and pck00011.tpc in the MOON_ME reference frame.',
+      tag: 'Δ = 0.0000° JPL VERIFIED',
+      accent: 'text-emerald-400',
+      action: () => setActiveTab('planner'),
+    },
+    {
+      icon: Compass,
+      title: '3D First-Person Surface Scene',
+      desc: 'Stand 2.0 meters above the lunar regolith. A local 513×513 DEM mesh paired with a procedural 19 km horizon occlusion cylinder casts true grazing shadows and models terrain signal cutoff.',
+      tag: 'THREE.JS FIRST-PERSON EYE LEVEL',
+      accent: 'text-violet-400',
       action: () => setActiveTab('site'),
+    },
+    {
+      icon: Radio,
+      title: 'Sub-Earth Libration Tracking',
+      desc: 'Models the Moon’s complex 14-day libration cycle where Earth wobbles by ±8.5° in elevation. Evaluates customizable antenna elevation masks from 0° to 5° to prevent terrain multipath loss.',
+      tag: '±8.5° LIBRATION MODEL',
+      accent: 'text-cyan-400',
+      action: () => setActiveTab('planner'),
+    },
+    {
+      icon: ShieldCheck,
+      title: 'Rescue & Pairwise Comparison',
+      desc: 'When launch delays push a site past its viable battery or thermal threshold, instant rescue algorithms suggest alternate dates, alternative sites, or high-illumination polar peaks.',
+      tag: 'DUAL SCENARIO COMPARATOR',
+      accent: 'text-emerald-400',
+      action: () => setActiveTab('planner'),
     },
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#fcfbf9] text-[#171717] font-sans antialiased overflow-x-hidden selection:bg-[#4338ca] selection:text-white">
-      {/* 1. FIXED TOP NAVIGATION WITH MIX-BLEND-DIFFERENCE */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-20 px-8 flex items-center justify-between mix-blend-difference pointer-events-auto">
-        {/* Logo in italic serif */}
+    <div className="relative min-h-screen bg-[#030303] text-white font-sans antialiased overflow-x-hidden selection:bg-[#8B5CF6] selection:text-white">
+      {/* 1. FIXED FLOATING NAVIGATION PILL */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[672px] rounded-full bg-[#0a0a0a]/70 backdrop-blur-xl border border-white/10 px-5 py-2.5 flex items-center justify-between shadow-2xl shadow-black/80">
+        {/* Left: Logo (4px gradient circle + Instrument Serif text) */}
         <div
           onClick={() => setActiveTab('landing')}
-          className="cursor-pointer group flex items-center space-x-2 text-white"
+          className="flex items-center space-x-2.5 cursor-pointer group"
         >
-          <span className="font-serif italic font-bold text-2xl tracking-tight hover:opacity-80 transition duration-500 ease-premium">
-            Luna Slip Planner
-          </span>
-          <span className="font-mono text-[10px] tracking-[0.4em] uppercase opacity-75 hidden sm:inline-block">
-            // ORG.INTEL
+          <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-[#8B5CF6] via-purple-400 to-[#06B6D4] shadow-[0_0_12px_#8B5CF6]" />
+          <span className="font-serif text-xl font-normal tracking-tight text-white group-hover:text-purple-300 transition duration-300 ease-snappy">
+            Luna Slip
           </span>
         </div>
 
-        {/* Monospace links with width-growing underline on hover */}
-        <nav className="hidden md:flex items-center space-x-10 text-white font-mono text-xs uppercase tracking-[0.35em]">
-          <a href="#work" className="relative py-1 group">
-            <span>Sites</span>
-            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 ease-premium group-hover:w-full" />
+        {/* Center: Links (12px uppercase Inter, neutral-400) */}
+        <div className="hidden sm:flex items-center space-x-6 text-[12px] font-sans uppercase tracking-wider text-neutral-400">
+          <a
+            href="#features"
+            className="hover:text-white transition duration-300 ease-snappy"
+          >
+            Features
           </a>
-          <a href="#capabilities" className="relative py-1 group">
-            <span>Capabilities</span>
-            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 ease-premium group-hover:w-full" />
-          </a>
-          <a href="#validation" className="relative py-1 group">
-            <span>Validation</span>
-            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 ease-premium group-hover:w-full" />
+          <a
+            href="#code"
+            className="hover:text-white transition duration-300 ease-snappy"
+          >
+            Engine
           </a>
           <a
             href="https://github.com/ashihams/luna"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative py-1 group flex items-center space-x-1"
+            className="hover:text-white transition duration-300 ease-snappy flex items-center space-x-1"
           >
-            <span>GitHub ↗</span>
-            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 ease-premium group-hover:w-full" />
+            <span>GitHub</span>
+            <span className="text-[10px]">↗</span>
           </a>
-        </nav>
-
-        {/* Pill-shaped CTA with pulsing status dot and GitHub Link */}
-        <div className="flex items-center space-x-3">
-          <a
-            href="https://github.com/ashihams/luna"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex px-4 py-2.5 rounded-full border border-white/40 text-white font-mono text-xs uppercase tracking-[0.3em] hover:bg-white hover:text-black transition duration-500 ease-premium"
-          >
-            GitHub Code ↗
-          </a>
-          <button
-            onClick={() => setActiveTab('planner')}
-            className="px-5 py-2.5 rounded-full border border-white/40 text-white font-mono text-xs uppercase tracking-[0.3em] flex items-center space-x-2.5 hover:bg-white hover:text-black transition duration-500 ease-premium"
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
-            <span>System Online</span>
-          </button>
         </div>
-      </header>
 
-      {/* 2. EXPANSIVE HERO SECTION (MIN 100VH + DRITFING MESH + WAVE CONTAINER) */}
-      <section className="relative min-h-screen w-full flex flex-col justify-between items-center pt-32 pb-24 overflow-hidden bg-[#fcfbf9]">
-        {/* Drifting Background Mesh Gradient (Indigo/Purple 30s drift) */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-60">
-          <div className="absolute -top-1/4 -left-1/4 w-[150vw] h-[150vh] animate-mesh-drift blur-3xl">
-            <div className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full bg-indigo-200/50 mix-blend-multiply filter blur-2xl" />
-            <div className="absolute top-1/2 right-1/4 w-[32rem] h-[32rem] rounded-full bg-purple-200/40 mix-blend-multiply filter blur-3xl" />
-            <div className="absolute bottom-1/3 left-1/3 w-80 h-80 rounded-full bg-blue-100/60 mix-blend-multiply filter blur-2xl" />
-          </div>
-        </div>
+        {/* Right: CTA (White background, black text, rounded-full) */}
+        <button
+          onClick={() => setActiveTab('planner')}
+          className="px-4 py-1.5 rounded-full bg-white text-black font-sans text-xs font-semibold hover:bg-neutral-200 transition duration-300 ease-snappy shadow-sm"
+        >
+          Launch Console
+        </button>
+      </nav>
+
+      {/* 2. HERO SECTION */}
+      <section className="relative min-h-screen w-full flex flex-col justify-center items-center pt-32 pb-20 px-6 overflow-hidden">
+        {/* Background Gradients: Radial Violet Glow + Left Cyan Glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60rem] h-[32rem] bg-[#8B5CF6]/30 filter blur-[120px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-1/3 -left-32 w-[36rem] h-[36rem] bg-[#06B6D4]/10 filter blur-[130px] rounded-full pointer-events-none -z-10" />
+
+        {/* Floating Ambient Orbs */}
+        <div className="absolute top-1/4 right-1/4 w-72 h-72 rounded-full bg-[#8B5CF6]/15 filter blur-[90px] animate-float-orb-1 pointer-events-none -z-10" />
+        <div className="absolute bottom-1/4 left-1/5 w-80 h-80 rounded-full bg-[#06B6D4]/15 filter blur-[90px] animate-float-orb-2 pointer-events-none -z-10" />
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center flex flex-col items-center justify-center flex-1 space-y-6">
-          <div className="font-mono text-xs uppercase tracking-[0.45em] text-[#4338ca] font-medium py-1 px-4 rounded-full border border-indigo-200/60 bg-white/60 backdrop-blur-sm">
-            NASA Space Apps 2026 // Lunar Landing Site Navigator
+        <div className="max-w-5xl mx-auto text-center flex flex-col items-center space-y-8 z-10">
+          {/* Status Badge */}
+          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-neutral-300">
+              NASA SPACE APPS 2026 // LUNAR SITE NAVIGATOR
+            </span>
           </div>
 
-          {/* Monumental Serif Typography with Italic Emphasis (11vw-14vw) */}
-          <h1 className="font-serif text-[11vw] sm:text-[10vw] lg:text-[8.5vw] font-normal leading-[0.88] text-[#171717] tracking-tight max-w-5xl">
-            Organic <span className="italic font-normal text-[#4338ca]">Intelligence</span> on the Moon
+          {/* Massive Editorial Heading with Text Shimmer */}
+          <h1 className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[-0.03em] leading-[0.92] text-white max-w-5xl">
+            My landing slipped <em className="italic font-normal">N</em> days. Is the site <span className="text-shimmer">viable?</span>
           </h1>
 
-          <p className="max-w-2xl mx-auto font-sans text-base sm:text-lg text-[#171717]/70 leading-relaxed pt-2">
-            My landing slipped <em className="italic font-serif">N</em> days. Is the site still viable?
-            Real-terrain 720-azimuth LOLA horizons and SPICE ephemerides evaluate true grazing solar occlusion and Earth line-of-sight in under 25 milliseconds.
+          {/* Subtext */}
+          <p className="max-w-2xl mx-auto font-sans text-base sm:text-lg text-neutral-400 font-light leading-relaxed">
+            Standard flat geometric spheres overestimate lunar south pole illumination by up to 18%.
+            Evaluate true 720-azimuth LOLA topography and NAIF SPICE orbits across 10,234 landing windows in under 25 milliseconds.
           </p>
 
-          {/* Quick Action Badges */}
-          <div className="pt-4 flex flex-wrap justify-center items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80 shadow-sm">
-              14 Artemis Sites
-            </span>
-            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80 shadow-sm">
-              720 Azimuths
-            </span>
-            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80 shadow-sm">
-              &lt;25ms Matrix
-            </span>
+          {/* Interactive Action Row: Shiny Border Button & Secondary Link */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+            {/* Special Component: Shiny Border Button */}
+            <div
+              onClick={() => setActiveTab('planner')}
+              className="relative p-[1.5px] rounded-full overflow-hidden group cursor-pointer shadow-[0_0_30px_-10px_#8B5CF6] transition-transform duration-300 ease-snappy hover:scale-[1.02]"
+            >
+              <div className="absolute -inset-[100%] shiny-border-conic animate-spin-conic" />
+              <div className="relative z-10 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full bg-[#0a0a0a] text-white font-sans text-sm font-semibold flex items-center space-x-3 group-hover:bg-[#121212] transition duration-300 ease-snappy">
+                <span>Enter Mission Planner</span>
+                <ArrowRight className="w-4 h-4 text-purple-400 group-hover:translate-x-1 transition duration-300 ease-snappy" />
+              </div>
+            </div>
+
+            {/* Secondary GitHub Code Link */}
             <a
               href="https://github.com/ashihams/luna"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-[#4338ca] hover:bg-indigo-100 transition duration-500 font-semibold shadow-sm"
+              className="px-6 py-3.5 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/20 text-neutral-200 font-sans text-sm font-medium transition duration-300 ease-snappy flex items-center space-x-2"
             >
-              GitHub: ashihams/luna ↗
+              <Code2 className="w-4 h-4 text-neutral-400" />
+              <span>GitHub Repository ↗</span>
             </a>
           </div>
-        </div>
 
-        {/* 3. SIGNATURE WAVE CONTAINER TRANSITION */}
-        <div className="relative w-full h-[26vh] overflow-hidden flex items-end justify-center">
-          <div
-            className="absolute bottom-0 w-[140%] h-[240%] bg-[#fcfbf9] border-t border-[#e5e5e5]/80 shadow-2xl transition-transform duration-1000 ease-premium"
-            style={{
-              borderRadius: '50% 50% 0 0',
-              transform: 'translate(0%, 15%)',
-            }}
-          />
-
-          {/* Primary Action Button and GitHub Code at the crest of the curve */}
-          <div className="relative z-20 mb-8 flex flex-wrap items-center justify-center gap-4">
-            <button
-              onClick={() => setActiveTab('planner')}
-              className="group px-9 py-4 rounded-full bg-[#4338ca] hover:bg-[#3730a3] text-white font-mono text-xs uppercase tracking-[0.35em] font-semibold animate-pulse-gentle transition-all duration-500 ease-premium flex items-center space-x-3 shadow-xl shadow-indigo-900/20"
-            >
-              <span>Initialize Mission Planner</span>
-              <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1.5 transition duration-500 ease-premium" />
-            </button>
-            <a
-              href="https://github.com/ashihams/luna"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-7 py-4 rounded-full bg-white hover:bg-slate-50 text-[#171717] border border-[#e5e5e5] font-mono text-xs uppercase tracking-[0.3em] font-semibold transition duration-500 ease-premium shadow-md flex items-center space-x-2"
-            >
-              <span>GitHub Code ↗</span>
-            </a>
+          {/* Quick Metrics Badges */}
+          <div className="pt-6 flex flex-wrap justify-center items-center gap-3 text-neutral-400 font-mono text-[11px] tracking-widest uppercase">
+            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/5">
+              14 Candidate Sites
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/5">
+              720 Azimuths (0.5°)
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/5">
+              &lt;25ms Recomputation
+            </span>
           </div>
         </div>
       </section>
 
-      {/* 4. WORK / PORTFOLIO GRID (INTELLIGENT CARD HOVER) */}
-      <section id="work" className="py-24 px-8 max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#e5e5e5] pb-8 mb-16">
-          <div>
-            <span className="font-mono text-xs uppercase tracking-[0.4em] text-[#4338ca] block mb-2">
-              [Selected Portfolio]
-            </span>
-            <h2 className="font-serif text-4xl sm:text-5xl font-normal text-[#171717]">
-              Curated <span className="italic font-normal">Candidate</span> Regions
-            </h2>
-          </div>
-          <p className="font-sans text-sm text-[#171717]/65 max-w-md mt-4 md:mt-0 leading-relaxed">
-            Staggered topographic assessment across the lunar south polar zone (80°S to 90°S),
-            verified against real LOLA elevation models.
-          </p>
-        </div>
-
-        {/* 2-Column Staggered Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {workCards.map((card, idx) => (
-            <div
-              key={card.title}
-              onClick={card.action}
-              className={`group cursor-pointer flex flex-col ${idx % 2 === 1 ? 'md:mt-16' : ''}`}
-            >
-              {/* Card Container: 4:3 Aspect Ratio + Intelligent Hover Scale & Lift */}
-              <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-[#e5e5e5] bg-white transition-all duration-700 ease-premium group-hover:-translate-y-4 group-hover:shadow-2xl group-hover:shadow-indigo-500/10">
-                {/* Inner background with drift scale */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${card.bg} transition-transform duration-700 ease-premium group-hover:scale-110 flex items-center justify-center p-8`}
-                >
-                  {/* Blurred color orb center */}
-                  <div className={`w-40 h-40 rounded-full ${card.orb} filter blur-2xl transform group-hover:scale-125 transition duration-700 ease-premium`} />
-
-                  {/* Surface preview teaser content */}
-                  <div className="relative z-10 text-center max-w-xs space-y-2">
-                    <span className="font-mono text-[10px] tracking-[0.35em] text-[#4338ca] uppercase font-semibold">
-                      Telemetry Node
-                    </span>
-                    <p className="font-sans text-xs text-[#171717]/75 leading-relaxed">
-                      {card.preview}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Action Pill revealing on hover in bottom-right corner */}
-                <div className="absolute bottom-5 right-5 z-20 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-premium">
-                  <div className="px-5 py-2 rounded-full bg-white text-[#171717] font-mono text-[10px] uppercase tracking-[0.3em] font-bold shadow-lg border border-[#e5e5e5]">
-                    Explore View ↗
-                  </div>
-                </div>
-              </div>
-
-              {/* Text Metadata below card separated by drawing 1px hairline */}
-              <div className="pt-6 space-y-2">
-                <div className="w-full h-[1px] bg-[#e5e5e5] group-hover:bg-[#4338ca] transition-colors duration-500 ease-premium" />
-                <div className="flex items-baseline justify-between pt-1">
-                  <h3 className="font-serif text-2xl font-normal text-[#171717] group-hover:text-[#4338ca] transition duration-500 ease-premium">
-                    {card.title}
-                  </h3>
-                  <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#171717]/50">
-                    {card.subtitle}
-                  </span>
-                </div>
-                <div className="font-mono text-[11px] tracking-[0.25em] uppercase text-[#171717]/60">
-                  {card.tag}
-                </div>
-              </div>
+      {/* 3. METRICS TICKER */}
+      <section id="metrics" className="w-full h-16 bg-black/40 border-y border-white/5 flex items-center overflow-hidden relative">
+        <div className="flex space-x-12 animate-ticker whitespace-nowrap">
+          {[...tickerItems, ...tickerItems].map((item, idx) => (
+            <div key={idx} className="flex items-center space-x-3 font-mono">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-500">
+                {item.label}:
+              </span>
+              <span className="text-sm text-neutral-200 font-medium">
+                {item.value}
+              </span>
+              <span className="text-white/10 text-xs ml-4">•</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* 5. SERVICE ACCORDION (CORE CAPABILITIES) */}
-      <section id="capabilities" className="py-24 px-8 max-w-6xl mx-auto border-t border-[#e5e5e5]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Sticky Header */}
-          <div className="lg:col-span-4 lg:sticky lg:top-28 space-y-6">
-            <span className="font-mono text-xs uppercase tracking-[0.4em] text-[#4338ca] block">
-              [System Architecture]
-            </span>
-            <h2 className="font-serif text-4xl sm:text-5xl font-normal text-[#171717] leading-tight">
-              Core <span className="italic font-normal">Capabilities</span>
-            </h2>
-            <p className="font-sans text-sm text-[#171717]/65 leading-relaxed">
-              Designed for space architects who require scientific precision, deterministic offline execution, and zero guesswork.
-            </p>
-            <div className="pt-2">
-              <button
-                onClick={() => setActiveTab('planner')}
-                className="group inline-flex items-center space-x-2 font-mono text-xs uppercase tracking-[0.3em] text-[#4338ca] hover:text-[#312e81] transition duration-500 ease-premium"
-              >
-                <span>Launch Interactive Matrix</span>
-                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition duration-500 ease-premium" />
-              </button>
-            </div>
-          </div>
-
-          {/* Right Interactive Vertical Accordion */}
-          <div className="lg:col-span-8 divide-y divide-[#e5e5e5]">
-            {capabilities.map((cap, idx) => {
-              const isOpen = activeAccordion === idx;
-              return (
-                <div key={cap.id} className="py-8 group">
-                  <button
-                    onClick={() => setActiveAccordion(isOpen ? null : idx)}
-                    className="w-full flex items-baseline justify-between text-left transition duration-500 ease-premium"
-                  >
-                    <div className="space-y-1">
-                      <div className="font-mono text-[10px] tracking-[0.35em] text-[#4338ca] uppercase font-semibold">
-                        {cap.id} // {cap.tag}
-                      </div>
-                      <h3
-                        className={`font-serif text-2xl sm:text-3xl font-normal transition duration-500 ease-premium ${
-                          isOpen ? 'text-[#171717]' : 'text-[#171717]/50 group-hover:text-[#171717]'
-                        }`}
-                      >
-                        {cap.title}
-                      </h3>
-                    </div>
-
-                    <span className="font-mono text-xs text-[#171717]/40 group-hover:text-[#4338ca] transition duration-500 ease-premium ml-4">
-                      {isOpen ? '[-]' : '[+]'}
-                    </span>
-                  </button>
-
-                  {/* Fluid Content Reveal */}
-                  <div
-                    className={`transition-all duration-700 ease-premium overflow-hidden ${
-                      isOpen ? 'max-h-60 opacity-100 pt-4' : 'max-h-0 opacity-0'
-                    }`}
-                  >
-                    <p className="font-sans text-sm text-[#171717]/70 leading-relaxed pr-8">
-                      {cap.desc}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. SCIENTIFIC BENCHMARK & VALIDATION (V1 - V4) */}
-      <section id="validation" className="py-24 px-8 max-w-6xl mx-auto border-t border-[#e5e5e5]">
-        <div className="max-w-2xl mb-16 space-y-3">
-          <span className="font-mono text-xs uppercase tracking-[0.4em] text-[#4338ca] block">
-            [Proof of Correctness]
+      {/* 4. FEATURE GRID */}
+      <section id="features" className="py-28 px-6 sm:px-12 max-w-7xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
+          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#8B5CF6] block">
+            [ARCHITECTURAL CORE]
           </span>
-          <h2 className="font-serif text-4xl sm:text-5xl font-normal text-[#171717]">
-            Empirical <span className="italic font-normal">Validation</span>
+          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-normal text-white tracking-[-0.02em]">
+            Deterministic <span className="italic font-normal">Lunar Physics</span>
           </h2>
-          <p className="font-sans text-sm text-[#171717]/65 leading-relaxed">
-            Every ephemeris step and terrain calculation is cross-checked against independent NASA reference data.
+          <p className="font-sans text-neutral-400 text-sm sm:text-base font-light leading-relaxed">
+            Engineered for space architects and trajectory designers. Every simulation executes with zero server roundtrips using precomputed SPICE DE421 kernels and LOLA 80 m topography.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="p-6 rounded-2xl border border-[#e5e5e5] bg-white space-y-3">
-            <span className="font-mono text-[10px] tracking-[0.35em] text-[#4338ca] uppercase block">
-              V1 // HORIZON
-            </span>
-            <div className="font-serif text-xl text-[#171717]">Spherical Dip</div>
-            <p className="font-sans text-xs text-[#171717]/65 leading-relaxed">
-              Synthetic flat sphere dip (-0.087°), 1000m wall (5.532°), cone symmetry, and pole smoothness pass 5/5 unit tests.
-            </p>
+        {/* 3-Column Grid of Interactive Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featureCards.map((feat) => {
+            const Icon = feat.icon;
+            return (
+              <div
+                key={feat.title}
+                onClick={feat.action}
+                className="group relative rounded-3xl border border-white/5 bg-white/[0.02] p-8 sm:p-10 transition-all duration-500 ease-snappy hover:-translate-y-3 hover:border-violet-500/40 hover:bg-white/[0.04] hover:shadow-[0_0_30px_-10px_rgba(139,92,246,0.4)] cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  {/* Top Icon Box */}
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-violet-400 group-hover:scale-110 group-hover:rotate-3 transition duration-300 ease-snappy">
+                    <Icon className="w-6 h-6" />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-serif text-2xl text-white font-normal mt-6 mb-3 tracking-tight group-hover:text-purple-200 transition duration-300 ease-snappy">
+                    {feat.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="font-sans text-sm text-neutral-400 leading-relaxed font-light">
+                    {feat.desc}
+                  </p>
+                </div>
+
+                {/* Bottom Tag */}
+                <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between font-mono text-[10px] tracking-[0.2em] uppercase">
+                  <span className={feat.accent}>{feat.tag}</span>
+                  <span className="text-neutral-500 group-hover:text-white group-hover:translate-x-1 transition duration-300 ease-snappy">
+                    ↗
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 5. CODE INTEGRATION BLOCK */}
+      <section id="code" className="py-24 px-6 sm:px-12 max-w-5xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#06B6D4] block">
+            [DEVELOPER INTERFACE]
+          </span>
+          <h2 className="font-serif text-4xl sm:text-5xl font-normal text-white tracking-tight">
+            Sub-Millisecond <span className="italic font-normal">SDK</span> Execution
+          </h2>
+          <p className="font-sans text-neutral-400 text-sm font-light">
+            Zero external API latency. The slip engine runs entirely in-memory using typed arrays and precomputed LOLA horizon masks.
+          </p>
+        </div>
+
+        {/* Dark IDE Window */}
+        <div className="bg-[#080808]/80 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+          {/* Window Header */}
+          <div className="px-6 py-4 border-b border-white/10 bg-white/[0.02] flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded-full bg-red-500/40" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/40" />
+              <div className="w-3 h-3 rounded-full bg-green-500/40" />
+            </div>
+
+            <div className="font-mono text-xs text-neutral-400 tracking-wider flex items-center space-x-2">
+              <Terminal className="w-3.5 h-3.5 text-neutral-500" />
+              <span>luna_slip_evaluator.ts</span>
+            </div>
+
+            <button
+              onClick={handleCopyCode}
+              className="text-neutral-400 hover:text-white transition duration-200 flex items-center space-x-1.5 text-xs font-mono"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
           </div>
 
-          <div className="p-6 rounded-2xl border border-[#e5e5e5] bg-white space-y-3">
-            <span className="font-mono text-[10px] tracking-[0.35em] text-[#4338ca] uppercase block">
-              V2 // EPHEMERIS
-            </span>
-            <div className="font-serif text-xl text-[#171717]">SPICE DE421</div>
-            <p className="font-sans text-xs text-[#171717]/65 leading-relaxed">
-              29.53-day synodic solar cycles and sub-Earth libration bounds [-8.5°, +8.5°] verified over 35,088 intervals.
-            </p>
-          </div>
-
-          <div className="p-6 rounded-2xl border border-[#e5e5e5] bg-white space-y-3">
-            <span className="font-mono text-[10px] tracking-[0.35em] text-[#4338ca] uppercase block">
-              V3 // JPL HORIZONS
-            </span>
-            <div className="font-serif text-xl text-[#171717]">Δ = 0.0000°</div>
-            <p className="font-sans text-xs text-[#171717]/65 leading-relaxed">
-              SPICE vectors match NASA JPL Horizons REST API across multiple sites and epochs with 0.0000° delta.
-            </p>
-          </div>
-
-          <div className="p-6 rounded-2xl border border-[#e5e5e5] bg-white space-y-3">
-            <span className="font-mono text-[10px] tracking-[0.35em] text-[#4338ca] uppercase block">
-              V4 // PGDA MAPS
-            </span>
-            <div className="font-serif text-xl text-[#171717]">Mazarico 2011</div>
-            <p className="font-sans text-xs text-[#171717]/65 leading-relaxed">
-              Earth visibility matched within 4.0% to 4.9% across polar ridges against published PGDA Product 69 maps.
-            </p>
+          {/* Code Window Body */}
+          <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto text-neutral-300">
+            <div className="space-y-1">
+              <div>
+                <span className="text-[#8B5CF6]">import</span> {'{'} <span className="text-[#06B6D4]">SiteMetricsHelper</span> {'}'} <span className="text-[#8B5CF6]">from</span> <span className="text-[#10B981]">'./workers/metrics'</span>;
+              </div>
+              <div>
+                <span className="text-[#8B5CF6]">import</span> {'{'} <span className="text-[#06B6D4]">fetchTracks</span>, <span className="text-[#06B6D4]">fetchHorizon</span> {'}'} <span className="text-[#8B5CF6]">from</span> <span className="text-[#10B981]">'./data/loader'</span>;
+              </div>
+              <div className="pt-3 text-neutral-500">
+                // Initialize topocentric SPICE ephemeris and LOLA 720-azimuth horizons
+              </div>
+              <div>
+                <span className="text-[#8B5CF6]">const</span> helper = <span className="text-[#8B5CF6]">new</span> <span className="text-[#06B6D4]">SiteMetricsHelper</span>(<span className="text-[#10B981]">'connecting-ridge'</span>, tracks, horizon);
+              </div>
+              <div className="pt-2 text-neutral-500">
+                // Evaluate 6.5-day Artemis sortie window under 24h battery constraint
+              </div>
+              <div>
+                <span className="text-[#8B5CF6]">const</span> metrics = helper.<span className="text-[#06B6D4]">evaluateWindow</span>(plannedDayIndex + slipDays, {'{'}
+              </div>
+              <div className="pl-6">
+                stay_days: <span className="text-[#10B981]">6.5</span>,
+              </div>
+              <div className="pl-6">
+                min_sun_fraction: <span className="text-[#10B981]">0.85</span>,
+              </div>
+              <div className="pl-6">
+                max_dark_gap_hours: <span className="text-[#10B981]">24.0</span>,
+              </div>
+              <div className="pl-6">
+                min_earth_fraction: <span className="text-[#10B981]">0.80</span>,
+              </div>
+              <div className="pl-6">
+                antenna_mask_deg: <span className="text-[#10B981]">0.0</span>,
+              </div>
+              <div>{'}'});</div>
+              <div className="pt-3 text-neutral-500">
+                // Instant slip tolerance verification in &lt;25 microseconds per cell
+              </div>
+              <div>
+                console.<span className="text-[#06B6D4]">log</span>(<span className="text-[#10B981]">'Viable: true | Slip: +6d'</span>);
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 7. HIGH-CONTRAST FOOTER WITH LARGE RADIUS CURVE (5REM) */}
-      <footer className="relative bg-[#171717] text-white pt-24 pb-12 px-8 rounded-t-[5rem] overflow-hidden mt-20">
-        {/* Subtle radial indigo glow from top-center */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-indigo-600/20 filter blur-3xl pointer-events-none rounded-full" />
-
-        <div className="relative z-10 max-w-6xl mx-auto space-y-16">
-          {/* Large-Scale Serif Quote */}
-          <div className="max-w-3xl border-b border-white/10 pb-12">
-            <span className="font-mono text-xs uppercase tracking-[0.4em] text-indigo-400 block mb-4">
-              [Mission Philosophy]
-            </span>
-            <blockquote className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-tight text-white/90">
-              “We choose to explore the lunar south pole not because it is flat, but because <span className="italic text-indigo-300">real topography</span> refuses to compromise.”
-            </blockquote>
-          </div>
-
-          {/* 3-Column Grid for Details, Navigation, and Attribution */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 font-sans text-xs text-white/60">
-            <div className="space-y-3">
-              <div className="font-mono uppercase tracking-[0.35em] text-white font-semibold">
-                Project Identity
+      {/* 6. FOOTER */}
+      <footer className="bg-[#050505] border-t border-white/5 pt-20 pb-12 px-6 sm:px-12 mt-20">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            {/* Column 1: Branding & Philosophy */}
+            <div className="space-y-4 md:col-span-1">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] shadow-[0_0_12px_#8B5CF6]" />
+                <span className="font-serif text-2xl font-normal text-white">
+                  Luna Slip
+                </span>
               </div>
-              <p className="leading-relaxed">
-                Luna Slip Planner was engineered for the NASA Space Apps Challenge 2026 under the Lunar Landing Site Navigator challenge.
+              <p className="font-sans text-xs text-neutral-400 font-light leading-relaxed">
+                Precision lunar landing site feasibility and slip planning for the Artemis era.
+                Engineered for the NASA Space Apps Challenge 2026.
               </p>
-              <div className="pt-2">
-                <a
-                  href="https://github.com/ashihams/luna"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center space-x-1 text-indigo-400 hover:text-white transition font-mono tracking-widest uppercase"
-                >
-                  <span>Open Source Repository ↗</span>
-                </a>
-              </div>
             </div>
 
+            {/* Column 2: Architecture */}
             <div className="space-y-3">
-              <div className="font-mono uppercase tracking-[0.35em] text-white font-semibold">
-                Direct Telemetry
+              <div className="font-mono text-[10px] uppercase tracking-widest text-neutral-400 font-semibold">
+                Core Systems
               </div>
-              <ul className="space-y-2 font-mono uppercase tracking-[0.25em]">
+              <ul className="space-y-2 font-sans text-xs text-neutral-400 font-light">
                 <li>
                   <button onClick={() => setActiveTab('planner')} className="hover:text-white transition">
-                    &gt; Launch Heatmap Planner
+                    Slip Tolerance Matrix
                   </button>
                 </li>
                 <li>
                   <button onClick={() => setActiveTab('site')} className="hover:text-white transition">
-                    &gt; First-Person 3D Surface
+                    Three.js 3D Regolith
                   </button>
                 </li>
                 <li>
                   <button onClick={() => setActiveTab('pole')} className="hover:text-white transition">
-                    &gt; 3D South Pole Overview
+                    300 km Polar Overview
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => setActiveTab('planner')} className="hover:text-white transition">
+                    Dual Scenario Compare
                   </button>
                 </li>
               </ul>
             </div>
 
+            {/* Column 3: Science */}
             <div className="space-y-3">
-              <div className="font-mono uppercase tracking-[0.35em] text-white font-semibold">
-                Scientific Citations
+              <div className="font-mono text-[10px] uppercase tracking-widest text-neutral-400 font-semibold">
+                Empirical Validation
               </div>
-              <p className="leading-relaxed">
-                Barker et al. 2023 (Planet. Sci. J. 4, 183) & Mazarico et al. 2011 (Icarus 211, 1066). Model parameters are user-editable assumptions.
+              <ul className="space-y-2 font-sans text-xs text-neutral-400 font-light">
+                <li>NASA NAIF SPICE DE421</li>
+                <li>LOLA 80 m Polar Stereographic</li>
+                <li>JPL Horizons REST API (Δ=0.0000°)</li>
+                <li>Mazarico et al. 2011 (PGDA Product 69)</li>
+              </ul>
+            </div>
+
+            {/* Column 4: Open Source */}
+            <div className="space-y-3">
+              <div className="font-mono text-[10px] uppercase tracking-widest text-neutral-400 font-semibold">
+                Repository
+              </div>
+              <p className="font-sans text-xs text-neutral-400 font-light leading-relaxed">
+                Full source code, horizon precomputation scripts, and validation test suite are open source.
               </p>
+              <div className="pt-1">
+                <a
+                  href="https://github.com/ashihams/luna"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-1.5 text-xs font-mono text-[#8B5CF6] hover:text-purple-300 transition"
+                >
+                  <span>github.com/ashihams/luna</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* Minimalist Monospace Copyright */}
-          <div className="pt-12 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center text-[10px] font-mono uppercase tracking-[0.4em] text-white/40">
-            <div>© 2026 LUNA SLIP PLANNER • ZERO-RUNTIME STATIC ARCHITECTURE</div>
-            <div className="mt-2 sm:mt-0">DEPLOYED TO VERCEL</div>
+          {/* Bottom Bar: Copyright & Operational Status Indicator */}
+          <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-xs text-neutral-500 font-sans">
+            <div>
+              © 2026 Luna Slip Planner • Built for NASA Space Apps Challenge
+            </div>
+
+            <div className="flex items-center space-x-2 mt-4 sm:mt-0 font-mono text-[11px] tracking-wider uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse" />
+              <span className="text-neutral-300">All Systems Operational</span>
+            </div>
           </div>
         </div>
       </footer>
