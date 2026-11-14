@@ -1,0 +1,10 @@
+{
+  "name": "slip-planner-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --prefix web",
+    "web:dev": "npm run dev --prefix web",
+    "web:build": "npm run build --prefix web"
+  }
+}
