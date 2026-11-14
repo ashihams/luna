@@ -1,0 +1,1064 @@
+{
+  "version": "1.0.0",
+  "generated_utc": "2026-11-14T10:28:50.342441+00:00",
+  "constants": {
+    "R_MOON_M": 1737400,
+    "R_SUN_KM": 695700,
+    "R_EARTH_KM": 6371.0,
+    "OBS_HEIGHT_M": 2.0,
+    "AZ_STEP_DEG": 0.5,
+    "T0_UTC": "2027-01-01T00:00:00",
+    "T1_UTC": "2029-01-01T00:00:00",
+    "STEP_MIN": 30,
+    "N_STEPS": 35088,
+    "DISC_SAMPLES": 32,
+    "TERRAIN_N": 513,
+    "TERRAIN_HALF_M": 10000,
+    "ABCORR": "LT+S"
+  },
+  "time": {
+    "t0_utc": "2027-01-01T00:00:00",
+    "t1_utc": "2029-01-01T00:00:00",
+    "step_min": 30,
+    "n_steps": 35088,
+    "days": 731.0
+  },
+  "sites": [
+    {
+      "id": "connecting-ridge",
+      "name": "Connecting Ridge (Site 01)",
+      "lat_deg": -89.305,
+      "lon_deg_east": 123.623,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site01; ridge crest verified",
+      "obs_height_m": 2.0,
+      "ground_height_m": 1303.46,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -4170.49,
+      "terrain_z_max": 0.0,
+      "files": {
+        "horizon": "data/horizon_connecting-ridge.json",
+        "tracks": "data/tracks_connecting-ridge.bin",
+        "terrain": "data/terrain_connecting-ridge.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "connecting-ridge-ext",
+      "name": "Connecting Ridge Extension",
+      "lat_deg": -88.99,
+      "lon_deg_east": 104.47,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022)",
+      "obs_height_m": 2.0,
+      "ground_height_m": 33.87,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -967.63,
+      "terrain_z_max": 1442.15,
+      "files": {
+        "horizon": "data/horizon_connecting-ridge-ext.json",
+        "tracks": "data/tracks_connecting-ridge-ext.bin",
+        "terrain": "data/terrain_connecting-ridge-ext.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "shackleton-rim",
+      "name": "Peak near Shackleton (Site 04)",
+      "lat_deg": -88.81,
+      "lon_deg_east": 124.68,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site04",
+      "obs_height_m": 2.0,
+      "ground_height_m": 1620.89,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -3079.2,
+      "terrain_z_max": 26.74,
+      "files": {
+        "horizon": "data/horizon_shackleton-rim.json",
+        "tracks": "data/tracks_shackleton-rim.bin",
+        "terrain": "data/terrain_shackleton-rim.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "de-gerlache-rim1",
+      "name": "de Gerlache Rim 1 (Site 11)",
+      "lat_deg": -88.67,
+      "lon_deg_east": -66.37,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site11",
+      "obs_height_m": 2.0,
+      "ground_height_m": 1591.76,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -2971.41,
+      "terrain_z_max": 221.52,
+      "files": {
+        "horizon": "data/horizon_de-gerlache-rim1.json",
+        "tracks": "data/tracks_de-gerlache-rim1.bin",
+        "terrain": "data/terrain_de-gerlache-rim1.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "de-gerlache-rim2",
+      "name": "de Gerlache Rim 2",
+      "lat_deg": -88.22,
+      "lon_deg_east": -63.43,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022; retained in Oct 2024 update)",
+      "obs_height_m": 2.0,
+      "ground_height_m": -159.5,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -1782.07,
+      "terrain_z_max": 1799.92,
+      "files": {
+        "horizon": "data/horizon_de-gerlache-rim2.json",
+        "tracks": "data/tracks_de-gerlache-rim2.bin",
+        "terrain": "data/terrain_de-gerlache-rim2.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "faustini-rim-a",
+      "name": "Faustini Rim A",
+      "lat_deg": -87.86,
+      "lon_deg_east": 90.0,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022)",
+      "obs_height_m": 2.0,
+      "ground_height_m": 42.15,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -2833.09,
+      "terrain_z_max": 535.16,
+      "files": {
+        "horizon": "data/horizon_faustini-rim-a.json",
+        "tracks": "data/tracks_faustini-rim-a.bin",
+        "terrain": "data/terrain_faustini-rim-a.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "peak-near-shackleton",
+      "name": "Peak near Shackleton (Site 07)",
+      "lat_deg": -89.02,
+      "lon_deg_east": 141.0,
+      "program": "artemis",
+      "source": "PGDA Product 78 Site07; Mazarico et al. 2011",
+      "obs_height_m": 2.0,
+      "ground_height_m": 370.76,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -1273.98,
+      "terrain_z_max": 1245.36,
+      "files": {
+        "horizon": "data/horizon_peak-near-shackleton.json",
+        "tracks": "data/tracks_peak-near-shackleton.bin",
+        "terrain": "data/terrain_peak-near-shackleton.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "haworth",
+      "name": "Haworth",
+      "lat_deg": -86.75,
+      "lon_deg_east": -23.67,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+      "obs_height_m": 2.0,
+      "ground_height_m": 1553.94,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -1442.23,
+      "terrain_z_max": 1164.49,
+      "files": {
+        "horizon": "data/horizon_haworth.json",
+        "tracks": "data/tracks_haworth.bin",
+        "terrain": "data/terrain_haworth.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "malapert-massif",
+      "name": "Malapert Massif",
+      "lat_deg": -85.98,
+      "lon_deg_east": -0.26,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+      "obs_height_m": 2.0,
+      "ground_height_m": 4811.47,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -3870.86,
+      "terrain_z_max": 360.86,
+      "files": {
+        "horizon": "data/horizon_malapert-massif.json",
+        "tracks": "data/tracks_malapert-massif.bin",
+        "terrain": "data/terrain_malapert-massif.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "leibnitz-beta",
+      "name": "Leibnitz Beta Plateau (Site 20)",
+      "lat_deg": -85.43,
+      "lon_deg_east": 31.83,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site20",
+      "obs_height_m": 2.0,
+      "ground_height_m": 6401.13,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -3326.22,
+      "terrain_z_max": 274.48,
+      "files": {
+        "horizon": "data/horizon_leibnitz-beta.json",
+        "tracks": "data/tracks_leibnitz-beta.bin",
+        "terrain": "data/terrain_leibnitz-beta.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "nobile-rim1",
+      "name": "Nobile Rim 1",
+      "lat_deg": -85.44,
+      "lon_deg_east": 37.44,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+      "obs_height_m": 2.0,
+      "ground_height_m": 5926.43,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -4202.06,
+      "terrain_z_max": 872.33,
+      "files": {
+        "horizon": "data/horizon_nobile-rim1.json",
+        "tracks": "data/tracks_nobile-rim1.bin",
+        "terrain": "data/terrain_nobile-rim1.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "nobile-rim2",
+      "name": "Nobile Rim 2",
+      "lat_deg": -83.93,
+      "lon_deg_east": 58.74,
+      "program": "artemis",
+      "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+      "obs_height_m": 2.0,
+      "ground_height_m": 1025.34,
+      "effective_radius_km": 269.2,
+      "terrain_z_min": -2207.81,
+      "terrain_z_max": 619.51,
+      "files": {
+        "horizon": "data/horizon_nobile-rim2.json",
+        "tracks": "data/tracks_nobile-rim2.bin",
+        "terrain": "data/terrain_nobile-rim2.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "malapert-site23",
+      "name": "Malapert Massif (Site 23)",
+      "lat_deg": -86.0,
+      "lon_deg_east": 2.0,
+      "program": "artemis",
+      "source": "PGDA Product 78 Site23",
+      "obs_height_m": 2.0,
+      "ground_height_m": 5154.45,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -4067.15,
+      "terrain_z_max": 17.88,
+      "files": {
+        "horizon": "data/horizon_malapert-site23.json",
+        "tracks": "data/tracks_malapert-site23.bin",
+        "terrain": "data/terrain_malapert-site23.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    },
+    {
+      "id": "slater-plain",
+      "name": "Slater Plain",
+      "lat_deg": -88.3,
+      "lon_deg_east": -28.0,
+      "program": "artemis",
+      "source": "NASA Artemis III updated candidate regions (Oct 2024)",
+      "obs_height_m": 2.0,
+      "ground_height_m": -910.4,
+      "effective_radius_km": 300.0,
+      "terrain_z_min": -786.41,
+      "terrain_z_max": 796.69,
+      "files": {
+        "horizon": "data/horizon_slater-plain.json",
+        "tracks": "data/tracks_slater-plain.bin",
+        "terrain": "data/terrain_slater-plain.bin"
+      },
+      "variants": [
+        "best",
+        "dem80",
+        "flat"
+      ],
+      "tracks_layout": [
+        {
+          "name": "sun_az",
+          "dtype": "uint16",
+          "byte_offset": 0,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_el",
+          "dtype": "int16",
+          "byte_offset": 70176,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_az",
+          "dtype": "uint16",
+          "byte_offset": 140352,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_el",
+          "dtype": "int16",
+          "byte_offset": 210528,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "earth_clearance",
+          "dtype": "int16",
+          "byte_offset": 280704,
+          "length": 35088,
+          "byte_length": 70176
+        },
+        {
+          "name": "sun_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 350880,
+          "length": 35088,
+          "byte_length": 35088
+        },
+        {
+          "name": "earth_vis_pct",
+          "dtype": "uint8",
+          "byte_offset": 385968,
+          "length": 35088,
+          "byte_length": 35088
+        }
+      ]
+    }
+  ]
+}
