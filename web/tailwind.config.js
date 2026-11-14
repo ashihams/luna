@@ -47,7 +47,50 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Host Grotesk"', 'system-ui', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+      transitionTimingFunction: {
+        premium: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      },
+      colors: {
+        cream: {
+          DEFAULT: '#fcfbf9',
+          50: '#ffffff',
+          100: '#fcfbf9',
+          200: '#f5f3ef',
+          300: '#ece8e1',
+        },
+        charcoal: {
+          DEFAULT: '#171717',
+          900: '#171717',
+          800: '#222222',
+          700: '#2e2e2e',
+        },
+        borderLight: '#e5e5e5',
+        indigo: {
+          DEFAULT: '#4338ca',
+          600: '#4f46e5',
+          700: '#4338ca',
+          800: '#3730a3',
+          900: '#312e81',
+        },
+      },
+      keyframes: {
+        mesh: {
+          '0%': { transform: 'rotate(0deg) scale(1)' },
+          '50%': { transform: 'rotate(180deg) scale(1.15)' },
+          '100%': { transform: 'rotate(360deg) scale(1)' },
+        },
+        pulseGentle: {
+          '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 rgba(67, 56, 202, 0)' },
+          '50%': { transform: 'scale(1.02)', boxShadow: '0 10px 25px -5px rgba(67, 56, 202, 0.35)' },
+        },
+      },
+      animation: {
+        'mesh-drift': 'mesh 30s linear infinite',
+        'pulse-gentle': 'pulseGentle 3s cubic-bezier(0.22, 1, 0.36, 1) infinite',
       },
     },
   },

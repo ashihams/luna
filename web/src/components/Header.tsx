@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
-import { Calendar, Compass, ShieldAlert, Sparkles, Layers, Globe, Scale, Home } from 'lucide-react';
+import { Sparkles, Compass, ShieldAlert, Layers, Scale, Home, Globe, Calendar } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const {
@@ -20,72 +20,74 @@ export const Header: React.FC = () => {
   const isCLPS = parameters.stay_days === 14.0;
 
   return (
-    <header className="h-14 border-b border-slate-800 bg-slate-950/90 backdrop-blur px-4 flex items-center justify-between z-20">
+    <header className="h-16 border-b border-[#262626] bg-[#171717]/95 backdrop-blur-md px-6 flex items-center justify-between z-20 select-none">
       {/* Brand & Mission */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-4">
         <div
           onClick={() => setActiveTab('landing')}
-          className="flex items-center space-x-2 cursor-pointer hover:opacity-85 transition"
+          className="flex items-center space-x-3 cursor-pointer group"
           title="Return to Landing Page"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-950/50">
-            <span className="text-white font-bold text-sm tracking-tighter">LP</span>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#4338ca] via-indigo-500 to-purple-400 flex items-center justify-center shadow-lg shadow-indigo-950/40 group-hover:scale-105 transition-transform duration-500 ease-premium">
+            <span className="text-white font-serif font-bold text-sm tracking-tighter">LP</span>
           </div>
           <div>
-            <div className="flex items-center space-x-2">
-              <span className="font-bold text-sm tracking-wide text-slate-100 uppercase">
+            <div className="flex items-center space-x-2.5">
+              <span className="font-serif italic font-bold text-base tracking-tight text-[#fcfbf9] group-hover:text-indigo-300 transition duration-500 ease-premium">
                 Luna Slip Planner
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                NASA Space Apps
+              <span className="text-[9px] font-mono tracking-[0.3em] uppercase px-2 py-0.5 rounded-full bg-white/5 text-indigo-300 border border-white/10">
+                NASA SPACE APPS
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">Lunar Landing Site Navigator • South Pole</p>
+            <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-white/40">
+              LUNAR SOUTH POLE • LOLA 720-AZIMUTH
+            </p>
           </div>
         </div>
       </div>
 
       {/* Quick Presets */}
-      <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+      <div className="hidden md:flex items-center bg-black/40 border border-[#262626] rounded-full p-1 space-x-1">
         <button
           onClick={() => applyPreset('artemis')}
-          className={`px-3 py-1 text-xs font-medium rounded-md transition-all flex items-center space-x-1.5 ${
+          className={`px-3.5 py-1.5 text-[11px] font-mono uppercase tracking-[0.25em] rounded-full transition-all duration-500 ease-premium flex items-center space-x-2 ${
             isArtemis
-              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-[#4338ca] text-white shadow-md shadow-indigo-900/30 font-semibold'
+              : 'text-white/50 hover:text-white'
           }`}
           title="Artemis III profile: 6.5-day surface stay"
         >
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkles className="w-3 h-3" />
           <span>Artemis (6.5d)</span>
         </button>
         <button
           onClick={() => applyPreset('clps')}
-          className={`px-3 py-1 text-xs font-medium rounded-md transition-all flex items-center space-x-1.5 ${
+          className={`px-3.5 py-1.5 text-[11px] font-mono uppercase tracking-[0.25em] rounded-full transition-all duration-500 ease-premium flex items-center space-x-2 ${
             isCLPS
-              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-[#4338ca] text-white shadow-md shadow-indigo-900/30 font-semibold'
+              : 'text-white/50 hover:text-white'
           }`}
           title="Commercial Lunar Payload Services profile: 14-day surface stay"
         >
-          <Compass className="w-3.5 h-3.5" />
+          <Compass className="w-3 h-3" />
           <span>CLPS (14d)</span>
         </button>
       </div>
 
       {/* Slip Status Badge */}
       {slipAnalysis && (
-        <div className="hidden lg:flex items-center space-x-2">
+        <div className="hidden lg:flex items-center space-x-3">
           <div
-            className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1.5 border ${
+            className={`px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-[0.25em] uppercase font-semibold flex items-center space-x-2 border transition-all duration-500 ease-premium ${
               slipAnalysis.isViable
-                ? 'bg-emerald-950/60 border-emerald-600/50 text-emerald-400'
-                : 'bg-rose-950/60 border-rose-600/50 text-rose-400'
+                ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
+                : 'bg-rose-950/40 border-rose-500/40 text-rose-300'
             }`}
           >
             <div
               className={`w-2 h-2 rounded-full ${
-                slipAnalysis.isViable ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                slipAnalysis.isViable ? 'bg-emerald-400 animate-ping' : 'bg-rose-400'
               }`}
             />
             <span>
@@ -98,49 +100,49 @@ export const Header: React.FC = () => {
           </div>
 
           {slipAnalysis.isFragile && (
-            <div className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-950/60 border border-amber-600/50 text-amber-300 flex items-center space-x-1">
-              <ShieldAlert className="w-3.5 h-3.5" />
+            <div className="px-3 py-1.5 rounded-full text-[10px] font-mono tracking-[0.25em] uppercase bg-amber-950/40 border border-amber-500/40 text-amber-300 flex items-center space-x-1.5">
+              <ShieldAlert className="w-3 h-3 text-amber-400" />
               <span>Fragile (&lt;3d)</span>
             </div>
           )}
         </div>
       )}
 
-      {/* Navigation tabs */}
-      <div className="flex items-center space-x-2">
+      {/* Navigation tabs & Actions */}
+      <div className="flex items-center space-x-3">
         <button
           onClick={() => pinCurrentScenario()}
-          className="px-2.5 py-1.5 text-xs text-slate-300 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-md transition flex items-center space-x-1.5"
+          className="px-3 py-1.5 text-[11px] font-mono tracking-[0.2em] uppercase text-white/70 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-500 ease-premium flex items-center space-x-1.5"
           title="Pin current scenario for comparison"
         >
-          <Layers className="w-3.5 h-3.5" />
-          <span>Pin Plan ({pinnedScenarios.length})</span>
+          <Layers className="w-3.5 h-3.5 text-indigo-300" />
+          <span>Pin ({pinnedScenarios.length})</span>
         </button>
 
         <button
           onClick={() => setIsComparisonOpen(true)}
-          className="px-2.5 py-1.5 text-xs font-medium text-cyan-300 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-700/60 rounded-md transition flex items-center space-x-1.5 shadow-sm"
+          className="px-3 py-1.5 text-[11px] font-mono tracking-[0.2em] uppercase font-semibold text-white bg-indigo-900/40 hover:bg-indigo-800/60 border border-indigo-500/40 rounded-full transition-all duration-500 ease-premium flex items-center space-x-1.5 shadow-sm"
           title="Compare scenarios side-by-side"
         >
-          <Scale className="w-3.5 h-3.5 text-cyan-400" />
+          <Scale className="w-3.5 h-3.5 text-indigo-300" />
           <span>Compare</span>
         </button>
 
-        <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+        <div className="flex items-center bg-black/40 border border-[#262626] rounded-full p-1 space-x-1">
           <button
             onClick={() => setActiveTab('landing')}
-            className="px-2.5 py-1 text-xs font-medium rounded-md text-slate-400 hover:text-slate-100 transition flex items-center space-x-1"
-            title="Return to Home Landing Page"
+            className="px-3 py-1.5 text-[11px] font-mono tracking-[0.2em] uppercase rounded-full text-white/60 hover:text-white transition duration-500 ease-premium flex items-center space-x-1.5"
+            title="Return to Landing Page"
           >
             <Home className="w-3.5 h-3.5" />
-            <span>Home</span>
+            <span className="hidden sm:inline">Landing</span>
           </button>
           <button
             onClick={() => setActiveTab('planner')}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 text-[11px] font-mono tracking-[0.2em] uppercase rounded-full transition-all duration-500 ease-premium flex items-center space-x-1.5 ${
               activeTab === 'planner'
-                ? 'bg-slate-800 text-white shadow'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-[#4338ca] text-white shadow-sm font-semibold'
+                : 'text-white/60 hover:text-white'
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
@@ -148,10 +150,10 @@ export const Header: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('site')}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 text-[11px] font-mono tracking-[0.2em] uppercase rounded-full transition-all duration-500 ease-premium flex items-center space-x-1.5 ${
               activeTab === 'site'
-                ? 'bg-slate-800 text-white shadow'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-[#4338ca] text-white shadow-sm font-semibold'
+                : 'text-white/60 hover:text-white'
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
@@ -159,10 +161,10 @@ export const Header: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('pole')}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all flex items-center space-x-1.5 ${
+            className={`px-3 py-1.5 text-[11px] font-mono tracking-[0.2em] uppercase rounded-full transition-all duration-500 ease-premium flex items-center space-x-1.5 ${
               activeTab === 'pole'
-                ? 'bg-slate-800 text-white shadow'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-[#4338ca] text-white shadow-sm font-semibold'
+                : 'text-white/60 hover:text-white'
             }`}
           >
             <Globe className="w-3.5 h-3.5" />
