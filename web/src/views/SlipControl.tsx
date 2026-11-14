@@ -126,7 +126,11 @@ export const SlipControl: React.FC = () => {
             )}
             <div>
               <div className="text-xs font-bold leading-tight">
-                {analysis.isViable ? 'SITE VIABLE FOR SORTIE' : 'MISSION SLIP UNFEASIBLE'}
+                {analysis.isViable
+                  ? 'SITE VIABLE FOR SORTIE'
+                  : slipDays === 0
+                  ? 'BASELINE DATE UNFEASIBLE'
+                  : 'MISSION SLIP UNFEASIBLE'}
               </div>
               <div className="text-[10px] text-slate-300 font-medium">
                 {analysis.isViable

@@ -6,7 +6,10 @@ import { Heatmap } from './charts/Heatmap';
 import { SlipControl } from './views/SlipControl';
 import { RescuePanel } from './views/RescuePanel';
 import { SiteView } from './views/SiteView';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { PoleOverview } from './three/PoleOverview';
+import { LandingPage } from './views/LandingPage';
+import { ComparisonDrawer } from './views/ComparisonDrawer';
+import { AlertCircle } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { loading, error, initialize, activeTab } = usePlannerStore();
@@ -14,6 +17,31 @@ export const App: React.FC = () => {
   useEffect(() => {
     initialize();
   }, [initialize]);
+
+  // Sync activeTab with browser Back/Forward navigation & hash changes
+  useEffect(() => {
+    const handleNavigation = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (['planner', 'site', 'pole'].includes(hash)) {
+        usePlannerStore.setState({ activeTab: hash as 'planner' | 'site' | 'pole' });
+      } else {
+        usePlannerStore.setState({ activeTab: 'landing' });
+      }
+    };
+
+    window.addEventListener('popstate', handleNavigation);
+    window.addEventListener('hashchange', handleNavigation);
+
+    return () => {
+      window.removeEventListener('popstate', handleNavigation);
+      window.removeEventListener('hashchange', handleNavigation);
+    };
+  }, []);
+
+  // 1. Landing Page View (Instant display)
+  if (activeTab === 'landing') {
+    return <LandingPage />;
+  }
 
   if (loading) {
     return (
@@ -27,7 +55,7 @@ export const App: React.FC = () => {
           </div>
           <div>
             <h1 className="text-base font-bold text-white uppercase tracking-wider">
-              Slip Planner
+              Luna Slip Planner
             </h1>
             <p className="text-xs text-slate-400 mt-1">
               Loading precomputed 35,088-step SPICE ephemeris and LOLA 80m horizons for all 14 Artemis landing sites...
@@ -56,6 +84,7 @@ export const App: React.FC = () => {
     );
   }
 
+  // 2. Mission Dashboard View
   return (
     <div className="w-screen h-screen flex flex-col bg-slate-950 overflow-hidden font-sans">
       <Header />
@@ -74,10 +103,15 @@ export const App: React.FC = () => {
 
             <RescuePanel />
           </div>
+        ) : activeTab === 'pole' ? (
+          <PoleOverview />
         ) : (
           <SiteView />
         )}
       </main>
+
+      {/* Two-Scenario Comparison Drawer */}
+      <ComparisonDrawer />
     </div>
   );
 };

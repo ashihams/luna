@@ -40,7 +40,7 @@ interface PlannerState {
   isPlaying: boolean;
   playbackSpeed: number;
   metricMode: MetricMode;
-  activeTab: 'planner' | 'site' | 'pole';
+  activeTab: 'landing' | 'planner' | 'site' | 'pole';
   parameters: PlannerParameters;
   helpers: SiteMetricsHelper[];
   heatmapMatrix: CellMetrics[][] | null;
@@ -56,9 +56,11 @@ interface PlannerState {
   setIsPlaying: (playing: boolean) => void;
   setPlaybackSpeed: (speed: number) => void;
   setMetricMode: (mode: MetricMode) => void;
-  setActiveTab: (tab: 'planner' | 'site' | 'pole') => void;
+  setActiveTab: (tab: 'landing' | 'planner' | 'site' | 'pole') => void;
   updateParameters: (params: Partial<PlannerParameters>) => void;
-  applyPreset: (preset: 'artemis' | 'clps') => void;
+  isComparisonOpen: boolean;
+  setIsComparisonOpen: (open: boolean) => void;
+  applyPreset: (preset: 'artemis' | 'clps' | 'viper' | 'habitat') => void;
   pinCurrentScenario: (name?: string) => void;
   removePinnedScenario: (id: string) => void;
 
@@ -89,24 +91,46 @@ export const CLPS_PRESET: PlannerParameters = {
   antenna_mask_deg: 0.0,
 };
 
+export const VIPER_PRESET: PlannerParameters = {
+  stay_days: 21.0,
+  lit_threshold_pct: 50,
+  min_sun_fraction: 0.85,
+  max_dark_gap_hours: 16,
+  min_earth_fraction: 0.85,
+  antenna_mask_deg: 1.5,
+};
+
+export const HABITAT_PRESET: PlannerParameters = {
+  stay_days: 28.0,
+  lit_threshold_pct: 40,
+  min_sun_fraction: 0.75,
+  max_dark_gap_hours: 48,
+  min_earth_fraction: 0.70,
+  antenna_mask_deg: 0.5,
+};
+
 export const usePlannerStore = create<PlannerState>((set, get) => ({
   loading: true,
   error: null,
   manifest: null,
   sites: [],
   selectedSiteId: 'connecting-ridge',
-  plannedDayIndex: 60, // ~March 2, 2027
+  plannedDayIndex: 12, // Jan 13, 2027 (Optimal Artemis III window with 100% Sun & Earth LOS)
   slipDays: 0,
   scrubStep: 0,
   isPlaying: false,
   playbackSpeed: 1,
   metricMode: 'combined',
-  activeTab: 'planner',
+  activeTab: (typeof window !== 'undefined' && ['planner', 'site', 'pole'].includes(window.location.hash.replace('#', ''))
+    ? window.location.hash.replace('#', '')
+    : 'landing') as 'landing' | 'planner' | 'site' | 'pole',
   parameters: { ...ARTEMIS_PRESET },
   helpers: [],
   heatmapMatrix: null,
   currentHorizon: null,
   pinnedScenarios: [],
+  isComparisonOpen: false,
+  setIsComparisonOpen: (open: boolean) => set({ isComparisonOpen: open }),
 
   initialize: async () => {
     set({ loading: true, error: null });
@@ -182,7 +206,19 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     set({ metricMode: mode });
   },
 
-  setActiveTab: (tab: 'planner' | 'site' | 'pole') => {
+  setActiveTab: (tab: 'landing' | 'planner' | 'site' | 'pole') => {
+    if (typeof window !== 'undefined') {
+      const currentHash = window.location.hash.replace('#', '');
+      if (tab === 'landing') {
+        if (currentHash !== '') {
+          history.pushState(null, '', window.location.pathname + window.location.search);
+        }
+      } else {
+        if (currentHash !== tab) {
+          window.location.hash = tab;
+        }
+      }
+    }
     set({ activeTab: tab });
   },
 
@@ -197,8 +233,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
   },
 
-  applyPreset: (preset: 'artemis' | 'clps') => {
-    const targetParams = preset === 'artemis' ? ARTEMIS_PRESET : CLPS_PRESET;
+  applyPreset: (preset: 'artemis' | 'clps' | 'viper' | 'habitat') => {
+    let targetParams = ARTEMIS_PRESET;
+    if (preset === 'clps') targetParams = CLPS_PRESET;
+    if (preset === 'viper') targetParams = VIPER_PRESET;
+    if (preset === 'habitat') targetParams = HABITAT_PRESET;
     get().updateParameters(targetParams);
   },
 
