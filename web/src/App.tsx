@@ -9,7 +9,7 @@ import { SiteView } from './views/SiteView';
 import { PoleOverview } from './three/PoleOverview';
 import { LandingPage } from './views/LandingPage';
 import { ComparisonDrawer } from './views/ComparisonDrawer';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { loading, error, initialize, activeTab } = usePlannerStore();
@@ -17,6 +17,26 @@ export const App: React.FC = () => {
   useEffect(() => {
     initialize();
   }, [initialize]);
+
+  // Sync activeTab with browser Back/Forward navigation & hash changes
+  useEffect(() => {
+    const handleNavigation = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (['planner', 'site', 'pole'].includes(hash)) {
+        usePlannerStore.setState({ activeTab: hash as 'planner' | 'site' | 'pole' });
+      } else {
+        usePlannerStore.setState({ activeTab: 'landing' });
+      }
+    };
+
+    window.addEventListener('popstate', handleNavigation);
+    window.addEventListener('hashchange', handleNavigation);
+
+    return () => {
+      window.removeEventListener('popstate', handleNavigation);
+      window.removeEventListener('hashchange', handleNavigation);
+    };
+  }, []);
 
   // 1. Landing Page View (Instant display)
   if (activeTab === 'landing') {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
-import { Calendar, Compass, ShieldAlert, Sparkles, Layers, Globe, Scale, Home } from 'lucide-react';
+import { Calendar, Compass, ShieldAlert, Sparkles, Layers, Globe, Scale, Home, ArrowLeft } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const {
@@ -21,8 +21,17 @@ export const Header: React.FC = () => {
 
   return (
     <header className="h-14 border-b border-slate-800 bg-slate-950/90 backdrop-blur px-4 flex items-center justify-between z-20">
-      {/* Brand & Mission */}
+      {/* Brand & Mission & Back Button */}
       <div className="flex items-center space-x-3">
+        <button
+          onClick={() => setActiveTab('landing')}
+          className="flex items-center space-x-1.5 px-2.5 py-1 text-xs font-medium text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700/80 rounded-md transition shadow-sm"
+          title="Return to Landing Page"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 text-cyan-400" />
+          <span className="hidden sm:inline">Landing</span>
+        </button>
+
         <div
           onClick={() => setActiveTab('landing')}
           className="flex items-center space-x-2 cursor-pointer hover:opacity-85 transition"
@@ -106,8 +115,18 @@ export const Header: React.FC = () => {
         </div>
       )}
 
-      {/* Navigation tabs */}
+      {/* Navigation tabs & GitHub Link */}
       <div className="flex items-center space-x-2">
+        <a
+          href="https://github.com/ashihams/luna"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden xl:flex px-2.5 py-1 text-xs text-slate-400 hover:text-slate-200 transition items-center space-x-1"
+          title="View GitHub Repository"
+        >
+          <span>GitHub ↗</span>
+        </a>
+
         <button
           onClick={() => pinCurrentScenario()}
           className="px-2.5 py-1.5 text-xs text-slate-300 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-md transition flex items-center space-x-1.5"

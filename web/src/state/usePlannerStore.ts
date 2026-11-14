@@ -208,10 +208,15 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   setActiveTab: (tab: 'landing' | 'planner' | 'site' | 'pole') => {
     if (typeof window !== 'undefined') {
+      const currentHash = window.location.hash.replace('#', '');
       if (tab === 'landing') {
-        history.replaceState(null, '', window.location.pathname);
+        if (currentHash !== '') {
+          history.pushState(null, '', window.location.pathname + window.location.search);
+        }
       } else {
-        window.location.hash = tab;
+        if (currentHash !== tab) {
+          window.location.hash = tab;
+        }
       }
     }
     set({ activeTab: tab });
