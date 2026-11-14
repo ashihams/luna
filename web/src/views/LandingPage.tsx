@@ -122,10 +122,27 @@ export const LandingPage: React.FC = () => {
             <span>Validation</span>
             <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 ease-premium group-hover:w-full" />
           </a>
+          <a
+            href="https://github.com/ashihams/luna"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative py-1 group flex items-center space-x-1"
+          >
+            <span>GitHub ↗</span>
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 ease-premium group-hover:w-full" />
+          </a>
         </nav>
 
-        {/* Pill-shaped CTA with pulsing status dot */}
-        <div className="flex items-center space-x-4">
+        {/* Pill-shaped CTA with pulsing status dot and GitHub Link */}
+        <div className="flex items-center space-x-3">
+          <a
+            href="https://github.com/ashihams/luna"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex px-4 py-2.5 rounded-full border border-white/40 text-white font-mono text-xs uppercase tracking-[0.3em] hover:bg-white hover:text-black transition duration-500 ease-premium"
+          >
+            GitHub Code ↗
+          </a>
           <button
             onClick={() => setActiveTab('planner')}
             className="px-5 py-2.5 rounded-full border border-white/40 text-white font-mono text-xs uppercase tracking-[0.3em] flex items-center space-x-2.5 hover:bg-white hover:text-black transition duration-500 ease-premium"
@@ -165,15 +182,23 @@ export const LandingPage: React.FC = () => {
 
           {/* Quick Action Badges */}
           <div className="pt-4 flex flex-wrap justify-center items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80">
+            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80 shadow-sm">
               14 Artemis Sites
             </span>
-            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80">
+            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80 shadow-sm">
               720 Azimuths
             </span>
-            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80">
+            <span className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-white border border-[#e5e5e5] text-[#171717]/80 shadow-sm">
               &lt;25ms Matrix
             </span>
+            <a
+              href="https://github.com/ashihams/luna"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-[#4338ca] hover:bg-indigo-100 transition duration-500 font-semibold shadow-sm"
+            >
+              GitHub: ashihams/luna ↗
+            </a>
           </div>
         </div>
 
@@ -187,15 +212,23 @@ export const LandingPage: React.FC = () => {
             }}
           />
 
-          {/* Primary Action Button at the crest of the curve */}
-          <div className="relative z-20 mb-8">
+          {/* Primary Action Button and GitHub Code at the crest of the curve */}
+          <div className="relative z-20 mb-8 flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={() => setActiveTab('planner')}
-              className="group px-10 py-4 rounded-full bg-[#4338ca] hover:bg-[#3730a3] text-white font-mono text-xs uppercase tracking-[0.35em] font-semibold animate-pulse-gentle transition-all duration-500 ease-premium flex items-center space-x-3 shadow-xl shadow-indigo-900/20"
+              className="group px-9 py-4 rounded-full bg-[#4338ca] hover:bg-[#3730a3] text-white font-mono text-xs uppercase tracking-[0.35em] font-semibold animate-pulse-gentle transition-all duration-500 ease-premium flex items-center space-x-3 shadow-xl shadow-indigo-900/20"
             >
               <span>Initialize Mission Planner</span>
               <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1.5 transition duration-500 ease-premium" />
             </button>
+            <a
+              href="https://github.com/ashihams/luna"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-7 py-4 rounded-full bg-white hover:bg-slate-50 text-[#171717] border border-[#e5e5e5] font-mono text-xs uppercase tracking-[0.3em] font-semibold transition duration-500 ease-premium shadow-md flex items-center space-x-2"
+            >
+              <span>GitHub Code ↗</span>
+            </a>
           </div>
         </div>
       </section>

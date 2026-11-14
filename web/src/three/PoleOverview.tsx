@@ -296,24 +296,24 @@ export const PoleOverview: React.FC = () => {
     <div ref={containerRef} className="w-full h-full relative cursor-grab select-none overflow-hidden bg-slate-950">
       {/* Top Overlay HUD */}
       <div className="absolute top-4 left-4 z-10 pointer-events-none flex flex-col space-y-2">
-        <div className="bg-slate-950/85 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-xl max-w-sm pointer-events-auto">
-          <div className="flex items-center space-x-2 text-cyan-400 mb-1">
+        <div className="bg-white/90 backdrop-blur-md border border-[#e5e5e5] rounded-2xl p-4 shadow-xl max-w-sm pointer-events-auto text-[#171717]">
+          <div className="flex items-center space-x-2 text-[#4338ca] mb-1.5">
             <Globe className="w-4 h-4" />
-            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-100">
+            <h2 className="font-serif italic text-sm font-semibold tracking-wide text-[#171717]">
               Lunar South Pole Overview (300×300 km)
             </h2>
           </div>
-          <p className="text-[11px] text-slate-400 leading-relaxed">
+          <p className="font-sans text-[11px] text-[#171717]/70 leading-relaxed">
             Full LOLA 80 m polar stereographic digital elevation model covering 80°S to 90°S.
             Markers indicate the 14 candidate Artemis sites, color-coded by mission viability on the selected date.
           </p>
-          <div className="flex items-center space-x-4 mt-2.5 text-[10px] font-medium border-t border-slate-800 pt-2">
-            <div className="flex items-center space-x-1.5 text-emerald-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500" />
+          <div className="flex items-center space-x-4 mt-3 text-[10px] font-mono uppercase tracking-wider border-t border-[#e5e5e5] pt-2.5">
+            <div className="flex items-center space-x-1.5 text-emerald-700">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm" />
               <span>Viable Site</span>
             </div>
-            <div className="flex items-center space-x-1.5 text-rose-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500" />
+            <div className="flex items-center space-x-1.5 text-rose-700">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm" />
               <span>Failed Constraints</span>
             </div>
           </div>
@@ -323,31 +323,31 @@ export const PoleOverview: React.FC = () => {
       {/* Floating Hover Tooltip */}
       {hoveredSite && tooltipPos && (
         <div
-          className="fixed pointer-events-none z-50 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-lg p-3 text-xs shadow-2xl transform -translate-x-1/2 -translate-y-full mb-3 w-56"
+          className="fixed pointer-events-none z-50 bg-white/95 backdrop-blur-md border border-[#e5e5e5] rounded-xl p-3.5 text-xs shadow-2xl transform -translate-x-1/2 -translate-y-full mb-3 w-60 text-[#171717]"
           style={{ left: tooltipPos.x, top: tooltipPos.y }}
         >
-          <div className="flex items-center justify-between border-b border-slate-800 pb-1 mb-1.5">
-            <span className="font-bold text-slate-100">{hoveredSite.name}</span>
+          <div className="flex items-center justify-between border-b border-[#e5e5e5] pb-1.5 mb-2">
+            <span className="font-serif font-bold text-sm text-[#171717]">{hoveredSite.name}</span>
             <span
-              className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+              className={`px-2 py-0.5 rounded-full font-mono text-[9px] uppercase font-semibold ${
                 hoveredViability?.viable
-                  ? 'bg-emerald-950 text-emerald-400 border border-emerald-700'
-                  : 'bg-rose-950 text-rose-400 border border-rose-700'
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                  : 'bg-rose-50 text-rose-800 border border-rose-300'
               }`}
             >
               {hoveredViability?.viable ? 'VIABLE' : 'FAILED'}
             </span>
           </div>
-          <div className="text-[10px] font-mono text-cyan-400">
+          <div className="text-[10px] font-mono text-[#4338ca] font-semibold">
             {hoveredSite.lat_deg.toFixed(3)}°S, {hoveredSite.lon_deg_east.toFixed(3)}°E
           </div>
-          <div className="mt-1 pt-1 border-t border-slate-800 flex justify-between text-[10px]">
-            <span className="text-slate-400">Score</span>
-            <span className="font-mono text-cyan-300 font-bold">
+          <div className="mt-2 pt-1.5 border-t border-[#e5e5e5] flex justify-between text-[11px]">
+            <span className="text-[#171717]/60">Score</span>
+            <span className="font-mono text-[#4338ca] font-bold">
               {hoveredViability ? (hoveredViability.score * 100).toFixed(1) : 0}
             </span>
           </div>
-          <div className="mt-1 text-[9px] text-cyan-400 font-medium text-center">
+          <div className="mt-2 text-[10px] text-[#4338ca] font-mono uppercase tracking-wider text-center font-semibold">
             Click to fly to Lander Site View →
           </div>
         </div>
