@@ -115,7 +115,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   manifest: null,
   sites: [],
   selectedSiteId: 'connecting-ridge',
-  plannedDayIndex: 60, // ~March 2, 2027
+  plannedDayIndex: 12, // Jan 13, 2027 (Optimal Artemis III window with 100% Sun & Earth LOS)
   slipDays: 0,
   scrubStep: 0,
   isPlaying: false,

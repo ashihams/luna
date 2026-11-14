@@ -7,6 +7,7 @@ export const Header: React.FC = () => {
     activeTab,
     setActiveTab,
     parameters,
+    slipDays,
     applyPreset,
     getSlipAnalysis,
     pinnedScenarios,
@@ -83,7 +84,13 @@ export const Header: React.FC = () => {
                 slipAnalysis.isViable ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
               }`}
             />
-            <span>{slipAnalysis.isViable ? 'MISSION VIABLE' : 'SLIP FAILED'}</span>
+            <span>
+              {slipAnalysis.isViable
+                ? 'MISSION VIABLE'
+                : slipDays === 0
+                ? 'BASELINE NON-VIABLE'
+                : 'SLIP FAILED'}
+            </span>
           </div>
 
           {slipAnalysis.isFragile && (
