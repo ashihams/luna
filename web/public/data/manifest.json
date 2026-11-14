@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated_utc": "2026-11-14T10:24:39.783670+00:00",
+  "generated_utc": "2026-11-14T10:28:50.342441+00:00",
   "constants": {
     "R_MOON_M": 1737400,
     "R_SUN_KM": 695700,
@@ -27,15 +27,15 @@
     {
       "id": "connecting-ridge",
       "name": "Connecting Ridge (Site 01)",
-      "lat_deg": -89.46,
-      "lon_deg_east": 136.68,
+      "lat_deg": -89.305,
+      "lon_deg_east": 123.623,
       "program": "artemis",
-      "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site01",
+      "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site01; ridge crest verified",
       "obs_height_m": 2.0,
-      "ground_height_m": -1182.87,
+      "ground_height_m": 1303.46,
       "effective_radius_km": 300.0,
-      "terrain_z_min": -1685.18,
-      "terrain_z_max": 2733.26,
+      "terrain_z_min": -4170.49,
+      "terrain_z_max": 0.0,
       "files": {
         "horizon": "data/horizon_connecting-ridge.json",
         "tracks": "data/tracks_connecting-ridge.bin",

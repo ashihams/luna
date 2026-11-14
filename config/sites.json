@@ -2,11 +2,11 @@
   {
     "id": "connecting-ridge",
     "name": "Connecting Ridge (Site 01)",
-    "lat_deg": -89.46,
-    "lon_deg_east": 136.68,
+    "lat_deg": -89.305,
+    "lon_deg_east": 123.623,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site01",
-    "notes": "Ridge between Shackleton and de Gerlache craters. 5m DEM available (Site01_final_adj_5mpp_surf.tif).",
+    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site01; ridge crest verified",
+    "notes": "Ridge between Shackleton and de Gerlache craters. Ridge crest elevation +1304m. 5m DEM available.",
     "obs_height_m": 2.0,
     "has_5m_dem": true
   },
