@@ -93,3 +93,58 @@ export async function fetchHorizon(site: SiteMeta): Promise<HorizonData> {
   horizonCache.set(site.id, horizon);
   return horizon;
 }
+
+export interface PoleOverviewData {
+  terrain: Uint16Array;
+  z_min: number;
+  z_max: number;
+  half_width_m: number;
+  dim: number;
+}
+
+let cachedPoleOverview: PoleOverviewData | null = null;
+
+export async function fetchPoleOverview(): Promise<PoleOverviewData> {
+  if (cachedPoleOverview) return cachedPoleOverview;
+
+  const [metaRes, binRes] = await Promise.all([
+    fetch('/data/pole_overview_meta.json'),
+    fetch('/data/pole_overview.bin'),
+  ]);
+
+  if (!metaRes.ok || !binRes.ok) {
+    throw new Error('Failed to load pole overview data');
+  }
+
+  const meta = await metaRes.json();
+  const buffer = await binRes.arrayBuffer();
+  const terrain = new Uint16Array(buffer);
+
+  cachedPoleOverview = {
+    terrain,
+    z_min: meta.z_min,
+    z_max: meta.z_max,
+    half_width_m: meta.half_width_m,
+    dim: meta.dim,
+  };
+  return cachedPoleOverview;
+}
+
+
+const terrainCache: Map<string, Uint16Array> = new Map();
+
+export async function fetchTerrain(site: SiteMeta): Promise<Uint16Array> {
+  if (terrainCache.has(site.id)) {
+    return terrainCache.get(site.id)!;
+  }
+
+  const res = await fetch(`/${site.files.terrain}`);
+  if (!res.ok) {
+    throw new Error(`Failed to load terrain mesh for ${site.id}: ${res.statusText}`);
+  }
+  const buffer = await res.arrayBuffer();
+  const terrain = new Uint16Array(buffer);
+  terrainCache.set(site.id, terrain);
+  return terrain;
+}
+

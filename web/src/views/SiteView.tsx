@@ -1,6 +1,7 @@
 import React from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
 import { SkyPlot } from '../charts/SkyPlot';
+import { SiteScene } from '../three/SiteScene';
 import { Sun, Radio, Compass, AlertCircle, Clock, ShieldCheck, Mountain } from 'lucide-react';
 
 export const SiteView: React.FC = () => {
@@ -117,25 +118,9 @@ export const SiteView: React.FC = () => {
           </div>
         </div>
 
-        {/* 3D Canvas Placeholder / Preview */}
-        <div className="flex-1 w-full h-full flex items-center justify-center bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-          {/* Subtle starfield background */}
-          <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
-
-          <div className="text-center z-10 p-6 max-w-md bg-slate-950/70 border border-slate-800 rounded-xl backdrop-blur shadow-2xl">
-            <Mountain className="w-12 h-12 text-cyan-400 mx-auto mb-3 animate-pulse" />
-            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider mb-1">
-              Lander Horizon & Surface Perspective
-            </h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-4">
-              Observer placed at 2.0 m above terrain. Full 513×513 lunar mesh with LOLA 80 m
-              elevation, lunar curvature subtraction, and 19 km horizon occlusion ring.
-            </p>
-            <div className="inline-flex items-center space-x-2 text-[11px] font-mono px-3 py-1 bg-slate-900 border border-slate-700 rounded-full text-cyan-300">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Rigorous Geometric Occlusion Active</span>
-            </div>
-          </div>
+        {/* 3D First-Person Surface Scene */}
+        <div className="flex-1 w-full h-full relative overflow-hidden">
+          <SiteScene />
         </div>
       </div>
 

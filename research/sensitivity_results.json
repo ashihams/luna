@@ -1,0 +1,32 @@
+{
+  "shackleton-rim": {
+    "name": "Peak near Shackleton (Site 04)",
+    "mean_sun_dem": 67.68274977895682,
+    "mean_sun_flat": 53.32491158267084,
+    "mean_dark_dem": 48.59448275862069,
+    "mean_dark_flat": 72.19931034482758,
+    "viable_days_dem": 129,
+    "viable_days_flat": 103,
+    "slip_sens": 0.08414477528686787
+  },
+  "connecting-ridge": {
+    "name": "Connecting Ridge (Site 01)",
+    "mean_sun_dem": 71.286326259947,
+    "mean_sun_flat": 53.37668877099947,
+    "mean_dark_dem": 39.37931034482759,
+    "mean_dark_flat": 72.16896551724138,
+    "viable_days_dem": 146,
+    "viable_days_flat": 120,
+    "slip_sens": 0.07555416843745572
+  },
+  "malapert-massif": {
+    "name": "Malapert Massif",
+    "mean_sun_dem": 34.29640583554382,
+    "mean_sun_flat": 50.37746242263491,
+    "mean_dark_dem": 100.74620689655173,
+    "mean_dark_flat": 77.26275862068965,
+    "viable_days_dem": 64,
+    "viable_days_flat": 157,
+    "slip_sens": 0.09454645665108365
+  }
+}
