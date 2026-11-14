@@ -1,0 +1,30 @@
+# Slip Planner — .gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Data cache (large raw DEMs and kernels)
+data/cache/*
+!data/cache/.gitignore
+
+# Generated web data (tracked for zero-setup static deployment)
+# web/public/data/ is included so static site works directly without running 180MB DEM pipeline
+
+# Node
+web/node_modules/
+web/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+.vercel

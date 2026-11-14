@@ -1,0 +1,168 @@
+[
+  {
+    "id": "connecting-ridge",
+    "name": "Connecting Ridge (Site 01)",
+    "lat_deg": -89.305,
+    "lon_deg_east": 123.623,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site01; ridge crest verified",
+    "notes": "Ridge between Shackleton and de Gerlache craters. Ridge crest elevation +1304m. 5m DEM available.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": true
+  },
+  {
+    "id": "connecting-ridge-ext",
+    "name": "Connecting Ridge Extension",
+    "lat_deg": -88.99,
+    "lon_deg_east": 104.47,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022)",
+    "notes": "Extension of the connecting ridge between Shackleton and de Gerlache.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "shackleton-rim",
+    "name": "Peak near Shackleton (Site 04)",
+    "lat_deg": -88.81,
+    "lon_deg_east": 124.68,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site04",
+    "notes": "Elevated area on rim of Shackleton crater. 5m DEM available (Site04_final_adj_5mpp_surf.tif).",
+    "obs_height_m": 2.0,
+    "has_5m_dem": true
+  },
+  {
+    "id": "de-gerlache-rim1",
+    "name": "de Gerlache Rim 1 (Site 11)",
+    "lat_deg": -88.67,
+    "lon_deg_east": -66.37,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site11",
+    "notes": "5m DEM available (Site11_final_adj_5mpp_surf.tif).",
+    "obs_height_m": 2.0,
+    "has_5m_dem": true
+  },
+  {
+    "id": "de-gerlache-rim2",
+    "name": "de Gerlache Rim 2",
+    "lat_deg": -88.22,
+    "lon_deg_east": -63.43,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022; retained in Oct 2024 update)",
+    "notes": "Retained in the October 2024 updated list of 9 regions.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "faustini-rim-a",
+    "name": "Faustini Rim A",
+    "lat_deg": -87.86,
+    "lon_deg_east": 90.0,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022)",
+    "notes": "On the rim of Faustini crater.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "peak-near-shackleton",
+    "name": "Peak near Shackleton (Site 07)",
+    "lat_deg": -89.02,
+    "lon_deg_east": 141.0,
+    "program": "artemis",
+    "source": "PGDA Product 78 Site07; Mazarico et al. 2011",
+    "notes": "5m DEM available (Site07_final_adj_5mpp_surf.tif). Distinct from Site04; on far-side flank of Shackleton. Coordinates approximate — refine from DEM header.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": true
+  },
+  {
+    "id": "haworth",
+    "name": "Haworth",
+    "lat_deg": -86.75,
+    "lon_deg_east": -23.67,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+    "notes": "Retained in October 2024 updated list.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "malapert-massif",
+    "name": "Malapert Massif",
+    "lat_deg": -85.98,
+    "lon_deg_east": -0.26,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+    "notes": "Retained in October 2024 updated list. Near-permanent Earth visibility.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "leibnitz-beta",
+    "name": "Leibnitz Beta Plateau (Site 20)",
+    "lat_deg": -85.43,
+    "lon_deg_east": 31.83,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site20",
+    "notes": "Relatively flat plateau. 5m DEM available (Site20_final_adj_5mpp_surf.tif).",
+    "obs_height_m": 2.0,
+    "has_5m_dem": true
+  },
+  {
+    "id": "nobile-rim1",
+    "name": "Nobile Rim 1",
+    "lat_deg": -85.44,
+    "lon_deg_east": 37.44,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+    "notes": "Retained in October 2024 updated list.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "nobile-rim2",
+    "name": "Nobile Rim 2",
+    "lat_deg": -83.93,
+    "lon_deg_east": 58.74,
+    "program": "artemis",
+    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+    "notes": "Retained in October 2024 updated list.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "malapert-site23",
+    "name": "Malapert Massif (Site 23)",
+    "lat_deg": -86.0,
+    "lon_deg_east": 2.0,
+    "program": "artemis",
+    "source": "PGDA Product 78 Site23",
+    "notes": "5m DEM available (Site23_final_adj_5mpp_surf.tif). Malapert region alternate.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": true
+  },
+  {
+    "id": "slater-plain",
+    "name": "Slater Plain",
+    "lat_deg": -88.3,
+    "lon_deg_east": -28.0,
+    "program": "artemis",
+    "source": "NASA Artemis III updated candidate regions (Oct 2024)",
+    "notes": "New addition in October 2024 update.",
+    "obs_height_m": 2.0,
+    "has_5m_dem": false
+  },
+  {
+    "id": "test-pole",
+    "name": "Test Site (Pole)",
+    "lat_deg": -89.9,
+    "lon_deg_east": 0.0,
+    "program": "other",
+    "source": "Synthetic test site",
+    "notes": "Near-pole test site for unit tests. Hidden in UI.",
+    "obs_height_m": 2.0,
+    "test": true,
+    "has_5m_dem": false
+  }
+]
