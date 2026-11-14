@@ -34,7 +34,7 @@ export const ControlPanel: React.FC = () => {
               }`}
             >
               <div className="font-semibold">Artemis III</div>
-              <div className="text-[10px] text-slate-400">6.5-day sortie</div>
+              <div className="text-[10px] text-slate-400">6.5d Sortie</div>
             </button>
             <button
               onClick={() => applyPreset('clps')}
@@ -45,7 +45,29 @@ export const ControlPanel: React.FC = () => {
               }`}
             >
               <div className="font-semibold">CLPS Lander</div>
-              <div className="text-[10px] text-slate-400">14-day lunar day</div>
+              <div className="text-[10px] text-slate-400">14d Lunar Day</div>
+            </button>
+            <button
+              onClick={() => applyPreset('viper')}
+              className={`px-2.5 py-1.5 text-xs font-medium rounded border text-left transition ${
+                parameters.stay_days === 21.0
+                  ? 'bg-indigo-950/40 border-indigo-500/60 text-indigo-200 shadow-sm'
+                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+              }`}
+            >
+              <div className="font-semibold">VIPER Rover</div>
+              <div className="text-[10px] text-slate-400">21d Traverse</div>
+            </button>
+            <button
+              onClick={() => applyPreset('habitat')}
+              className={`px-2.5 py-1.5 text-xs font-medium rounded border text-left transition ${
+                parameters.stay_days === 28.0
+                  ? 'bg-emerald-950/40 border-emerald-500/60 text-emerald-200 shadow-sm'
+                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+              }`}
+            >
+              <div className="font-semibold">Base Camp</div>
+              <div className="text-[10px] text-slate-400">28d Habitation</div>
             </button>
           </div>
         </div>

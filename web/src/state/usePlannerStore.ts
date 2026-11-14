@@ -58,7 +58,9 @@ interface PlannerState {
   setMetricMode: (mode: MetricMode) => void;
   setActiveTab: (tab: 'planner' | 'site' | 'pole') => void;
   updateParameters: (params: Partial<PlannerParameters>) => void;
-  applyPreset: (preset: 'artemis' | 'clps') => void;
+  isComparisonOpen: boolean;
+  setIsComparisonOpen: (open: boolean) => void;
+  applyPreset: (preset: 'artemis' | 'clps' | 'viper' | 'habitat') => void;
   pinCurrentScenario: (name?: string) => void;
   removePinnedScenario: (id: string) => void;
 
@@ -89,6 +91,24 @@ export const CLPS_PRESET: PlannerParameters = {
   antenna_mask_deg: 0.0,
 };
 
+export const VIPER_PRESET: PlannerParameters = {
+  stay_days: 21.0,
+  lit_threshold_pct: 50,
+  min_sun_fraction: 0.85,
+  max_dark_gap_hours: 16,
+  min_earth_fraction: 0.85,
+  antenna_mask_deg: 1.5,
+};
+
+export const HABITAT_PRESET: PlannerParameters = {
+  stay_days: 28.0,
+  lit_threshold_pct: 40,
+  min_sun_fraction: 0.75,
+  max_dark_gap_hours: 48,
+  min_earth_fraction: 0.70,
+  antenna_mask_deg: 0.5,
+};
+
 export const usePlannerStore = create<PlannerState>((set, get) => ({
   loading: true,
   error: null,
@@ -107,6 +127,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   heatmapMatrix: null,
   currentHorizon: null,
   pinnedScenarios: [],
+  isComparisonOpen: false,
+  setIsComparisonOpen: (open: boolean) => set({ isComparisonOpen: open }),
 
   initialize: async () => {
     set({ loading: true, error: null });
@@ -197,8 +219,11 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     }
   },
 
-  applyPreset: (preset: 'artemis' | 'clps') => {
-    const targetParams = preset === 'artemis' ? ARTEMIS_PRESET : CLPS_PRESET;
+  applyPreset: (preset: 'artemis' | 'clps' | 'viper' | 'habitat') => {
+    let targetParams = ARTEMIS_PRESET;
+    if (preset === 'clps') targetParams = CLPS_PRESET;
+    if (preset === 'viper') targetParams = VIPER_PRESET;
+    if (preset === 'habitat') targetParams = HABITAT_PRESET;
     get().updateParameters(targetParams);
   },
 

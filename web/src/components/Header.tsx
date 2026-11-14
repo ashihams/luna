@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
-import { Calendar, Compass, ShieldAlert, Sparkles, Layers } from 'lucide-react';
+import { Calendar, Compass, ShieldAlert, Sparkles, Layers, Globe, Scale } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const {
@@ -11,6 +11,7 @@ export const Header: React.FC = () => {
     getSlipAnalysis,
     pinnedScenarios,
     pinCurrentScenario,
+    setIsComparisonOpen,
   } = usePlannerStore();
 
   const slipAnalysis = getSlipAnalysis();
@@ -105,6 +106,15 @@ export const Header: React.FC = () => {
           <span>Pin Plan ({pinnedScenarios.length})</span>
         </button>
 
+        <button
+          onClick={() => setIsComparisonOpen(true)}
+          className="px-2.5 py-1.5 text-xs font-medium text-cyan-300 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-700/60 rounded-md transition flex items-center space-x-1.5 shadow-sm"
+          title="Compare scenarios side-by-side"
+        >
+          <Scale className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Compare</span>
+        </button>
+
         <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
           <button
             onClick={() => setActiveTab('planner')}
@@ -115,7 +125,7 @@ export const Header: React.FC = () => {
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Heatmap Planner</span>
+            <span>Heatmap</span>
           </button>
           <button
             onClick={() => setActiveTab('site')}
@@ -126,7 +136,18 @@ export const Header: React.FC = () => {
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
-            <span>Site View & 3D</span>
+            <span>Site 3D</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('pole')}
+            className={`px-3 py-1 text-xs font-medium rounded-md transition-all flex items-center space-x-1.5 ${
+              activeTab === 'pole'
+                ? 'bg-slate-800 text-white shadow'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Globe className="w-3.5 h-3.5" />
+            <span>Pole 3D</span>
           </button>
         </div>
       </div>

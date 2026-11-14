@@ -6,6 +6,8 @@ import { Heatmap } from './charts/Heatmap';
 import { SlipControl } from './views/SlipControl';
 import { RescuePanel } from './views/RescuePanel';
 import { SiteView } from './views/SiteView';
+import { PoleOverview } from './three/PoleOverview';
+import { ComparisonDrawer } from './views/ComparisonDrawer';
 import { Loader2, AlertCircle } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -74,10 +76,15 @@ export const App: React.FC = () => {
 
             <RescuePanel />
           </div>
+        ) : activeTab === 'pole' ? (
+          <PoleOverview />
         ) : (
           <SiteView />
         )}
       </main>
+
+      {/* Two-Scenario Comparison Drawer */}
+      <ComparisonDrawer />
     </div>
   );
 };
