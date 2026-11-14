@@ -40,7 +40,7 @@ interface PlannerState {
   isPlaying: boolean;
   playbackSpeed: number;
   metricMode: MetricMode;
-  activeTab: 'planner' | 'site' | 'pole';
+  activeTab: 'landing' | 'planner' | 'site' | 'pole';
   parameters: PlannerParameters;
   helpers: SiteMetricsHelper[];
   heatmapMatrix: CellMetrics[][] | null;
@@ -56,7 +56,7 @@ interface PlannerState {
   setIsPlaying: (playing: boolean) => void;
   setPlaybackSpeed: (speed: number) => void;
   setMetricMode: (mode: MetricMode) => void;
-  setActiveTab: (tab: 'planner' | 'site' | 'pole') => void;
+  setActiveTab: (tab: 'landing' | 'planner' | 'site' | 'pole') => void;
   updateParameters: (params: Partial<PlannerParameters>) => void;
   isComparisonOpen: boolean;
   setIsComparisonOpen: (open: boolean) => void;
@@ -204,7 +204,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     set({ metricMode: mode });
   },
 
-  setActiveTab: (tab: 'planner' | 'site' | 'pole') => {
+  setActiveTab: (tab: 'landing' | 'planner' | 'site' | 'pole') => {
     set({ activeTab: tab });
   },
 

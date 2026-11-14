@@ -27,9 +27,29 @@ export default {
         earth: {
           blue: '#219ebc',
           cyan: '#8ecae6',
-        }
+        },
+        brand: {
+          DEFAULT: '#2e5bff',
+          hover: '#1e48e0',
+          light: '#eef2ff',
+        },
+        surface: {
+          DEFAULT: '#ffffff',
+          alt: '#f7f6f6',
+          dark: '#141314',
+          border: '#e0e0df',
+        },
+        content: {
+          primary: '#201f20',
+          secondary: '#494949',
+          muted: '#606060',
+          inverse: '#fcfcfd',
+        },
+      },
+      fontFamily: {
+        sans: ['"Host Grotesk"', 'system-ui', 'sans-serif'],
       },
     },
   },
   plugins: [],
-}
+};

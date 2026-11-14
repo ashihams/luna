@@ -1,8 +1,8 @@
-# Slip Planner 🌑
+# Luna Slip Planner 🌑
 > *My landing slipped N days. Is this site still viable, and what are my alternatives?*
 
 **NASA Space Apps 2026 — Challenge: Lunar Landing Site Navigator**  
-**Live Application:** [https://dist-seven-psi-39.vercel.app](https://dist-seven-psi-39.vercel.app)  
+**Live Application:** [https://lunaslipplanner.vercel.app](https://lunaslipplanner.vercel.app)  
 **Target Region:** Lunar South Pole (80°S to 90°S) • 14 Curated Artemis III Candidate Sites  
 
 ---

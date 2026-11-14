@@ -7,6 +7,7 @@ import { SlipControl } from './views/SlipControl';
 import { RescuePanel } from './views/RescuePanel';
 import { SiteView } from './views/SiteView';
 import { PoleOverview } from './three/PoleOverview';
+import { LandingPage } from './views/LandingPage';
 import { ComparisonDrawer } from './views/ComparisonDrawer';
 import { Loader2, AlertCircle } from 'lucide-react';
 
@@ -29,7 +30,7 @@ export const App: React.FC = () => {
           </div>
           <div>
             <h1 className="text-base font-bold text-white uppercase tracking-wider">
-              Slip Planner
+              Luna Slip Planner
             </h1>
             <p className="text-xs text-slate-400 mt-1">
               Loading precomputed 35,088-step SPICE ephemeris and LOLA 80m horizons for all 14 Artemis landing sites...
@@ -58,6 +59,12 @@ export const App: React.FC = () => {
     );
   }
 
+  // 1. Landing Page View
+  if (activeTab === 'landing') {
+    return <LandingPage />;
+  }
+
+  // 2. Mission Dashboard View
   return (
     <div className="w-screen h-screen flex flex-col bg-slate-950 overflow-hidden font-sans">
       <Header />
