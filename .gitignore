@@ -1,0 +1,29 @@
+# Slip Planner — .gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Data cache (large files)
+data/cache/*
+!data/cache/.gitignore
+
+# Generated web data
+web/public/data/*
+!web/public/data/.gitkeep
+
+# Node
+web/node_modules/
+web/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

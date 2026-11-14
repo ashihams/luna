@@ -1,0 +1,53 @@
+# Slip Planner – master constants
+# All values referenced in the build spec, section 6.
+
+R_MOON_M: 1737400          # Lunar reference sphere radius (metres)
+R_SUN_KM: 695700           # Solar radius (km)
+R_EARTH_KM: 6371.0         # Earth mean radius (km)
+
+OBS_HEIGHT_M: 2.0          # Default lander-top observer height (metres); per-site override in sites.json
+
+AZ_STEP_DEG: 0.5           # Horizon azimuth resolution → 720 azimuths
+AZ_COUNT: 720              # = 360 / AZ_STEP_DEG
+
+T0_UTC: "2027-01-01T00:00:00"
+T1_UTC: "2029-01-01T00:00:00"
+STEP_MIN: 30               # Temporal resolution (minutes)
+N_STEPS: 35088             # 731 days × 48 half-hours
+
+DISC_SAMPLES: 32           # Equal-area samples across Sun/Earth disc
+
+TERRAIN_N: 513             # Terrain grid side length (pixels)
+TERRAIN_HALF_M: 10000      # Half-width of terrain tile (metres) → ±10 km
+
+ABCORR: "LT+S"            # SPICE aberration correction
+
+# Terrain level ranges (metres from site)
+NEAR_RANGE_M: [0, 15000]
+MID_RANGE_M: [15000, 60000]
+FAR_RANGE_M: [60000, 300000]
+
+# SPICE kernels (relative to data/cache/kernels/)
+# SPICE kernels (relative to data/cache/kernels/) — load in this order
+SPICE_KERNELS:
+  - "naif0012.tls"
+  - "pck00011.tpc"
+  - "de421.bsp"
+  - "moon_pa_de421_1900-2050.bpc"
+  - "moon_080317.tf"
+
+# DEM URLs
+DEM_20M_URL: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_20MPP_ADJ.TIF"
+DEM_40M_URL: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_40MPP_ADJ.TIF"
+DEM_80M_URL: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ.TIF"
+SLOPE_20M_URL: "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDSM_80S_20MPP_ADJ.TIF"
+
+# SPICE kernel URLs (NAIF generic_kernels) — VERIFIED 2026-11-14
+# de421.bsp moved to a_old_versions/ subdirectory on NAIF server
+# pck00011.tpc required for BODY301_RADII (Moon shape constants)
+SPICE_KERNEL_URLS:
+  naif0012.tls: "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls"
+  pck00011.tpc: "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00011.tpc"
+  de421.bsp: "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/a_old_versions/de421.bsp"
+  moon_pa_de421_1900-2050.bpc: "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/moon_pa_de421_1900-2050.bpc"
+  moon_080317.tf: "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/satellites/moon_080317.tf"

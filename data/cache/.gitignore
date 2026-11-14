@@ -1,0 +1,3 @@
+# data/cache — git-ignored; holds DEM windows (.npy) and SPICE kernels
+*
+!.gitignore
