@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
-import { AlertTriangle, CheckCircle2, ShieldAlert, Sun, Radio, Moon, Sparkles } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, RotateCcw, ShieldAlert, Sparkles, Sun, Radio, Moon } from 'lucide-react';
 
 export const SlipControl: React.FC = () => {
   const {
@@ -56,36 +56,36 @@ export const SlipControl: React.FC = () => {
   const quickDeltas = [-7, -1, 0, 1, 3, 7, 14, 28];
 
   return (
-    <div className="border-t border-[#e5e5e5] bg-[#fcfbf9] p-4 space-y-3.5 select-none text-[#171717]">
+    <div className="border-t border-slate-800 bg-slate-950/80 p-3.5 space-y-3">
       {/* Top row: Slip slider and date delta */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         {/* Date mapping */}
         <div className="flex items-center space-x-3">
-          <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl px-3.5 py-2">
-            <div className="font-mono text-[9px] text-[#171717]/50 uppercase tracking-[0.25em]">
+          <div className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5">
+            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
               Planned Launch
             </div>
-            <div className="text-sm font-mono font-bold text-amber-600">{plannedDateStr}</div>
+            <div className="text-sm font-mono font-bold text-amber-400">{plannedDateStr}</div>
           </div>
 
-          <div className="text-[#171717]/30 font-serif">→</div>
+          <div className="text-slate-600 font-bold">→</div>
 
           <div
-            className={`rounded-xl px-3.5 py-2 border shadow-sm transition-all duration-500 ease-premium ${
+            className={`rounded-lg px-3 py-1.5 border ${
               analysis.isViable
-                ? 'bg-emerald-50/80 border-emerald-300'
-                : 'bg-rose-50/80 border-rose-300'
+                ? 'bg-emerald-950/30 border-emerald-700/50'
+                : 'bg-rose-950/30 border-rose-700/50'
             }`}
           >
-            <div className="flex items-center justify-between font-mono text-[9px] text-[#171717]/60 uppercase tracking-[0.25em]">
+            <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
               <span>Slipped Landing</span>
-              <span className="font-mono text-[#4338ca] ml-2 font-bold">
-                {slipDays >= 0 ? `+${slipDays}` : slipDays}d
+              <span className="font-mono text-cyan-400 ml-2">
+                {slipDays >= 0 ? `+${slipDays}` : slipDays} days
               </span>
             </div>
             <div
               className={`text-sm font-mono font-bold ${
-                analysis.isViable ? 'text-emerald-700' : 'text-rose-700'
+                analysis.isViable ? 'text-emerald-400' : 'text-rose-400'
               }`}
             >
               {slippedDateStr}
@@ -93,15 +93,15 @@ export const SlipControl: React.FC = () => {
           </div>
 
           {/* Quick buttons */}
-          <div className="hidden sm:flex items-center space-x-1.5">
+          <div className="hidden sm:flex items-center space-x-1">
             {quickDeltas.map((d) => (
               <button
                 key={d}
                 onClick={() => setSlipDays(d)}
-                className={`px-2.5 py-1 text-[11px] font-mono tracking-wider rounded-full transition-all duration-500 ease-premium shadow-sm ${
+                className={`px-2 py-1 text-xs font-mono rounded transition ${
                   slipDays === d
-                    ? 'bg-[#4338ca] text-white font-bold'
-                    : 'bg-white text-[#171717]/70 hover:text-[#171717] border border-[#e5e5e5]'
+                    ? 'bg-cyan-500 text-black font-bold shadow'
+                    : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
                 }`}
               >
                 {d === 0 ? 'RESET' : d > 0 ? `+${d}d` : `${d}d`}
@@ -113,65 +113,65 @@ export const SlipControl: React.FC = () => {
         {/* Primary Viability / Tolerance Badge */}
         <div className="flex items-center space-x-3">
           <div
-            className={`px-4 py-2 rounded-xl border shadow-sm flex items-center space-x-3 transition-all duration-500 ease-premium ${
+            className={`px-3.5 py-2 rounded-lg border flex items-center space-x-2.5 ${
               analysis.isViable
-                ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
-                : 'bg-rose-50 border-rose-300 text-rose-900'
+                ? 'bg-emerald-950/50 border-emerald-600/60 text-emerald-300'
+                : 'bg-rose-950/50 border-rose-600/60 text-rose-300'
             }`}
           >
             {analysis.isViable ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
             ) : (
-              <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+              <AlertTriangle className="w-5 h-5 text-rose-400 flex-shrink-0" />
             )}
             <div>
-              <div className="font-serif italic text-xs font-semibold leading-tight">
+              <div className="text-xs font-bold leading-tight">
                 {analysis.isViable
-                  ? 'Site Viable for Sortie'
+                  ? 'SITE VIABLE FOR SORTIE'
                   : slipDays === 0
-                  ? 'Baseline Date Unfeasible'
-                  : 'Mission Slip Unfeasible'}
+                  ? 'BASELINE DATE UNFEASIBLE'
+                  : 'MISSION SLIP UNFEASIBLE'}
               </div>
-              <div className="font-sans text-[10px] text-[#171717]/70">
+              <div className="text-[10px] text-slate-300 font-medium">
                 {analysis.isViable
-                  ? `${parameters.stay_days}d window satisfies solar & direct-Earth constraints`
+                  ? `${parameters.stay_days}d window satisfies all solar & direct-Earth constraints`
                   : failureReasons.join('; ') || 'Thresholds violated'}
               </div>
             </div>
           </div>
 
           {/* Slip tolerance info */}
-          <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl px-3.5 py-2 text-xs">
-            <div className="font-mono text-[9px] text-[#171717]/50 uppercase tracking-[0.25em]">Slip Tolerance</div>
+          <div className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs">
+            <div className="text-[10px] text-slate-500 uppercase font-semibold">Slip Tolerance</div>
             {analysis.slipToleranceDays >= 0 ? (
-              <div className="font-mono font-bold flex items-center space-x-1.5 mt-0.5">
+              <div className="font-mono font-bold flex items-center space-x-1">
                 <span
                   className={
                     analysis.isFragile
-                      ? 'text-amber-600'
-                      : 'text-emerald-600'
+                      ? 'text-amber-400'
+                      : 'text-emerald-400'
                   }
                 >
                   {analysis.slipToleranceDays} continuous days
                 </span>
                 {analysis.isFragile && (
-                  <span className="text-[9px] px-1.5 py-0.5 bg-amber-100 text-amber-800 border border-amber-300 rounded-full font-mono uppercase tracking-widest">
+                  <span className="text-[10px] px-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded">
                     FRAGILE
                   </span>
                 )}
               </div>
             ) : (
-              <div className="font-mono text-rose-600 font-semibold mt-0.5">
-                0 days (Planned non-viable)
+              <div className="font-mono text-rose-400 font-semibold">
+                0 days (Planned date non-viable)
               </div>
             )}
           </div>
 
           {/* Earliest recovery */}
           {!analysis.isViable && analysis.earliestRecoveryDays !== null && (
-            <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl px-3.5 py-2 text-xs">
-              <div className="font-mono text-[9px] text-[#171717]/50 uppercase tracking-[0.25em]">Recovery Window</div>
-              <div className="font-mono font-bold text-[#4338ca] mt-0.5">
+            <div className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs">
+              <div className="text-[10px] text-slate-500 uppercase font-semibold">Recovery Window</div>
+              <div className="font-mono font-bold text-cyan-400">
                 In +{analysis.earliestRecoveryDays} days
               </div>
             </div>
@@ -180,10 +180,10 @@ export const SlipControl: React.FC = () => {
       </div>
 
       {/* Slider */}
-      <div className="space-y-1 pt-1">
-        <div className="flex justify-between text-xs text-[#171717]/70 font-sans">
-          <span>Slip Slider: Drag to simulate launch delays across lunar synodic cycles</span>
-          <span className="font-mono text-[#4338ca] font-semibold">
+      <div className="space-y-1">
+        <div className="flex justify-between text-[11px] text-slate-400">
+          <span>Slip Slider: Drag to simulate launch delays</span>
+          <span className="font-mono text-cyan-400 font-semibold">
             {slipDays > 0 ? `+${slipDays} days slip` : slipDays === 0 ? 'On-schedule (0 days)' : `${slipDays} days early`}
           </span>
         </div>
@@ -194,9 +194,9 @@ export const SlipControl: React.FC = () => {
           step="1"
           value={slipDays}
           onChange={(e) => setSlipDays(parseInt(e.target.value))}
-          className="w-full accent-[#4338ca] h-2 bg-[#e5e5e5] rounded-lg cursor-pointer"
+          className="w-full accent-cyan-400 h-2 bg-slate-800 rounded-lg cursor-pointer"
         />
-        <div className="flex justify-between font-mono text-[9px] uppercase tracking-[0.25em] text-[#171717]/50">
+        <div className="flex justify-between text-[10px] font-mono text-slate-500">
           <span>-15d</span>
           <span>0d (Baseline)</span>
           <span>+15d</span>
@@ -207,67 +207,67 @@ export const SlipControl: React.FC = () => {
       </div>
 
       {/* Metrics Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1 text-xs">
-        <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl p-2.5">
-          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#171717]/50 flex items-center space-x-1.5">
-            <Sun className="w-3 h-3 text-amber-500" />
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 text-xs">
+        <div className="bg-slate-900/90 border border-slate-800 rounded p-2">
+          <div className="text-[10px] text-slate-500 flex items-center space-x-1">
+            <Sun className="w-3 h-3 text-amber-400" />
             <span>Sun Fraction</span>
           </div>
-          <div className="font-mono text-lg font-bold text-amber-600 mt-0.5">
+          <div className="font-mono text-base font-bold text-amber-300">
             {Math.round(metrics.sun_fraction * 100)}%
           </div>
-          <div className="font-sans text-[10px] text-[#171717]/50">Min: {Math.round(parameters.min_sun_fraction * 100)}%</div>
+          <div className="text-[9px] text-slate-500">Min: {Math.round(parameters.min_sun_fraction * 100)}%</div>
         </div>
 
-        <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl p-2.5">
-          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#171717]/50 flex items-center space-x-1.5">
-            <Radio className="w-3 h-3 text-sky-500" />
+        <div className="bg-slate-900/90 border border-slate-800 rounded p-2">
+          <div className="text-[10px] text-slate-500 flex items-center space-x-1">
+            <Radio className="w-3 h-3 text-blue-400" />
             <span>Earth Comms</span>
           </div>
-          <div className="font-mono text-lg font-bold text-sky-600 mt-0.5">
+          <div className="font-mono text-base font-bold text-blue-300">
             {Math.round(metrics.earth_fraction * 100)}%
           </div>
-          <div className="font-sans text-[10px] text-[#171717]/50">Min: {Math.round(parameters.min_earth_fraction * 100)}%</div>
+          <div className="text-[9px] text-slate-500">Min: {Math.round(parameters.min_earth_fraction * 100)}%</div>
         </div>
 
-        <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl p-2.5">
-          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#171717]/50 flex items-center space-x-1.5">
-            <Moon className="w-3 h-3 text-rose-500" />
+        <div className="bg-slate-900/90 border border-slate-800 rounded p-2">
+          <div className="text-[10px] text-slate-500 flex items-center space-x-1">
+            <Moon className="w-3 h-3 text-rose-400" />
             <span>Max Dark Gap</span>
           </div>
           <div
-            className={`font-mono text-lg font-bold mt-0.5 ${
+            className={`font-mono text-base font-bold ${
               metrics.longest_dark_gap_h > parameters.max_dark_gap_hours
-                ? 'text-rose-600'
-                : 'text-[#171717]'
+                ? 'text-rose-400'
+                : 'text-slate-200'
             }`}
           >
             {metrics.longest_dark_gap_h.toFixed(1)} h
           </div>
-          <div className="font-sans text-[10px] text-[#171717]/50">Limit: {parameters.max_dark_gap_hours}h</div>
+          <div className="text-[9px] text-slate-500">Max limit: {parameters.max_dark_gap_hours}h</div>
         </div>
 
-        <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl p-2.5">
-          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#171717]/50 flex items-center space-x-1.5">
-            <Radio className="w-3 h-3 text-purple-500" />
+        <div className="bg-slate-900/90 border border-slate-800 rounded p-2">
+          <div className="text-[10px] text-slate-500 flex items-center space-x-1">
+            <Radio className="w-3 h-3 text-purple-400" />
             <span>Max Outage</span>
           </div>
-          <div className="font-mono text-lg font-bold text-purple-600 mt-0.5">
+          <div className="font-mono text-base font-bold text-purple-300">
             {metrics.longest_comms_outage_h.toFixed(1)} h
           </div>
-          <div className="font-sans text-[10px] text-[#171717]/50">Direct LOS Outage</div>
+          <div className="text-[9px] text-slate-500">Earth LOS outage</div>
         </div>
 
-        <div className="bg-white border border-[#e5e5e5] shadow-sm rounded-xl p-2.5">
-          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#171717]/50 flex items-center space-x-1.5">
-            <Sparkles className="w-3 h-3 text-[#4338ca]" />
-            <span>Viability Score</span>
+        <div className="bg-slate-900/90 border border-slate-800 rounded p-2">
+          <div className="text-[10px] text-slate-500 flex items-center space-x-1">
+            <Sparkles className="w-3 h-3 text-cyan-400" />
+            <span>Score</span>
           </div>
-          <div className="font-mono text-lg font-bold text-[#4338ca] mt-0.5">
+          <div className="font-mono text-base font-bold text-cyan-300">
             {(metrics.score * 100).toFixed(1)}
-            <span className="text-xs text-[#171717]/40 font-normal">/100</span>
+            <span className="text-xs text-slate-500 font-normal">/100</span>
           </div>
-          <div className="font-sans text-[10px] text-[#171717]/50 truncate">{selectedSite?.name.split('(')[0]}</div>
+          <div className="text-[9px] text-slate-500">{selectedSite?.name.split('(')[0]}</div>
         </div>
       </div>
     </div>

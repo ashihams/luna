@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { usePlannerStore, PinnedScenario } from '../state/usePlannerStore';
-import { X, Layers, Sun, Radio, Moon, Trophy } from 'lucide-react';
+import { X, ArrowRight, CheckCircle2, AlertTriangle, Layers, Sun, Radio, Moon, Trophy } from 'lucide-react';
 
 export const ComparisonDrawer: React.FC = () => {
   const {
     isComparisonOpen,
     setIsComparisonOpen,
     pinnedScenarios,
+    removePinnedScenario,
     setSelectedSiteId,
     setPlannedDayIndex,
     setSlipDays,
@@ -81,26 +82,24 @@ export const ComparisonDrawer: React.FC = () => {
   const deltaOutage = scenarioB.metrics.longest_comms_outage_h - scenarioA.metrics.longest_comms_outage_h;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 select-none text-[#171717]">
-      <div className="w-full max-w-4xl bg-[#fcfbf9] border border-[#e5e5e5] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-[#e5e5e5] flex items-center justify-between bg-white">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-full bg-[#4338ca] flex items-center justify-center">
-              <Layers className="w-4 h-4 text-white" />
-            </div>
+        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
+          <div className="flex items-center space-x-2.5">
+            <Layers className="w-5 h-5 text-cyan-400" />
             <div>
-              <h2 className="font-serif italic text-base font-semibold text-[#171717]">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-100">
                 Two-Scenario Mission Comparison
               </h2>
-              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#171717]/50">
-                LOLA HORIZONS • POWER MARGINS • EARTH COMMS WINDOWS
+              <p className="text-xs text-slate-400">
+                Evaluate slip alternatives, power margins, and communication windows side-by-side.
               </p>
             </div>
           </div>
           <button
             onClick={() => setIsComparisonOpen(false)}
-            className="p-2 rounded-full bg-slate-100 text-[#171717]/60 hover:text-[#171717] hover:bg-slate-200 transition duration-500 ease-premium"
+            className="p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition"
           >
             <X className="w-4 h-4" />
           </button>
@@ -110,14 +109,14 @@ export const ComparisonDrawer: React.FC = () => {
         <div className="p-6 overflow-y-auto space-y-6">
           {/* Selectors */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="font-mono text-[10px] font-semibold text-[#171717]/60 uppercase tracking-[0.3em]">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                 Scenario A (Baseline)
               </label>
               <select
                 value={slotAId}
                 onChange={(e) => setSlotAId(e.target.value)}
-                className="w-full bg-white border border-[#e5e5e5] shadow-sm rounded-xl px-3.5 py-2.5 text-xs text-[#171717] font-mono focus:outline-none focus:border-[#4338ca]"
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 font-medium focus:outline-none focus:border-cyan-500"
               >
                 {allAvailable.map((s) => (
                   <option key={`a-${s.id}`} value={s.id}>
@@ -127,14 +126,14 @@ export const ComparisonDrawer: React.FC = () => {
               </select>
             </div>
 
-            <div className="space-y-2">
-              <label className="font-mono text-[10px] font-semibold text-[#171717]/60 uppercase tracking-[0.3em]">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                 Scenario B (Alternative)
               </label>
               <select
                 value={slotBId}
                 onChange={(e) => setSlotBId(e.target.value)}
-                className="w-full bg-white border border-[#e5e5e5] shadow-sm rounded-xl px-3.5 py-2.5 text-xs text-[#171717] font-mono focus:outline-none focus:border-[#4338ca]"
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 font-medium focus:outline-none focus:border-cyan-500"
               >
                 {allAvailable.map((s) => (
                   <option key={`b-${s.id}`} value={s.id}>
@@ -149,24 +148,24 @@ export const ComparisonDrawer: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             {/* Scenario A Card */}
             <div
-              className={`p-4 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4 transition-all duration-500 ease-premium ${
+              className={`p-4 rounded-xl border flex flex-col justify-between space-y-3 ${
                 scenarioA.metrics.viable
-                  ? 'bg-white border-[#e5e5e5]'
-                  : 'bg-rose-50/50 border-rose-200'
+                  ? 'bg-slate-900/40 border-slate-800'
+                  : 'bg-rose-950/20 border-rose-900/50'
               }`}
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-serif font-medium text-sm text-[#171717]">{scenarioA.siteName}</h3>
-                  <div className="font-mono text-[11px] text-[#4338ca] mt-1 font-semibold">
+                  <h3 className="font-bold text-sm text-slate-100">{scenarioA.siteName}</h3>
+                  <div className="text-xs font-mono text-cyan-400 mt-0.5">
                     Date: {scenarioA.dateUtc} (Slip: {scenarioA.slipDays >= 0 ? `+${scenarioA.slipDays}` : scenarioA.slipDays}d)
                   </div>
                 </div>
                 <div
-                  className={`px-2.5 py-1 rounded-full font-mono text-[9px] uppercase tracking-wider font-semibold border ${
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
                     scenarioA.metrics.viable
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                      : 'bg-rose-50 text-rose-800 border-rose-300'
+                      ? 'bg-emerald-950 text-emerald-400 border-emerald-700/60'
+                      : 'bg-rose-950 text-rose-400 border-rose-700/60'
                   }`}
                 >
                   {scenarioA.metrics.viable ? 'VIABLE' : 'FAILED'}
@@ -175,7 +174,7 @@ export const ComparisonDrawer: React.FC = () => {
 
               <button
                 onClick={() => applyScenario(scenarioA)}
-                className="w-full py-2 px-3 rounded-full bg-white hover:bg-slate-50 border border-[#e5e5e5] font-mono text-[11px] uppercase tracking-[0.2em] text-[#171717] transition-all duration-500 ease-premium shadow-sm"
+                className="w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 font-medium transition"
               >
                 Adopt Scenario A
               </button>
@@ -183,24 +182,24 @@ export const ComparisonDrawer: React.FC = () => {
 
             {/* Scenario B Card */}
             <div
-              className={`p-4 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4 transition-all duration-500 ease-premium ${
+              className={`p-4 rounded-xl border flex flex-col justify-between space-y-3 ${
                 scenarioB.metrics.viable
-                  ? 'bg-indigo-50/40 border-indigo-200'
-                  : 'bg-rose-50/50 border-rose-200'
+                  ? 'bg-slate-900/40 border-cyan-500/40'
+                  : 'bg-rose-950/20 border-rose-900/50'
               }`}
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-serif font-medium text-sm text-[#171717]">{scenarioB.siteName}</h3>
-                  <div className="font-mono text-[11px] text-[#4338ca] mt-1 font-semibold">
+                  <h3 className="font-bold text-sm text-slate-100">{scenarioB.siteName}</h3>
+                  <div className="text-xs font-mono text-cyan-400 mt-0.5">
                     Date: {scenarioB.dateUtc} (Slip: {scenarioB.slipDays >= 0 ? `+${scenarioB.slipDays}` : scenarioB.slipDays}d)
                   </div>
                 </div>
                 <div
-                  className={`px-2.5 py-1 rounded-full font-mono text-[9px] uppercase tracking-wider font-semibold border ${
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
                     scenarioB.metrics.viable
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                      : 'bg-rose-50 text-rose-800 border-rose-300'
+                      ? 'bg-emerald-950 text-emerald-400 border-emerald-700/60'
+                      : 'bg-rose-950 text-rose-400 border-rose-700/60'
                   }`}
                 >
                   {scenarioB.metrics.viable ? 'VIABLE' : 'FAILED'}
@@ -209,7 +208,7 @@ export const ComparisonDrawer: React.FC = () => {
 
               <button
                 onClick={() => applyScenario(scenarioB)}
-                className="w-full py-2 px-3 rounded-full bg-[#4338ca] hover:bg-[#3730a3] text-white font-mono text-[11px] uppercase tracking-[0.2em] font-semibold transition-all duration-500 ease-premium shadow-md shadow-indigo-900/20"
+                className="w-full py-1.5 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs transition shadow-lg shadow-cyan-950/50"
               >
                 Adopt Scenario B
               </button>
@@ -217,106 +216,106 @@ export const ComparisonDrawer: React.FC = () => {
           </div>
 
           {/* Metric Rows Table */}
-          <div className="border border-[#e5e5e5] rounded-2xl overflow-hidden bg-white shadow-sm">
-            <div className="grid grid-cols-12 bg-slate-50 px-5 py-3 font-mono text-[10px] font-semibold text-[#171717]/60 border-b border-[#e5e5e5] uppercase tracking-[0.25em]">
+          <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-900/40">
+            <div className="grid grid-cols-12 bg-slate-900/80 px-4 py-2.5 text-[11px] font-semibold text-slate-400 border-b border-slate-800 uppercase tracking-wider">
               <div className="col-span-5">Metric</div>
               <div className="col-span-3 text-right">Scenario A</div>
               <div className="col-span-1 text-center">Δ</div>
               <div className="col-span-3 text-right">Scenario B</div>
             </div>
 
-            <div className="divide-y divide-[#e5e5e5] text-xs">
+            <div className="divide-y divide-slate-800/80 text-xs">
               {/* Composite Score */}
-              <div className="grid grid-cols-12 px-5 py-3 items-center">
-                <div className="col-span-5 font-sans font-medium text-[#171717] flex items-center space-x-2">
-                  <Trophy className="w-3.5 h-3.5 text-[#4338ca]" />
-                  <span>Mission Viability Score</span>
+              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
+                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+                  <Trophy className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Mission Score</span>
                 </div>
-                <div className="col-span-3 text-right font-mono font-bold text-[#171717]">
+                <div className="col-span-3 text-right font-mono font-bold text-slate-100">
                   {(scenarioA.metrics.score * 100).toFixed(1)}
                 </div>
                 <div className="col-span-1 text-center font-mono font-bold text-[11px]">
-                  <span className={deltaScore >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                  <span className={deltaScore >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                     {deltaScore >= 0 ? `+${deltaScore}` : deltaScore}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono font-bold text-[#4338ca]">
+                <div className="col-span-3 text-right font-mono font-bold text-cyan-300">
                   {(scenarioB.metrics.score * 100).toFixed(1)}
                 </div>
               </div>
 
               {/* Sun Lit % */}
-              <div className="grid grid-cols-12 px-5 py-3 items-center">
-                <div className="col-span-5 font-sans font-medium text-[#171717] flex items-center space-x-2">
-                  <Sun className="w-3.5 h-3.5 text-amber-500" />
+              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
+                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
                   <span>Solar Illumination</span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-amber-600 font-semibold">
+                <div className="col-span-3 text-right font-mono text-amber-300">
                   {Math.round(scenarioA.metrics.sun_fraction * 100)}%
                 </div>
                 <div className="col-span-1 text-center font-mono text-[11px]">
-                  <span className={deltaSun >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                  <span className={deltaSun >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                     {deltaSun >= 0 ? `+${deltaSun}%` : `${deltaSun}%`}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-amber-600 font-bold">
+                <div className="col-span-3 text-right font-mono text-amber-300 font-semibold">
                   {Math.round(scenarioB.metrics.sun_fraction * 100)}%
                 </div>
               </div>
 
               {/* Earth Comms % */}
-              <div className="grid grid-cols-12 px-5 py-3 items-center">
-                <div className="col-span-5 font-sans font-medium text-[#171717] flex items-center space-x-2">
-                  <Radio className="w-3.5 h-3.5 text-sky-500" />
+              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
+                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+                  <Radio className="w-3.5 h-3.5 text-blue-400" />
                   <span>Earth Direct LOS</span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-sky-600 font-semibold">
+                <div className="col-span-3 text-right font-mono text-blue-300">
                   {Math.round(scenarioA.metrics.earth_fraction * 100)}%
                 </div>
                 <div className="col-span-1 text-center font-mono text-[11px]">
-                  <span className={deltaEarth >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                  <span className={deltaEarth >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                     {deltaEarth >= 0 ? `+${deltaEarth}%` : `${deltaEarth}%`}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-sky-600 font-bold">
+                <div className="col-span-3 text-right font-mono text-blue-300 font-semibold">
                   {Math.round(scenarioB.metrics.earth_fraction * 100)}%
                 </div>
               </div>
 
               {/* Max Dark Gap */}
-              <div className="grid grid-cols-12 px-5 py-3 items-center">
-                <div className="col-span-5 font-sans font-medium text-[#171717] flex items-center space-x-2">
-                  <Moon className="w-3.5 h-3.5 text-rose-500" />
+              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
+                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+                  <Moon className="w-3.5 h-3.5 text-rose-400" />
                   <span>Longest Dark Gap</span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-[#171717]">
+                <div className="col-span-3 text-right font-mono text-slate-200">
                   {scenarioA.metrics.longest_dark_gap_h.toFixed(1)} h
                 </div>
                 <div className="col-span-1 text-center font-mono text-[11px]">
-                  <span className={deltaDark <= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                  <span className={deltaDark <= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                     {deltaDark > 0 ? `+${deltaDark.toFixed(1)}h` : `${deltaDark.toFixed(1)}h`}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-[#171717] font-semibold">
+                <div className="col-span-3 text-right font-mono text-slate-200 font-semibold">
                   {scenarioB.metrics.longest_dark_gap_h.toFixed(1)} h
                 </div>
               </div>
 
               {/* Max Comms Outage */}
-              <div className="grid grid-cols-12 px-5 py-3 items-center">
-                <div className="col-span-5 font-sans font-medium text-[#171717] flex items-center space-x-2">
-                  <Radio className="w-3.5 h-3.5 text-purple-500" />
+              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
+                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+                  <Radio className="w-3.5 h-3.5 text-purple-400" />
                   <span>Longest Comms Outage</span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-purple-600 font-semibold">
+                <div className="col-span-3 text-right font-mono text-purple-300">
                   {scenarioA.metrics.longest_comms_outage_h.toFixed(1)} h
                 </div>
                 <div className="col-span-1 text-center font-mono text-[11px]">
-                  <span className={deltaOutage <= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                  <span className={deltaOutage <= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                     {deltaOutage > 0 ? `+${deltaOutage.toFixed(1)}h` : `${deltaOutage.toFixed(1)}h`}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-purple-600 font-bold">
+                <div className="col-span-3 text-right font-mono text-purple-300 font-semibold">
                   {scenarioB.metrics.longest_comms_outage_h.toFixed(1)} h
                 </div>
               </div>
@@ -325,10 +324,10 @@ export const ComparisonDrawer: React.FC = () => {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-[#e5e5e5] bg-white flex justify-end">
+        <div className="px-6 py-3 border-t border-slate-800 bg-slate-900/50 flex justify-end">
           <button
             onClick={() => setIsComparisonOpen(false)}
-            className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-[#171717] rounded-full font-mono text-xs uppercase tracking-[0.25em] transition-all duration-500 ease-premium font-semibold"
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition"
           >
             Close Comparison
           </button>

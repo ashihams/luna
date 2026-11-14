@@ -381,32 +381,32 @@ export const Heatmap: React.FC = () => {
   }, [plannedDayIndex, selectedSiteIdx, numSites, sites, setPlannedDayIndex, setSelectedSiteId]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full flex flex-col select-none rounded-2xl overflow-hidden border border-[#e5e5e5] bg-white shadow-sm">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-[#e5e5e5] bg-[#fcfbf9] text-xs">
+    <div ref={containerRef} className="relative w-full h-full flex flex-col select-none">
+      <div className="flex items-center justify-between px-3 py-1.5 border-b border-slate-800/80 bg-slate-900/40 text-xs">
         <div className="flex items-center space-x-2">
-          <span className="font-serif italic font-semibold text-[#171717]">Landing Feasibility Heatmap</span>
-          <span className="font-mono text-[9px] uppercase tracking-wider text-[#171717]/50">
+          <span className="font-semibold text-slate-200">Landing Feasibility Heatmap</span>
+          <span className="text-[10px] text-slate-400">
             (14 sites × 731 days, 2027–2028 | Click or Arrow keys to navigate)
           </span>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center space-x-4 font-mono text-[9px] uppercase tracking-wider">
+        <div className="flex items-center space-x-4 text-[10px]">
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-[#0b1329] border border-slate-700" />
-            <span className="text-[#171717]/60">Low</span>
+            <span className="text-slate-400">Low Score</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-[#0d9488]" />
-            <span className="text-[#171717]/60">Viable</span>
+            <span className="text-slate-400">Viable</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-[#fbbf24]" />
-            <span className="text-[#171717]/60">Optimal</span>
+            <span className="text-slate-400">Optimal (90%+)</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-sm border border-red-500 bg-red-950/40" />
-            <span className="text-red-600">Non-viable</span>
+            <span className="text-red-400">Non-viable Outlined</span>
           </div>
         </div>
       </div>
@@ -423,57 +423,57 @@ export const Heatmap: React.FC = () => {
         {/* Floating Tooltip */}
         {tooltip && (
           <div
-            className="fixed pointer-events-none z-50 bg-white/95 backdrop-blur-md border border-[#e5e5e5] rounded-xl shadow-xl p-3.5 text-xs w-64 transform -translate-x-1/2 -translate-y-full mb-3 text-[#171717]"
+            className="fixed pointer-events-none z-50 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-lg shadow-xl p-3 text-xs w-60 transform -translate-x-1/2 -translate-y-full mb-3"
             style={{ left: tooltip.x, top: tooltip.y }}
           >
-            <div className="flex items-center justify-between border-b border-[#e5e5e5] pb-2 mb-2">
-              <span className="font-serif font-bold text-sm text-[#171717] truncate pr-2">{tooltip.siteName}</span>
+            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
+              <span className="font-bold text-slate-100 truncate pr-2">{tooltip.siteName}</span>
               <span
-                className={`px-2 py-0.5 rounded-full text-[9px] font-mono uppercase font-semibold ${
+                className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
                   tooltip.metrics.viable
-                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
-                    : 'bg-rose-50 text-rose-800 border border-rose-300'
+                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-700/60'
+                    : 'bg-rose-950 text-rose-400 border border-rose-700/60'
                 }`}
               >
                 {tooltip.metrics.viable ? 'VIABLE' : 'FAILED'}
               </span>
             </div>
 
-            <div className="text-[11px] font-mono text-[#171717]/60 mb-2.5">
-              UTC Start: <span className="text-[#4338ca] font-semibold">{tooltip.dateStr}</span> (Day{' '}
+            <div className="text-[11px] font-mono text-slate-400 mb-2">
+              UTC Start: <span className="text-cyan-400 font-semibold">{tooltip.dateStr}</span> (Day{' '}
               {tooltip.dayIndex})
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-[11px]">
+            <div className="grid grid-cols-2 gap-1.5 text-[11px]">
               <div>
-                <span className="text-[#171717]/50 block font-mono text-[9px] uppercase tracking-wider">Sun Lit</span>
-                <span className="font-mono text-amber-600 font-semibold">
+                <span className="text-slate-500 block text-[10px]">Sun Fraction</span>
+                <span className="font-mono text-amber-300 font-semibold">
                   {Math.round(tooltip.metrics.sun_fraction * 100)}%
                 </span>
               </div>
               <div>
-                <span className="text-[#171717]/50 block font-mono text-[9px] uppercase tracking-wider">Earth Comms</span>
-                <span className="font-mono text-sky-600 font-semibold">
+                <span className="text-slate-500 block text-[10px]">Earth Fraction</span>
+                <span className="font-mono text-blue-300 font-semibold">
                   {Math.round(tooltip.metrics.earth_fraction * 100)}%
                 </span>
               </div>
               <div>
-                <span className="text-[#171717]/50 block font-mono text-[9px] uppercase tracking-wider">Dark Gap</span>
-                <span className="font-mono text-rose-600 font-semibold">
+                <span className="text-slate-500 block text-[10px]">Max Dark Gap</span>
+                <span className="font-mono text-rose-300 font-semibold">
                   {tooltip.metrics.longest_dark_gap_h.toFixed(1)} h
                 </span>
               </div>
               <div>
-                <span className="text-[#171717]/50 block font-mono text-[9px] uppercase tracking-wider">Comms Outage</span>
-                <span className="font-mono text-purple-600 font-semibold">
+                <span className="text-slate-500 block text-[10px]">Max Outage</span>
+                <span className="font-mono text-purple-300 font-semibold">
                   {tooltip.metrics.longest_comms_outage_h.toFixed(1)} h
                 </span>
               </div>
             </div>
 
-            <div className="mt-2.5 pt-2 border-t border-[#e5e5e5] flex justify-between items-center text-[11px]">
-              <span className="font-mono text-[9px] uppercase tracking-wider text-[#171717]/50">Viability Score</span>
-              <span className="font-mono font-bold text-[#4338ca]">
+            <div className="mt-2 pt-1.5 border-t border-slate-800 flex justify-between items-center text-[11px]">
+              <span className="text-slate-400">Composite Score</span>
+              <span className="font-mono font-bold text-cyan-300">
                 {(tooltip.metrics.score * 100).toFixed(1)} / 100
               </span>
             </div>
