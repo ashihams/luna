@@ -74,14 +74,14 @@ export const SiteView: React.FC = () => {
   const darkGapHorizon = metrics.dark_gap_start_horizon;
 
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row overflow-hidden bg-slate-950">
+    <div className="w-full h-full flex flex-col lg:flex-row overflow-hidden bg-[#030303]">
       {/* Left 60%: 3D Scene / Perspective View */}
-      <div className="flex-1 h-full relative flex flex-col bg-slate-900 border-r border-slate-800">
+      <div className="flex-1 h-full relative flex flex-col bg-[#050508] border-r border-white/5">
         {/* Top Info Bar */}
         <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-2 pointer-events-none">
-          <div className="bg-slate-950/80 backdrop-blur border border-slate-800 px-3 py-1.5 rounded-lg shadow-lg pointer-events-auto">
-            <div className="text-[10px] text-slate-400 font-semibold uppercase">Lander Location</div>
-            <div className="text-sm font-bold text-slate-100">{selectedSite.name}</div>
+          <div className="bg-[#030303]/80 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg shadow-lg pointer-events-auto">
+            <div className="text-[10px] text-neutral-400 font-mono tracking-widest uppercase">Lander Location</div>
+            <div className="text-sm font-serif font-bold text-white tracking-wide">{selectedSite.name}</div>
             <div className="text-[11px] font-mono text-cyan-400">
               {selectedSite.lat_deg.toFixed(3)}°S, {selectedSite.lon_deg_east.toFixed(3)}°E •{' '}
               {selectedSite.ground_height_m.toFixed(0)} m elev
@@ -89,28 +89,28 @@ export const SiteView: React.FC = () => {
           </div>
 
           {/* Countdown Badges */}
-          <div className="bg-slate-950/80 backdrop-blur border border-slate-800 px-3 py-1.5 rounded-lg shadow-lg flex items-center space-x-3 pointer-events-auto">
+          <div className="bg-[#030303]/80 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg shadow-lg flex items-center space-x-3 pointer-events-auto">
             <div className="flex items-center space-x-1.5">
-              <Sun className={`w-4 h-4 ${isCurrentlyLit ? 'text-amber-400' : 'text-slate-500'}`} />
+              <Sun className={`w-4 h-4 ${isCurrentlyLit ? 'text-violet-400' : 'text-slate-500'}`} />
               <div>
                 <div className="text-[10px] text-slate-400 uppercase font-semibold">
                   {isCurrentlyLit ? 'Time to Sunset' : 'Time to Sunrise'}
                 </div>
-                <div className="text-xs font-mono font-bold text-amber-300">
+                <div className="text-xs font-mono font-bold text-violet-300">
                   {hoursToSunsetOrSunrise > 0 ? `${hoursToSunsetOrSunrise.toFixed(1)} hrs` : 'None in range'}
                 </div>
               </div>
             </div>
 
-            <div className="h-6 w-px bg-slate-800" />
+            <div className="h-6 w-px bg-white/10" />
 
             <div className="flex items-center space-x-1.5">
-              <Radio className={`w-4 h-4 ${isCurrentlyLOS ? 'text-blue-400' : 'text-slate-500'}`} />
+              <Radio className={`w-4 h-4 ${isCurrentlyLOS ? 'text-cyan-400' : 'text-slate-500'}`} />
               <div>
                 <div className="text-[10px] text-slate-400 uppercase font-semibold">
                   {isCurrentlyLOS ? 'Time to Earthset' : 'Time to Earthrise'}
                 </div>
-                <div className="text-xs font-mono font-bold text-blue-300">
+                <div className="text-xs font-mono font-bold text-cyan-300">
                   {hoursToEarthsetOrEarthrise > 0 ? `${hoursToEarthsetOrEarthrise.toFixed(1)} hrs` : 'Continuous LOS'}
                 </div>
               </div>
@@ -125,17 +125,17 @@ export const SiteView: React.FC = () => {
       </div>
 
       {/* Right 40%: Sky Plot, Countdown Badges, and "Why" Box */}
-      <div className="w-full lg:w-[480px] h-full flex flex-col bg-slate-950 border-t lg:border-t-0 lg:border-l border-slate-800">
+      <div className="w-full lg:w-[480px] h-full flex flex-col bg-[#030303] border-t lg:border-t-0 lg:border-l border-white/10">
         {/* Sky Plot Container */}
-        <div className="h-72 border-b border-slate-800">
+        <div className="h-72 border-b border-white/10">
           <SkyPlot />
         </div>
 
         {/* Data-Driven "Why" Box (Spec Section 15 & 18) */}
         <div className="flex-1 p-4 overflow-y-auto space-y-4">
-          <div className="border border-amber-500/30 bg-amber-950/20 rounded-lg p-3.5 space-y-2">
-            <div className="flex items-center space-x-2 text-amber-300">
-              <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+          <div className="border border border-violet-500/30 bg-[#0c0a18]/70 backdrop-blur-sm rounded-xl p-4 space-y-2.5 shadow-lg shadow-violet-950/20">
+            <div className="flex items-center space-x-2 text-violet-300">
+              <AlertCircle className="w-4 h-4 text-violet-400 flex-shrink-0" />
               <h4 className="text-xs font-bold uppercase tracking-wider">
                 Why Box: Physical Obstruction Analysis
               </h4>
@@ -143,23 +143,23 @@ export const SiteView: React.FC = () => {
 
             <p className="text-xs text-slate-300 leading-relaxed">
               At the start of the longest dark gap (
-              <span className="font-mono text-amber-400 font-semibold">
+              <span className="font-mono text-violet-400 font-semibold">
                 {metrics.longest_dark_gap_h.toFixed(1)} hours
               </span>
               ), solar occlusion occurs at azimuth{' '}
               <span className="font-mono text-cyan-400 font-semibold">{darkGapAz.toFixed(1)}°</span>:
             </p>
 
-            <div className="bg-slate-900/90 rounded border border-slate-800 p-2.5 text-xs font-mono space-y-1">
+            <div className="bg-[#050508] rounded-lg border border-white/10 p-3 text-xs font-mono space-y-1.5">
               <div className="flex justify-between">
                 <span className="text-slate-400">Sun Center Elevation:</span>
-                <span className="text-amber-300 font-semibold">{darkGapEl.toFixed(2)}°</span>
+                <span className="text-violet-300 font-semibold">{darkGapEl.toFixed(2)}°</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Terrain Horizon Crest:</span>
                 <span className="text-cyan-300 font-semibold">+{darkGapHorizon.toFixed(2)}°</span>
               </div>
-              <div className="flex justify-between border-t border-slate-800 pt-1 text-[11px]">
+              <div className="flex justify-between border-t border-white/10 pt-1 text-[11px]">
                 <span className="text-slate-400">Occlusion Dip:</span>
                 <span className="text-rose-400 font-semibold">
                   {(darkGapEl - darkGapHorizon).toFixed(2)}° below ridge
@@ -174,8 +174,8 @@ export const SiteView: React.FC = () => {
           </div>
 
           {/* Mission Site Statistics Card */}
-          <div className="border border-slate-800 bg-slate-900/50 rounded-lg p-3.5 space-y-2 text-xs">
-            <div className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">
+          <div className="border border-white/10 bg-[#080808]/70 backdrop-blur-sm rounded-xl p-4 space-y-2.5 text-xs">
+            <div className="font-serif text-sm font-medium text-neutral-200 tracking-wide">
               Site Characteristics
             </div>
             <div className="grid grid-cols-2 gap-2 text-slate-300 font-mono text-[11px]">

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { usePlannerStore, PinnedScenario } from '../state/usePlannerStore';
-import { X, ArrowRight, CheckCircle2, AlertTriangle, Layers, Sun, Radio, Moon, Trophy } from 'lucide-react';
+import { X, Layers, Sun, Radio, Moon, Trophy } from 'lucide-react';
 
 export const ComparisonDrawer: React.FC = () => {
   const {
     isComparisonOpen,
     setIsComparisonOpen,
     pinnedScenarios,
-    removePinnedScenario,
     setSelectedSiteId,
     setPlannedDayIndex,
     setSlipDays,
@@ -82,24 +81,26 @@ export const ComparisonDrawer: React.FC = () => {
   const deltaOutage = scenarioB.metrics.longest_comms_outage_h - scenarioA.metrics.longest_comms_outage_h;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 select-none text-white">
+      <div className="w-full max-w-4xl bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_0_50px_-10px_rgba(139,92,246,0.3)] overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
-          <div className="flex items-center space-x-2.5">
-            <Layers className="w-5 h-5 text-cyan-400" />
+        <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] flex items-center justify-center shadow-[0_0_12px_#8B5CF6]">
+              <Layers className="w-4 h-4 text-white" />
+            </div>
             <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-100">
+              <h2 className="font-serif text-xl font-normal text-white tracking-tight">
                 Two-Scenario Mission Comparison
               </h2>
-              <p className="text-xs text-slate-400">
-                Evaluate slip alternatives, power margins, and communication windows side-by-side.
+              <p className="font-mono text-[10px] uppercase tracking-widest text-neutral-400">
+                LOLA HORIZONS • POWER MARGINS • EARTH COMMS WINDOWS
               </p>
             </div>
           </div>
           <button
             onClick={() => setIsComparisonOpen(false)}
-            className="p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition"
+            className="p-2 rounded-full bg-white/[0.04] text-neutral-400 hover:text-white hover:bg-white/[0.08] transition duration-200"
           >
             <X className="w-4 h-4" />
           </button>
@@ -109,14 +110,14 @@ export const ComparisonDrawer: React.FC = () => {
         <div className="p-6 overflow-y-auto space-y-6">
           {/* Selectors */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="font-mono text-[10px] font-semibold text-neutral-400 uppercase tracking-widest">
                 Scenario A (Baseline)
               </label>
               <select
                 value={slotAId}
                 onChange={(e) => setSlotAId(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 font-medium focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#121212] border border-white/10 rounded-2xl px-4 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-violet-500"
               >
                 {allAvailable.map((s) => (
                   <option key={`a-${s.id}`} value={s.id}>
@@ -126,14 +127,14 @@ export const ComparisonDrawer: React.FC = () => {
               </select>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="font-mono text-[10px] font-semibold text-neutral-400 uppercase tracking-widest">
                 Scenario B (Alternative)
               </label>
               <select
                 value={slotBId}
                 onChange={(e) => setSlotBId(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 font-medium focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#121212] border border-white/10 rounded-2xl px-4 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-violet-500"
               >
                 {allAvailable.map((s) => (
                   <option key={`b-${s.id}`} value={s.id}>
@@ -148,24 +149,24 @@ export const ComparisonDrawer: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             {/* Scenario A Card */}
             <div
-              className={`p-4 rounded-xl border flex flex-col justify-between space-y-3 ${
+              className={`p-4 rounded-2xl border flex flex-col justify-between space-y-4 transition duration-300 ease-snappy ${
                 scenarioA.metrics.viable
-                  ? 'bg-slate-900/40 border-slate-800'
-                  : 'bg-rose-950/20 border-rose-900/50'
+                  ? 'bg-white/[0.02] border-white/10'
+                  : 'bg-rose-950/20 border-rose-900/40'
               }`}
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-bold text-sm text-slate-100">{scenarioA.siteName}</h3>
-                  <div className="text-xs font-mono text-cyan-400 mt-0.5">
+                  <h3 className="font-serif text-lg font-normal text-white">{scenarioA.siteName}</h3>
+                  <div className="font-mono text-[11px] text-purple-300 mt-1">
                     Date: {scenarioA.dateUtc} (Slip: {scenarioA.slipDays >= 0 ? `+${scenarioA.slipDays}` : scenarioA.slipDays}d)
                   </div>
                 </div>
                 <div
-                  className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                  className={`px-2.5 py-1 rounded-full font-mono text-[9px] uppercase tracking-wider font-semibold border ${
                     scenarioA.metrics.viable
-                      ? 'bg-emerald-950 text-emerald-400 border-emerald-700/60'
-                      : 'bg-rose-950 text-rose-400 border-rose-700/60'
+                      ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
+                      : 'bg-rose-950/60 text-rose-300 border-rose-500/40'
                   }`}
                 >
                   {scenarioA.metrics.viable ? 'VIABLE' : 'FAILED'}
@@ -174,7 +175,7 @@ export const ComparisonDrawer: React.FC = () => {
 
               <button
                 onClick={() => applyScenario(scenarioA)}
-                className="w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 font-medium transition"
+                className="w-full py-2 px-3 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 font-sans text-xs text-white transition duration-300 ease-snappy"
               >
                 Adopt Scenario A
               </button>
@@ -182,24 +183,24 @@ export const ComparisonDrawer: React.FC = () => {
 
             {/* Scenario B Card */}
             <div
-              className={`p-4 rounded-xl border flex flex-col justify-between space-y-3 ${
+              className={`p-4 rounded-2xl border flex flex-col justify-between space-y-4 transition duration-300 ease-snappy ${
                 scenarioB.metrics.viable
-                  ? 'bg-slate-900/40 border-cyan-500/40'
-                  : 'bg-rose-950/20 border-rose-900/50'
+                  ? 'bg-violet-950/20 border-violet-500/40 shadow-[0_0_20px_-10px_#8B5CF6]'
+                  : 'bg-rose-950/20 border-rose-900/40'
               }`}
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-bold text-sm text-slate-100">{scenarioB.siteName}</h3>
-                  <div className="text-xs font-mono text-cyan-400 mt-0.5">
+                  <h3 className="font-serif text-lg font-normal text-white">{scenarioB.siteName}</h3>
+                  <div className="font-mono text-[11px] text-purple-300 mt-1">
                     Date: {scenarioB.dateUtc} (Slip: {scenarioB.slipDays >= 0 ? `+${scenarioB.slipDays}` : scenarioB.slipDays}d)
                   </div>
                 </div>
                 <div
-                  className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                  className={`px-2.5 py-1 rounded-full font-mono text-[9px] uppercase tracking-wider font-semibold border ${
                     scenarioB.metrics.viable
-                      ? 'bg-emerald-950 text-emerald-400 border-emerald-700/60'
-                      : 'bg-rose-950 text-rose-400 border-rose-700/60'
+                      ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
+                      : 'bg-rose-950/60 text-rose-300 border-rose-500/40'
                   }`}
                 >
                   {scenarioB.metrics.viable ? 'VIABLE' : 'FAILED'}
@@ -208,7 +209,7 @@ export const ComparisonDrawer: React.FC = () => {
 
               <button
                 onClick={() => applyScenario(scenarioB)}
-                className="w-full py-1.5 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs transition shadow-lg shadow-cyan-950/50"
+                className="w-full py-2 px-3 rounded-full bg-[#8B5CF6] hover:bg-[#7c3aed] text-white font-sans text-xs font-semibold transition duration-300 ease-snappy shadow-[0_0_15px_-5px_#8B5CF6]"
               >
                 Adopt Scenario B
               </button>
@@ -216,37 +217,37 @@ export const ComparisonDrawer: React.FC = () => {
           </div>
 
           {/* Metric Rows Table */}
-          <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-900/40">
-            <div className="grid grid-cols-12 bg-slate-900/80 px-4 py-2.5 text-[11px] font-semibold text-slate-400 border-b border-slate-800 uppercase tracking-wider">
+          <div className="border border-white/5 rounded-2xl overflow-hidden bg-white/[0.01]">
+            <div className="grid grid-cols-12 bg-white/[0.03] px-5 py-3 font-mono text-[10px] font-semibold text-neutral-400 border-b border-white/5 uppercase tracking-widest">
               <div className="col-span-5">Metric</div>
               <div className="col-span-3 text-right">Scenario A</div>
               <div className="col-span-1 text-center">Δ</div>
               <div className="col-span-3 text-right">Scenario B</div>
             </div>
 
-            <div className="divide-y divide-slate-800/80 text-xs">
+            <div className="divide-y divide-white/5 text-xs">
               {/* Composite Score */}
-              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
-                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
-                  <Trophy className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Mission Score</span>
+              <div className="grid grid-cols-12 px-5 py-3 items-center">
+                <div className="col-span-5 font-sans text-white flex items-center space-x-2">
+                  <Trophy className="w-3.5 h-3.5 text-violet-400" />
+                  <span>Mission Viability Score</span>
                 </div>
-                <div className="col-span-3 text-right font-mono font-bold text-slate-100">
+                <div className="col-span-3 text-right font-mono font-medium text-white/90">
                   {(scenarioA.metrics.score * 100).toFixed(1)}
                 </div>
-                <div className="col-span-1 text-center font-mono font-bold text-[11px]">
+                <div className="col-span-1 text-center font-mono font-semibold text-[11px]">
                   <span className={deltaScore >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                     {deltaScore >= 0 ? `+${deltaScore}` : deltaScore}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono font-bold text-cyan-300">
+                <div className="col-span-3 text-right font-mono font-bold text-purple-300">
                   {(scenarioB.metrics.score * 100).toFixed(1)}
                 </div>
               </div>
 
               {/* Sun Lit % */}
-              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
-                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+              <div className="grid grid-cols-12 px-5 py-3 items-center">
+                <div className="col-span-5 font-sans text-white flex items-center space-x-2">
                   <Sun className="w-3.5 h-3.5 text-amber-400" />
                   <span>Solar Illumination</span>
                 </div>
@@ -264,12 +265,12 @@ export const ComparisonDrawer: React.FC = () => {
               </div>
 
               {/* Earth Comms % */}
-              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
-                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
-                  <Radio className="w-3.5 h-3.5 text-blue-400" />
+              <div className="grid grid-cols-12 px-5 py-3 items-center">
+                <div className="col-span-5 font-sans text-white flex items-center space-x-2">
+                  <Radio className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Earth Direct LOS</span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-blue-300">
+                <div className="col-span-3 text-right font-mono text-cyan-300">
                   {Math.round(scenarioA.metrics.earth_fraction * 100)}%
                 </div>
                 <div className="col-span-1 text-center font-mono text-[11px]">
@@ -277,18 +278,18 @@ export const ComparisonDrawer: React.FC = () => {
                     {deltaEarth >= 0 ? `+${deltaEarth}%` : `${deltaEarth}%`}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-blue-300 font-semibold">
+                <div className="col-span-3 text-right font-mono text-cyan-300 font-semibold">
                   {Math.round(scenarioB.metrics.earth_fraction * 100)}%
                 </div>
               </div>
 
               {/* Max Dark Gap */}
-              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
-                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+              <div className="grid grid-cols-12 px-5 py-3 items-center">
+                <div className="col-span-5 font-sans text-white flex items-center space-x-2">
                   <Moon className="w-3.5 h-3.5 text-rose-400" />
                   <span>Longest Dark Gap</span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-slate-200">
+                <div className="col-span-3 text-right font-mono text-white/90">
                   {scenarioA.metrics.longest_dark_gap_h.toFixed(1)} h
                 </div>
                 <div className="col-span-1 text-center font-mono text-[11px]">
@@ -296,14 +297,14 @@ export const ComparisonDrawer: React.FC = () => {
                     {deltaDark > 0 ? `+${deltaDark.toFixed(1)}h` : `${deltaDark.toFixed(1)}h`}
                   </span>
                 </div>
-                <div className="col-span-3 text-right font-mono text-slate-200 font-semibold">
+                <div className="col-span-3 text-right font-mono text-white font-semibold">
                   {scenarioB.metrics.longest_dark_gap_h.toFixed(1)} h
                 </div>
               </div>
 
               {/* Max Comms Outage */}
-              <div className="grid grid-cols-12 px-4 py-2.5 items-center">
-                <div className="col-span-5 font-medium text-slate-200 flex items-center space-x-2">
+              <div className="grid grid-cols-12 px-5 py-3 items-center">
+                <div className="col-span-5 font-sans text-white flex items-center space-x-2">
                   <Radio className="w-3.5 h-3.5 text-purple-400" />
                   <span>Longest Comms Outage</span>
                 </div>
@@ -324,10 +325,10 @@ export const ComparisonDrawer: React.FC = () => {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-slate-800 bg-slate-900/50 flex justify-end">
+        <div className="px-6 py-4 border-t border-white/10 bg-white/[0.02] flex justify-end">
           <button
             onClick={() => setIsComparisonOpen(false)}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition"
+            className="px-6 py-2 bg-white/[0.05] hover:bg-white/[0.1] text-white rounded-full font-sans text-xs font-semibold transition duration-200"
           >
             Close Comparison
           </button>

@@ -8,76 +8,78 @@ export const ControlPanel: React.FC = () => {
     usePlannerStore();
 
   return (
-    <div className="w-80 h-full border-r border-slate-800 bg-slate-950/70 p-4 flex flex-col justify-between overflow-y-auto">
-      <div className="space-y-5">
+    <div className="w-80 h-full border-r border-white/10 bg-[#080808]/90 backdrop-blur-xl p-5 flex flex-col justify-between overflow-y-auto select-none text-white">
+      <div className="space-y-6">
         {/* Title */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div className="flex items-center space-x-2 text-slate-200">
-            <Sliders className="w-4 h-4 text-cyan-400" />
-            <h2 className="text-xs font-bold uppercase tracking-wider">Mission Constraints</h2>
+        <div className="flex items-center justify-between border-b border-white/10 pb-3.5">
+          <div className="flex items-center space-x-2.5 text-white">
+            <Sliders className="w-4 h-4 text-violet-400" />
+            <h2 className="font-serif text-lg font-normal tracking-tight">Mission Constraints</h2>
           </div>
-          <span className="text-[10px] text-slate-500 font-mono">EDITABLE</span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em] px-2 py-0.5 rounded-full bg-white/[0.04] text-purple-300 border border-white/10">
+            EDITABLE
+          </span>
         </div>
 
         {/* Preset quick buttons */}
         <div>
-          <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">
+          <label className="font-mono text-[10px] uppercase tracking-[0.25em] text-neutral-400 block mb-2">
             Mission Profile Preset
           </label>
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => applyPreset('artemis')}
-              className={`px-2.5 py-1.5 text-xs font-medium rounded border text-left transition ${
+              className={`p-3 text-xs rounded-2xl border text-left transition duration-300 ease-snappy ${
                 parameters.stay_days === 6.5
-                  ? 'bg-cyan-950/40 border-cyan-500/60 text-cyan-200 shadow-sm'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  ? 'bg-violet-950/30 border-[#8B5CF6] text-white shadow-[0_0_20px_-10px_#8B5CF6]'
+                  : 'bg-white/[0.02] border-white/5 text-neutral-300 hover:border-violet-500/40 hover:bg-white/[0.04]'
               }`}
             >
-              <div className="font-semibold">Artemis III</div>
-              <div className="text-[10px] text-slate-400">6.5d Sortie</div>
+              <div className="font-serif text-sm font-normal text-white">Artemis III</div>
+              <div className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-0.5">6.5d Sortie</div>
             </button>
             <button
               onClick={() => applyPreset('clps')}
-              className={`px-2.5 py-1.5 text-xs font-medium rounded border text-left transition ${
+              className={`p-3 text-xs rounded-2xl border text-left transition duration-300 ease-snappy ${
                 parameters.stay_days === 14.0
-                  ? 'bg-amber-950/40 border-amber-500/60 text-amber-200 shadow-sm'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  ? 'bg-violet-950/30 border-[#8B5CF6] text-white shadow-[0_0_20px_-10px_#8B5CF6]'
+                  : 'bg-white/[0.02] border-white/5 text-neutral-300 hover:border-violet-500/40 hover:bg-white/[0.04]'
               }`}
             >
-              <div className="font-semibold">CLPS Lander</div>
-              <div className="text-[10px] text-slate-400">14d Lunar Day</div>
+              <div className="font-serif text-sm font-normal text-white">CLPS Lander</div>
+              <div className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-0.5">14d Lunar Day</div>
             </button>
             <button
               onClick={() => applyPreset('viper')}
-              className={`px-2.5 py-1.5 text-xs font-medium rounded border text-left transition ${
+              className={`p-3 text-xs rounded-2xl border text-left transition duration-300 ease-snappy ${
                 parameters.stay_days === 21.0
-                  ? 'bg-indigo-950/40 border-indigo-500/60 text-indigo-200 shadow-sm'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  ? 'bg-violet-950/30 border-[#8B5CF6] text-white shadow-[0_0_20px_-10px_#8B5CF6]'
+                  : 'bg-white/[0.02] border-white/5 text-neutral-300 hover:border-violet-500/40 hover:bg-white/[0.04]'
               }`}
             >
-              <div className="font-semibold">VIPER Rover</div>
-              <div className="text-[10px] text-slate-400">21d Traverse</div>
+              <div className="font-serif text-sm font-normal text-white">VIPER Rover</div>
+              <div className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-0.5">21d Traverse</div>
             </button>
             <button
               onClick={() => applyPreset('habitat')}
-              className={`px-2.5 py-1.5 text-xs font-medium rounded border text-left transition ${
+              className={`p-3 text-xs rounded-2xl border text-left transition duration-300 ease-snappy ${
                 parameters.stay_days === 28.0
-                  ? 'bg-emerald-950/40 border-emerald-500/60 text-emerald-200 shadow-sm'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  ? 'bg-violet-950/30 border-[#8B5CF6] text-white shadow-[0_0_20px_-10px_#8B5CF6]'
+                  : 'bg-white/[0.02] border-white/5 text-neutral-300 hover:border-violet-500/40 hover:bg-white/[0.04]'
               }`}
             >
-              <div className="font-semibold">Base Camp</div>
-              <div className="text-[10px] text-slate-400">28d Habitation</div>
+              <div className="font-serif text-sm font-normal text-white">Base Camp</div>
+              <div className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mt-0.5">28d Habitation</div>
             </button>
           </div>
         </div>
 
         {/* Heatmap Metric Display Mode */}
         <div>
-          <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">
+          <label className="font-mono text-[10px] uppercase tracking-[0.25em] text-neutral-400 block mb-2">
             Heatmap Metric View
           </label>
-          <div className="grid grid-cols-3 gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
+          <div className="grid grid-cols-3 gap-1 bg-white/[0.02] p-1 rounded-full border border-white/10">
             {(
               [
                 { id: 'combined', label: 'Combined' },
@@ -88,10 +90,10 @@ export const ControlPanel: React.FC = () => {
               <button
                 key={m.id}
                 onClick={() => setMetricMode(m.id)}
-                className={`py-1 text-xs font-medium rounded transition ${
+                className={`py-1 text-[11px] font-sans font-medium rounded-full transition duration-300 ease-snappy ${
                   metricMode === m.id
-                    ? 'bg-slate-800 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#8B5CF6] text-white shadow-[0_0_12px_-5px_#8B5CF6] font-semibold'
+                    : 'text-neutral-400 hover:text-white'
                 }`}
               >
                 {m.label}
@@ -104,12 +106,12 @@ export const ControlPanel: React.FC = () => {
         <div className="space-y-4 pt-1">
           {/* Stay Duration */}
           <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-slate-300 font-medium flex items-center space-x-1.5">
-                <Clock className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="text-neutral-300 font-sans flex items-center space-x-1.5">
+                <Clock className="w-3.5 h-3.5 text-violet-400" />
                 <span>Stay Duration</span>
               </span>
-              <span className="font-mono text-cyan-400 font-semibold">{parameters.stay_days} d</span>
+              <span className="font-mono text-purple-300 font-semibold">{parameters.stay_days} d</span>
             </div>
             <input
               type="range"
@@ -118,23 +120,23 @@ export const ControlPanel: React.FC = () => {
               step="0.5"
               value={parameters.stay_days}
               onChange={(e) => updateParameters({ stay_days: parseFloat(e.target.value) })}
-              className="w-full accent-cyan-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              className="w-full accent-[#8B5CF6] h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-slate-500 mt-0.5">
-              <span>1 day</span>
-              <span>14 days</span>
-              <span>28 days</span>
+            <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-neutral-500 mt-1">
+              <span>1d</span>
+              <span>14d</span>
+              <span>28d</span>
             </div>
           </div>
 
           {/* Min Sun Fraction */}
           <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-slate-300 font-medium flex items-center space-x-1.5">
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="text-neutral-300 font-sans flex items-center space-x-1.5">
                 <Sun className="w-3.5 h-3.5 text-amber-400" />
                 <span>Min Sun Fraction</span>
               </span>
-              <span className="font-mono text-amber-400 font-semibold">
+              <span className="font-mono text-amber-300 font-semibold">
                 {Math.round(parameters.min_sun_fraction * 100)}%
               </span>
             </div>
@@ -145,18 +147,18 @@ export const ControlPanel: React.FC = () => {
               step="0.05"
               value={parameters.min_sun_fraction}
               onChange={(e) => updateParameters({ min_sun_fraction: parseFloat(e.target.value) })}
-              className="w-full accent-amber-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              className="w-full accent-amber-500 h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
           </div>
 
           {/* Max Dark Gap */}
           <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-slate-300 font-medium flex items-center space-x-1.5">
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="text-neutral-300 font-sans flex items-center space-x-1.5">
                 <Clock className="w-3.5 h-3.5 text-rose-400" />
                 <span>Max Dark Gap</span>
               </span>
-              <span className="font-mono text-rose-400 font-semibold">
+              <span className="font-mono text-rose-300 font-semibold">
                 {parameters.max_dark_gap_hours} hrs
               </span>
             </div>
@@ -167,9 +169,9 @@ export const ControlPanel: React.FC = () => {
               step="2"
               value={parameters.max_dark_gap_hours}
               onChange={(e) => updateParameters({ max_dark_gap_hours: parseInt(e.target.value) })}
-              className="w-full accent-rose-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              className="w-full accent-rose-500 h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-slate-500 mt-0.5">
+            <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-neutral-500 mt-1">
               <span>6h</span>
               <span>24h (battery)</span>
               <span>72h</span>
@@ -178,12 +180,12 @@ export const ControlPanel: React.FC = () => {
 
           {/* Lit Threshold */}
           <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-slate-300 font-medium flex items-center space-x-1.5">
-                <Eye className="w-3.5 h-3.5 text-yellow-400" />
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="text-neutral-300 font-sans flex items-center space-x-1.5">
+                <Eye className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Solar Disc Lit Threshold</span>
               </span>
-              <span className="font-mono text-yellow-400 font-semibold">
+              <span className="font-mono text-cyan-300 font-semibold">
                 {parameters.lit_threshold_pct}%
               </span>
             </div>
@@ -194,18 +196,18 @@ export const ControlPanel: React.FC = () => {
               step="5"
               value={parameters.lit_threshold_pct}
               onChange={(e) => updateParameters({ lit_threshold_pct: parseInt(e.target.value) })}
-              className="w-full accent-yellow-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              className="w-full accent-[#06B6D4] h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
           </div>
 
           {/* Min Earth Fraction */}
           <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-slate-300 font-medium flex items-center space-x-1.5">
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="text-neutral-300 font-sans flex items-center space-x-1.5">
                 <Radio className="w-3.5 h-3.5 text-blue-400" />
                 <span>Min Earth Visibility</span>
               </span>
-              <span className="font-mono text-blue-400 font-semibold">
+              <span className="font-mono text-blue-300 font-semibold">
                 {Math.round(parameters.min_earth_fraction * 100)}%
               </span>
             </div>
@@ -216,18 +218,18 @@ export const ControlPanel: React.FC = () => {
               step="0.05"
               value={parameters.min_earth_fraction}
               onChange={(e) => updateParameters({ min_earth_fraction: parseFloat(e.target.value) })}
-              className="w-full accent-blue-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              className="w-full accent-blue-500 h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
           </div>
 
           {/* Antenna Mask */}
           <div>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-slate-300 font-medium flex items-center space-x-1.5">
+            <div className="flex justify-between text-xs mb-1.5">
+              <span className="text-neutral-300 font-sans flex items-center space-x-1.5">
                 <Shield className="w-3.5 h-3.5 text-purple-400" />
                 <span>Antenna Horizon Mask</span>
               </span>
-              <span className="font-mono text-purple-400 font-semibold">
+              <span className="font-mono text-purple-300 font-semibold">
                 +{parameters.antenna_mask_deg.toFixed(1)}°
               </span>
             </div>
@@ -238,9 +240,9 @@ export const ControlPanel: React.FC = () => {
               step="0.5"
               value={parameters.antenna_mask_deg}
               onChange={(e) => updateParameters({ antenna_mask_deg: parseFloat(e.target.value) })}
-              className="w-full accent-purple-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              className="w-full accent-purple-500 h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-slate-500 mt-0.5">
+            <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-neutral-500 mt-1">
               <span>0° (Terrain LOS)</span>
               <span>+2.5°</span>
               <span>+5.0° (Multipath)</span>
@@ -250,12 +252,12 @@ export const ControlPanel: React.FC = () => {
       </div>
 
       {/* Methodology & Assumptions Footer Note */}
-      <div className="mt-4 p-3 bg-slate-900/80 rounded-lg border border-slate-800/80 text-[11px] text-slate-400 space-y-1.5">
-        <div className="flex items-center space-x-1.5 text-slate-300 font-semibold">
-          <Info className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+      <div className="mt-6 p-4 bg-white/[0.02] border border-white/5 rounded-2xl text-xs space-y-2 text-neutral-400 font-light">
+        <div className="flex items-center space-x-2 text-white font-normal font-serif text-sm">
+          <Info className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" />
           <span>Modeling Assumptions</span>
         </div>
-        <p className="text-[10px] leading-relaxed text-slate-400">
+        <p className="font-sans text-[11px] leading-relaxed text-neutral-400">
           Thresholds are mission planning assumptions, not rigid constraints. Observer height is 2.0 m
           above LOLA 80 m DEM terrain in the MOON_ME reference frame.
         </p>

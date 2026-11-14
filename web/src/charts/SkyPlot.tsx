@@ -360,13 +360,13 @@ export const SkyPlot: React.FC = () => {
   }, [size, trackData, currentHorizon, parameters.antenna_mask_deg]);
 
   return (
-    <div ref={containerRef} className="h-full flex flex-col bg-slate-950/60 p-3 space-y-2 select-none">
+    <div ref={containerRef} className="h-full flex flex-col bg-[#050508] p-3 space-y-2 select-none">
       {/* Top Header of Sky Plot */}
-      <div className="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
+      <div className="flex items-center justify-between text-xs border-b border-white/10 pb-2">
         <div className="flex items-center space-x-2">
           <Compass className="w-4 h-4 text-cyan-400" />
-          <span className="font-semibold text-slate-200">Sky Visibility Plot</span>
-          <span className="text-[10px] text-slate-500 font-mono">
+          <span className="font-serif font-bold text-white tracking-wide">Sky Visibility Plot</span>
+          <span className="text-[10px] text-neutral-500 font-mono">
             Azimuth 0°–360° × Elevation -5° to +10°
           </span>
         </div>
@@ -400,25 +400,25 @@ export const SkyPlot: React.FC = () => {
       </div>
 
       {/* Time Scrubber Controls */}
-      <div className="flex items-center space-x-3 pt-1 border-t border-slate-800/80 text-xs">
+      <div className="flex items-center space-x-3 pt-1 border-t border-white/10/80 text-xs">
         <div className="flex items-center space-x-1">
           <button
             onClick={() => setScrubStep(Math.max(0, scrubStep - 1))}
-            className="p-1 rounded hover:bg-slate-800 text-slate-300 transition"
+            className="p-1 rounded hover:bg-white/10 text-neutral-300 transition"
             title="Step backward (-30m)"
           >
             <SkipBack className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="p-1.5 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white transition shadow"
+            className="p-1.5 rounded-full bg-violet-600 hover:bg-violet-500 shadow-violet-900/30 text-white transition shadow"
             title={isPlaying ? 'Pause' : 'Play mission timeline'}
           >
             {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
           </button>
           <button
             onClick={() => setScrubStep(Math.min(windowSteps - 1, scrubStep + 1))}
-            className="p-1 rounded hover:bg-slate-800 text-slate-300 transition"
+            className="p-1 rounded hover:bg-white/10 text-neutral-300 transition"
             title="Step forward (+30m)"
           >
             <SkipForward className="w-3.5 h-3.5" />
@@ -428,7 +428,7 @@ export const SkyPlot: React.FC = () => {
         {/* Speed button */}
         <button
           onClick={() => setPlaybackSpeed(playbackSpeed === 1 ? 2 : playbackSpeed === 2 ? 5 : 1)}
-          className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-[10px] font-mono text-cyan-400"
+          className="px-1.5 py-0.5 rounded bg-[#0a0a0a] border border-white/10 text-[10px] font-mono text-violet-300"
           title="Playback speed"
         >
           {playbackSpeed}x
@@ -441,13 +441,13 @@ export const SkyPlot: React.FC = () => {
           max={Math.max(1, windowSteps - 1)}
           value={scrubStep}
           onChange={(e) => setScrubStep(parseInt(e.target.value))}
-          className="flex-1 accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+          className="flex-1 accent-violet-500 h-1.5 bg-white/10 rounded cursor-pointer"
         />
 
         {/* Timestamp & Step Label */}
-        <div className="font-mono text-[11px] text-slate-300 whitespace-nowrap">
+        <div className="font-mono text-[11px] text-neutral-300 whitespace-nowrap">
           <span className="text-cyan-400 font-semibold">{currentUtcString}</span>
-          <span className="text-slate-500 ml-2">
+          <span className="text-neutral-500 ml-2">
             (+{(scrubStep * 0.5).toFixed(1)}h / {(parameters.stay_days * 24).toFixed(0)}h)
           </span>
         </div>

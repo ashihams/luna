@@ -58,44 +58,40 @@ export const Heatmap: React.FC = () => {
 
   // Month boundaries for 2027 and 2028
   const monthTicks = useMemo(() => {
-    if (!manifest) return [];
     const ticks: { day: number; label: string }[] = [];
-    const base = new Date(manifest.time.t0_utc);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let dayCount = 0;
+    const daysInMonths2027 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const daysInMonths2028 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-    for (let m = 0; m < 24; m++) {
-      const d = new Date(Date.UTC(2027, m, 1));
-      const diffMs = d.getTime() - base.getTime();
-      const day = Math.round(diffMs / (86400 * 1000));
-      if (day >= 0 && day < numDays) {
-        const label = d.toLocaleDateString('en-US', { month: 'short', year: '2-digit', timeZone: 'UTC' });
-        ticks.push({ day, label });
-      }
-    }
+    daysInMonths2027.forEach((days, i) => {
+      ticks.push({ day: dayCount, label: `${months[i]} 27` });
+      dayCount += days;
+    });
+
+    daysInMonths2028.forEach((days, i) => {
+      ticks.push({ day: dayCount, label: `${months[i]} 28` });
+      dayCount += days;
+    });
+
     return ticks;
-  }, [manifest, numDays]);
+  }, []);
 
-  // Color mapping
+  // Colormaps for metric modes
   const getColor = useCallback(
-    (metric: CellMetrics, mode: string) => {
-      let val = metric.score;
-      if (mode === 'power') val = metric.sun_fraction;
-      if (mode === 'comms') val = metric.earth_fraction;
+    (cell: CellMetrics, mode: string) => {
+      let val = 0;
+      if (mode === 'power') val = cell.sun_fraction;
+      else if (mode === 'comms') val = cell.earth_fraction;
+      else val = cell.score;
 
-      // Color ramp
-      if (!metric.viable) {
-        // Dimmer red/slate tone for non-viable
-        const v = Math.max(0, Math.min(1, val));
-        const r = Math.round(40 + v * 50);
-        const g = Math.round(15 + v * 15);
-        const b = Math.round(25 + v * 25);
-        return `rgb(${r}, ${g}, ${b})`;
-      }
+      val = Math.max(0, Math.min(1, val));
 
       if (mode === 'power') {
-        // Amber / Yellow ramp
-        const r = Math.round(60 + val * 195);
-        const g = Math.round(40 + val * 175);
-        const b = Math.round(20 + val * 30);
+        // Solar Gold ramp
+        const r = Math.round(20 + val * 235);
+        const g = Math.round(15 + val * 170);
+        const b = Math.round(10 + val * 20);
         return `rgb(${r}, ${g}, ${b})`;
       } else if (mode === 'comms') {
         // Cyan / Blue ramp
@@ -144,7 +140,7 @@ export const Heatmap: React.FC = () => {
     const cellH = heatHeight / numSites;
 
     // Background
-    ctx.fillStyle = '#090d16';
+    ctx.fillStyle = '#050508';
     ctx.fillRect(0, 0, width, height);
 
     // Draw Heatmap Cells
@@ -171,7 +167,7 @@ export const Heatmap: React.FC = () => {
     // Selected Site Horizontal Glow
     if (selectedSiteIdx >= 0) {
       const y = TOP_MARGIN + selectedSiteIdx * cellH;
-      ctx.strokeStyle = '#38bdf8';
+      ctx.strokeStyle = '#8B5CF6';
       ctx.lineWidth = 1.5;
       ctx.strokeRect(LEFT_MARGIN, y, heatWidth, cellH);
     }
@@ -191,7 +187,7 @@ export const Heatmap: React.FC = () => {
     // Slipped Date Marker (Solid Cyan line)
     const slippedX = LEFT_MARGIN + slippedDayIndex * cellW;
     ctx.save();
-    ctx.strokeStyle = '#22d3ee';
+    ctx.strokeStyle = '#06B6D4';
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(slippedX, TOP_MARGIN - 14);
@@ -220,9 +216,9 @@ export const Heatmap: React.FC = () => {
 
       // Site background row highlight
       if (isSelected) {
-        ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
+        ctx.fillStyle = 'rgba(139, 92, 246, 0.15)';
         ctx.fillRect(0, TOP_MARGIN + s * cellH, LEFT_MARGIN, cellH);
-        ctx.fillStyle = '#38bdf8';
+        ctx.fillStyle = '#a78bfa';
         ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, sans-serif';
       } else {
         ctx.fillStyle = '#94a3b8';
@@ -260,95 +256,80 @@ export const Heatmap: React.FC = () => {
     slippedDayIndex,
     slipDays,
     metricMode,
+    sites,
     getColor,
     monthTicks,
-    sites,
   ]);
 
-  // Click handler to select site or date
+  // Click interaction: select site and planned date
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas || !manifest) return;
+    if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
     const heatWidth = dimensions.width - LEFT_MARGIN - RIGHT_MARGIN;
     const heatHeight = dimensions.height - TOP_MARGIN - BOTTOM_MARGIN;
-    const cellW = heatWidth / numDays;
-    const cellH = heatHeight / numSites;
 
-    // Check if clicked in site label area
-    if (mouseX < LEFT_MARGIN && mouseY >= TOP_MARGIN && mouseY <= TOP_MARGIN + heatHeight) {
-      const siteIdx = Math.floor((mouseY - TOP_MARGIN) / cellH);
-      if (siteIdx >= 0 && siteIdx < numSites) {
-        setSelectedSiteId(sites[siteIdx].id);
+    // Check if clicked in heatmap grid area
+    if (x >= LEFT_MARGIN && x <= LEFT_MARGIN + heatWidth && y >= TOP_MARGIN && y <= TOP_MARGIN + heatHeight) {
+      const cellW = heatWidth / numDays;
+      const cellH = heatHeight / numSites;
+
+      const clickedDay = Math.floor((x - LEFT_MARGIN) / cellW);
+      const clickedSiteIdx = Math.floor((y - TOP_MARGIN) / cellH);
+
+      if (clickedDay >= 0 && clickedDay < numDays) {
+        setPlannedDayIndex(clickedDay);
       }
-      return;
-    }
 
-    // Check if clicked in heat grid
-    if (
-      mouseX >= LEFT_MARGIN &&
-      mouseX <= LEFT_MARGIN + heatWidth &&
-      mouseY >= TOP_MARGIN &&
-      mouseY <= TOP_MARGIN + heatHeight
-    ) {
-      const day = Math.floor((mouseX - LEFT_MARGIN) / cellW);
-      const siteIdx = Math.floor((mouseY - TOP_MARGIN) / cellH);
-
-      if (siteIdx >= 0 && siteIdx < numSites) {
-        setSelectedSiteId(sites[siteIdx].id);
-      }
-      if (day >= 0 && day < numDays) {
-        setPlannedDayIndex(day);
+      if (clickedSiteIdx >= 0 && clickedSiteIdx < numSites) {
+        setSelectedSiteId(sites[clickedSiteIdx].id);
       }
     }
   };
 
-  // Hover Tooltip handler
+  // Hover Tooltip interaction
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas || !heatmapMatrix || !manifest) return;
 
     const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
     const heatWidth = dimensions.width - LEFT_MARGIN - RIGHT_MARGIN;
     const heatHeight = dimensions.height - TOP_MARGIN - BOTTOM_MARGIN;
-    const cellW = heatWidth / numDays;
-    const cellH = heatHeight / numSites;
 
-    if (
-      mouseX >= LEFT_MARGIN &&
-      mouseX <= LEFT_MARGIN + heatWidth &&
-      mouseY >= TOP_MARGIN &&
-      mouseY <= TOP_MARGIN + heatHeight
-    ) {
-      const day = Math.floor((mouseX - LEFT_MARGIN) / cellW);
-      const siteIdx = Math.floor((mouseY - TOP_MARGIN) / cellH);
+    if (x >= LEFT_MARGIN && x <= LEFT_MARGIN + heatWidth && y >= TOP_MARGIN && y <= TOP_MARGIN + heatHeight) {
+      const cellW = heatWidth / numDays;
+      const cellH = heatHeight / numSites;
 
-      if (siteIdx >= 0 && siteIdx < numSites && day >= 0 && day < numDays) {
-        const metrics = heatmapMatrix[siteIdx][day];
-        const site = sites[siteIdx];
+      const dayIdx = Math.floor((x - LEFT_MARGIN) / cellW);
+      const siteIdx = Math.floor((y - TOP_MARGIN) / cellH);
 
-        const d = new Date(manifest.time.t0_utc);
-        d.setUTCDate(d.getUTCDate() + day);
-        const dateStr = d.toISOString().split('T')[0];
+      if (dayIdx >= 0 && dayIdx < numDays && siteIdx >= 0 && siteIdx < numSites) {
+        const metrics = heatmapMatrix[siteIdx]?.[dayIdx];
+        if (metrics) {
+          const baseDate = new Date(manifest.time.t0_utc);
+          baseDate.setUTCDate(baseDate.getUTCDate() + dayIdx);
+          const dateStr = baseDate.toISOString().split('T')[0];
 
-        setTooltip({
-          x: e.clientX,
-          y: e.clientY,
-          siteName: site.name,
-          dateStr,
-          dayIndex: day,
-          metrics,
-        });
-        return;
+          setTooltip({
+            x: e.clientX,
+            y: e.clientY,
+            siteName: sites[siteIdx].name,
+            dateStr,
+            dayIndex: dayIdx,
+            metrics,
+          });
+          return;
+        }
       }
     }
+
     setTooltip(null);
   };
 
@@ -356,7 +337,7 @@ export const Heatmap: React.FC = () => {
     setTooltip(null);
   };
 
-  // Keyboard navigation: Arrow keys move site and date
+  // Keyboard navigation for arrow keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
@@ -381,32 +362,32 @@ export const Heatmap: React.FC = () => {
   }, [plannedDayIndex, selectedSiteIdx, numSites, sites, setPlannedDayIndex, setSelectedSiteId]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full flex flex-col select-none">
-      <div className="flex items-center justify-between px-3 py-1.5 border-b border-slate-800/80 bg-slate-900/40 text-xs">
+    <div ref={containerRef} className="relative w-full h-full flex flex-col select-none rounded-2xl overflow-hidden border border-white/10 bg-[#080808]">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0a0a0a]/90 backdrop-blur-xl text-xs">
         <div className="flex items-center space-x-2">
-          <span className="font-semibold text-slate-200">Landing Feasibility Heatmap</span>
-          <span className="text-[10px] text-slate-400">
+          <span className="font-serif text-white font-normal text-sm">Landing Feasibility Heatmap</span>
+          <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-400">
             (14 sites × 731 days, 2027–2028 | Click or Arrow keys to navigate)
           </span>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center space-x-4 text-[10px]">
+        <div className="flex items-center space-x-4 font-mono text-[10px] uppercase tracking-wider">
           <div className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-[#0b1329] border border-slate-700" />
-            <span className="text-slate-400">Low Score</span>
+            <span className="w-2.5 h-2.5 rounded-sm bg-[#0b1329] border border-white/10" />
+            <span className="text-neutral-400">Low</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-[#0d9488]" />
-            <span className="text-slate-400">Viable</span>
+            <span className="text-neutral-400">Viable</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-[#fbbf24]" />
-            <span className="text-slate-400">Optimal (90%+)</span>
+            <span className="text-neutral-400">Optimal</span>
           </div>
           <div className="flex items-center space-x-1.5">
             <span className="w-2.5 h-2.5 rounded-sm border border-red-500 bg-red-950/40" />
-            <span className="text-red-400">Non-viable Outlined</span>
+            <span className="text-red-400">Non-viable</span>
           </div>
         </div>
       </div>
@@ -423,57 +404,57 @@ export const Heatmap: React.FC = () => {
         {/* Floating Tooltip */}
         {tooltip && (
           <div
-            className="fixed pointer-events-none z-50 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-lg shadow-xl p-3 text-xs w-60 transform -translate-x-1/2 -translate-y-full mb-3"
+            className="fixed pointer-events-none z-50 bg-[#0a0a0a]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_0_30px_-10px_rgba(139,92,246,0.4)] p-4 text-xs w-64 transform -translate-x-1/2 -translate-y-full mb-3 text-white"
             style={{ left: tooltip.x, top: tooltip.y }}
           >
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
-              <span className="font-bold text-slate-100 truncate pr-2">{tooltip.siteName}</span>
+            <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
+              <span className="font-serif text-base text-white truncate pr-2">{tooltip.siteName}</span>
               <span
-                className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                className={`px-2 py-0.5 rounded-full font-mono text-[9px] uppercase font-semibold ${
                   tooltip.metrics.viable
-                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-700/60'
-                    : 'bg-rose-950 text-rose-400 border border-rose-700/60'
+                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/50 shadow-[0_0_8px_-2px_#10B981]'
+                    : 'bg-rose-950 text-rose-400 border border-rose-500/50'
                 }`}
               >
                 {tooltip.metrics.viable ? 'VIABLE' : 'FAILED'}
               </span>
             </div>
 
-            <div className="text-[11px] font-mono text-slate-400 mb-2">
-              UTC Start: <span className="text-cyan-400 font-semibold">{tooltip.dateStr}</span> (Day{' '}
+            <div className="text-[11px] font-mono text-neutral-400 mb-2">
+              UTC Start: <span className="text-cyan-300 font-semibold">{tooltip.dateStr}</span> (Day{' '}
               {tooltip.dayIndex})
             </div>
 
-            <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+            <div className="grid grid-cols-2 gap-2 text-[11px]">
               <div>
-                <span className="text-slate-500 block text-[10px]">Sun Fraction</span>
+                <span className="text-neutral-500 block font-mono text-[9px] uppercase tracking-wider">Sun Lit</span>
                 <span className="font-mono text-amber-300 font-semibold">
                   {Math.round(tooltip.metrics.sun_fraction * 100)}%
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[10px]">Earth Fraction</span>
-                <span className="font-mono text-blue-300 font-semibold">
+                <span className="text-neutral-500 block font-mono text-[9px] uppercase tracking-wider">Earth Comms</span>
+                <span className="font-mono text-cyan-300 font-semibold">
                   {Math.round(tooltip.metrics.earth_fraction * 100)}%
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[10px]">Max Dark Gap</span>
+                <span className="text-neutral-500 block font-mono text-[9px] uppercase tracking-wider">Dark Gap</span>
                 <span className="font-mono text-rose-300 font-semibold">
                   {tooltip.metrics.longest_dark_gap_h.toFixed(1)} h
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[10px]">Max Outage</span>
+                <span className="text-neutral-500 block font-mono text-[9px] uppercase tracking-wider">Comms Outage</span>
                 <span className="font-mono text-purple-300 font-semibold">
                   {tooltip.metrics.longest_comms_outage_h.toFixed(1)} h
                 </span>
               </div>
             </div>
 
-            <div className="mt-2 pt-1.5 border-t border-slate-800 flex justify-between items-center text-[11px]">
-              <span className="text-slate-400">Composite Score</span>
-              <span className="font-mono font-bold text-cyan-300">
+            <div className="mt-2.5 pt-2 border-t border-white/10 flex justify-between items-center text-[11px]">
+              <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-400">Score</span>
+              <span className="font-mono font-bold text-purple-300">
                 {(tooltip.metrics.score * 100).toFixed(1)} / 100
               </span>
             </div>

@@ -54,7 +54,7 @@ export const PoleOverview: React.FC = () => {
 
     // Scene & Camera
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x020617);
+    scene.background = new THREE.Color(0x030303);
 
     const camera = new THREE.PerspectiveCamera(
       45,
@@ -293,21 +293,21 @@ export const PoleOverview: React.FC = () => {
   const hoveredViability = hoveredSiteId ? siteViabilityMap.get(hoveredSiteId) : null;
 
   return (
-    <div ref={containerRef} className="w-full h-full relative cursor-grab select-none overflow-hidden bg-slate-950">
+    <div ref={containerRef} className="w-full h-full relative cursor-grab select-none overflow-hidden bg-[#030303]">
       {/* Top Overlay HUD */}
       <div className="absolute top-4 left-4 z-10 pointer-events-none flex flex-col space-y-2">
-        <div className="bg-slate-950/85 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-xl max-w-sm pointer-events-auto">
+        <div className="bg-[#030303]/85 backdrop-blur border border-white/10 rounded-xl p-3.5 shadow-xl max-w-sm pointer-events-auto">
           <div className="flex items-center space-x-2 text-cyan-400 mb-1">
             <Globe className="w-4 h-4" />
-            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-100">
+            <h2 className="text-sm font-serif font-bold text-white tracking-wide">
               Lunar South Pole Overview (300×300 km)
             </h2>
           </div>
-          <p className="text-[11px] text-slate-400 leading-relaxed">
+          <p className="text-[11px] text-neutral-400 leading-relaxed">
             Full LOLA 80 m polar stereographic digital elevation model covering 80°S to 90°S.
             Markers indicate the 14 candidate Artemis sites, color-coded by mission viability on the selected date.
           </p>
-          <div className="flex items-center space-x-4 mt-2.5 text-[10px] font-medium border-t border-slate-800 pt-2">
+          <div className="flex items-center space-x-4 mt-2.5 text-[10px] font-medium border-t border-white/10 pt-2">
             <div className="flex items-center space-x-1.5 text-emerald-400">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500" />
               <span>Viable Site</span>
@@ -323,11 +323,11 @@ export const PoleOverview: React.FC = () => {
       {/* Floating Hover Tooltip */}
       {hoveredSite && tooltipPos && (
         <div
-          className="fixed pointer-events-none z-50 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-lg p-3 text-xs shadow-2xl transform -translate-x-1/2 -translate-y-full mb-3 w-56"
+          className="fixed pointer-events-none z-50 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 rounded-xl p-3.5 text-xs shadow-2xl transform -translate-x-1/2 -translate-y-full mb-3 w-60"
           style={{ left: tooltipPos.x, top: tooltipPos.y }}
         >
-          <div className="flex items-center justify-between border-b border-slate-800 pb-1 mb-1.5">
-            <span className="font-bold text-slate-100">{hoveredSite.name}</span>
+          <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-1.5">
+            <span className="font-bold text-white">{hoveredSite.name}</span>
             <span
               className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
                 hoveredViability?.viable
@@ -341,8 +341,8 @@ export const PoleOverview: React.FC = () => {
           <div className="text-[10px] font-mono text-cyan-400">
             {hoveredSite.lat_deg.toFixed(3)}°S, {hoveredSite.lon_deg_east.toFixed(3)}°E
           </div>
-          <div className="mt-1 pt-1 border-t border-slate-800 flex justify-between text-[10px]">
-            <span className="text-slate-400">Score</span>
+          <div className="mt-1 pt-1 border-t border-white/10 flex justify-between text-[10px]">
+            <span className="text-neutral-400">Score</span>
             <span className="font-mono text-cyan-300 font-bold">
               {hoveredViability ? (hoveredViability.score * 100).toFixed(1) : 0}
             </span>
