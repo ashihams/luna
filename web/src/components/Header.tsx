@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
-import { Calendar, Compass, ShieldAlert, Sparkles, Layers, Globe, Scale, Home, ArrowLeft } from 'lucide-react';
+import { Calendar, Compass, ShieldAlert, Sparkles, Layers, Globe, Scale } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const {
@@ -21,26 +21,13 @@ export const Header: React.FC = () => {
 
   return (
     <header className="h-14 border-b border-white/10 bg-[#0a0a0a]/80 backdrop-blur-xl px-5 flex items-center justify-between z-20 select-none text-white">
-      {/* Brand & Mission & Back Button */}
-      <div className="flex items-center space-x-3.5">
-        <button
-          onClick={() => setActiveTab('landing')}
-          className="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-sans text-neutral-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-full transition duration-300 ease-snappy shadow-sm"
-          title="Return to Landing Page"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 text-violet-400" />
-          <span className="hidden sm:inline">Landing</span>
-        </button>
-
-        <div
-          onClick={() => setActiveTab('landing')}
-          className="flex items-center space-x-2.5 cursor-pointer group"
-          title="Return to Landing Page"
-        >
+      {/* Brand & Mission */}
+      <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2.5">
           <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#06B6D4] shadow-[0_0_10px_#8B5CF6]" />
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-serif text-lg font-normal tracking-tight text-white group-hover:text-purple-300 transition duration-300 ease-snappy">
+              <span className="font-serif text-lg font-normal tracking-tight text-white">
                 Luna Slip Planner
               </span>
               <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] text-neutral-400 border border-white/10 uppercase tracking-widest">
