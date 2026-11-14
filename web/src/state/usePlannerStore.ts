@@ -121,7 +121,9 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   isPlaying: false,
   playbackSpeed: 1,
   metricMode: 'combined',
-  activeTab: 'planner',
+  activeTab: (typeof window !== 'undefined' && ['planner', 'site', 'pole'].includes(window.location.hash.replace('#', ''))
+    ? window.location.hash.replace('#', '')
+    : 'landing') as 'landing' | 'planner' | 'site' | 'pole',
   parameters: { ...ARTEMIS_PRESET },
   helpers: [],
   heatmapMatrix: null,
@@ -205,6 +207,13 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   },
 
   setActiveTab: (tab: 'landing' | 'planner' | 'site' | 'pole') => {
+    if (typeof window !== 'undefined') {
+      if (tab === 'landing') {
+        history.replaceState(null, '', window.location.pathname);
+      } else {
+        window.location.hash = tab;
+      }
+    }
     set({ activeTab: tab });
   },
 

@@ -18,6 +18,11 @@ export const App: React.FC = () => {
     initialize();
   }, [initialize]);
 
+  // 1. Landing Page View (Instant display)
+  if (activeTab === 'landing') {
+    return <LandingPage />;
+  }
+
   if (loading) {
     return (
       <div className="w-screen h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-200 select-none">
@@ -57,11 +62,6 @@ export const App: React.FC = () => {
         </div>
       </div>
     );
-  }
-
-  // 1. Landing Page View
-  if (activeTab === 'landing') {
-    return <LandingPage />;
   }
 
   // 2. Mission Dashboard View
