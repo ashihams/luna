@@ -8,13 +8,12 @@ __pycache__/
 venv/
 *.egg-info/
 
-# Data cache (large files)
+# Data cache (large raw DEMs and kernels)
 data/cache/*
 !data/cache/.gitignore
 
-# Generated web data
-web/public/data/*
-!web/public/data/.gitkeep
+# Generated web data (tracked for zero-setup static deployment)
+# web/public/data/ is included so static site works directly without running 180MB DEM pipeline
 
 # Node
 web/node_modules/
