@@ -136,6 +136,13 @@ export const RescuePanel: React.FC = () => {
                     </span>
                   </div>
 
+                  {item.distance_km !== undefined && (
+                    <div className="flex items-center space-x-1.5 text-[11px] font-mono text-violet-300 bg-violet-950/20 px-2 py-1 rounded-lg border border-violet-500/20">
+                      <MapPin className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" />
+                      <span>{item.distance_km.toFixed(1)} km surface distance</span>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-3 gap-1 font-mono text-[10px] text-neutral-400 border-t border-white/5 pt-2">
                     <div>
                       Sun: <span className="text-white font-medium">{Math.round(item.sun_fraction * 100)}%</span>

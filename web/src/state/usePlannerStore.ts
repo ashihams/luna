@@ -315,7 +315,12 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const slippedDay = Math.max(0, Math.min(730, plannedDayIndex + slipDays));
     return computeRescueCandidates(
       heatmapMatrix,
-      sites.map((s) => ({ id: s.id, name: s.name })),
+      sites.map((s) => ({
+        id: s.id,
+        name: s.name,
+        lat_deg: s.lat_deg,
+        lon_deg_east: s.lon_deg_east,
+      })),
       siteIdx,
       slippedDay,
       manifest.time.t0_utc,

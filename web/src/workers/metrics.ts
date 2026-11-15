@@ -255,9 +255,33 @@ export function calculateSlipAnalysis(
  * (b) best other sites on the slipped date
  * (c) top 5 site-date pairs overall
  */
+
+/**
+ * Great-circle surface distance on a sphere of radius R_MOON = 1737.4 km
+ */
+export function computeLunarDistanceKm(
+  lat1Deg: number,
+  lon1Deg: number,
+  lat2Deg: number,
+  lon2Deg: number
+): number {
+  const R_MOON_KM = 1737.4;
+  const toRad = Math.PI / 180;
+  const phi1 = lat1Deg * toRad;
+  const phi2 = lat2Deg * toRad;
+  const deltaPhi = (lat2Deg - lat1Deg) * toRad;
+  const deltaLambda = (lon2Deg - lon1Deg) * toRad;
+
+  const a =
+    Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+    Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)));
+  return R_MOON_KM * c;
+}
+
 export function computeRescueCandidates(
   matrix: CellMetrics[][],
-  siteNames: { id: string; name: string }[],
+  siteList: { id: string; name: string; lat_deg?: number; lon_deg_east?: number }[],
   siteIndex: number,
   slippedDayIndex: number,
   baseDateUtc: string,
@@ -285,8 +309,8 @@ export function computeRescueCandidates(
     if (!m.complete) continue;
     altDates.push({
       type: 'alt_date',
-      siteId: siteNames[siteIndex].id,
-      siteName: siteNames[siteIndex].name,
+      siteId: siteList[siteIndex].id,
+      siteName: siteList[siteIndex].name,
       dayIndex: d,
       dateUtc: getDateString(d),
       score: m.score,
@@ -304,16 +328,31 @@ export function computeRescueCandidates(
     return b.score - a.score;
   });
 
-  // (b) Alternative sites on the slipped date
+  const curSite = siteList[siteIndex];
+  const getDistance = (targetIndex: number): number | undefined => {
+    const tgt = siteList[targetIndex];
+    if (
+      curSite.lat_deg !== undefined &&
+      curSite.lon_deg_east !== undefined &&
+      tgt.lat_deg !== undefined &&
+      tgt.lon_deg_east !== undefined
+    ) {
+      return computeLunarDistanceKm(curSite.lat_deg, curSite.lon_deg_east, tgt.lat_deg, tgt.lon_deg_east);
+    }
+    return undefined;
+  };
+
+  // (b) Alternative sites on the slipped date (ranked by surface distance for viable sites)
   const altSites: RescueCandidate[] = [];
-  for (let s = 0; s < siteNames.length; s++) {
+  for (let s = 0; s < siteList.length; s++) {
     if (s === siteIndex) continue;
     const m = matrix[s][slippedDayIndex];
     if (!m.complete) continue;
+    const distKm = getDistance(s);
     altSites.push({
       type: 'alt_site',
-      siteId: siteNames[s].id,
-      siteName: siteNames[s].name,
+      siteId: siteList[s].id,
+      siteName: siteList[s].name,
       dayIndex: slippedDayIndex,
       dateUtc: getDateString(slippedDayIndex),
       score: m.score,
@@ -322,10 +361,16 @@ export function computeRescueCandidates(
       sun_fraction: m.sun_fraction,
       earth_fraction: m.earth_fraction,
       longest_dark_gap_h: m.longest_dark_gap_h,
+      distance_km: distKm !== undefined ? Math.round(distKm * 10) / 10 : undefined,
     });
   }
+
+  // Viable alternatives ranked primarily by surface proximity (closest distance first); non-viable by score
   altSites.sort((a, b) => {
     if (a.viable !== b.viable) return a.viable ? -1 : 1;
+    if (a.viable && b.viable && a.distance_km !== undefined && b.distance_km !== undefined) {
+      return a.distance_km - b.distance_km;
+    }
     return b.score - a.score;
   });
 
@@ -334,15 +379,16 @@ export function computeRescueCandidates(
   const startRange = Math.max(0, slippedDayIndex - 45);
   const endRange = Math.min(numDays - 1, slippedDayIndex + 45);
 
-  for (let s = 0; s < siteNames.length; s++) {
+  for (let s = 0; s < siteList.length; s++) {
     for (let d = startRange; d <= endRange; d++) {
       if (s === siteIndex && d === slippedDayIndex) continue;
       const m = matrix[s][d];
       if (m.viable) {
+        const distKm = getDistance(s);
         allCandidates.push({
           type: 'top_overall',
-          siteId: siteNames[s].id,
-          siteName: siteNames[s].name,
+          siteId: siteList[s].id,
+          siteName: siteList[s].name,
           dayIndex: d,
           dateUtc: getDateString(d),
           score: m.score,
@@ -351,6 +397,7 @@ export function computeRescueCandidates(
           sun_fraction: m.sun_fraction,
           earth_fraction: m.earth_fraction,
           longest_dark_gap_h: m.longest_dark_gap_h,
+          distance_km: distKm !== undefined ? Math.round(distKm * 10) / 10 : undefined,
         });
       }
     }

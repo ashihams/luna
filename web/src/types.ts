@@ -138,6 +138,7 @@ export interface RescueCandidate {
   sun_fraction: number;
   earth_fraction: number;
   longest_dark_gap_h: number;
+  distance_km?: number;
 }
 
 export type MetricMode = 'combined' | 'power' | 'comms';

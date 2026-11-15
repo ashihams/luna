@@ -41,7 +41,7 @@
 
 Local SPICE ephemeris evaluation (`MOON_ME` body-fixed frame with DE421 planetary kernel) was cross-checked against the NASA JPL Horizons REST API across two test sites using their exact candidate coordinates (`shackleton-rim`: -88.81°, 124.68°; `connecting-ridge`: -89.305°, 123.623°) and three operational epochs (2027-01-01, 2027-07-01, 2028-01-01).
 
-Machine-readable results: [horizons-results.json](horizons-results.json).
+Machine-readable results: [horizons-results.json](horizons-results.json). A complete, unedited raw API response fetched directly from NASA JPL Horizons is archived as verification evidence at [horizons-raw-response.json](horizons-raw-response.json) and [horizons-raw-response.txt](horizons-raw-response.txt).
 
 | Site | Date (UTC) | Body | SPICE az/el | Horizons az/el | Delta az | Delta el | Pass |
 |---|---|---|---|---|---|---|---|
