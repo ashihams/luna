@@ -3,6 +3,7 @@
 __pycache__
 data/cache
 data/kernels
+data/out_accuracy
 data/out_dem20
 data/out_longrun
 data/out_longrun_dem80
