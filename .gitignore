@@ -31,3 +31,5 @@ Thumbs.db
 .audit/
 web/public/data/catalog.json
 web/public/data/metrics-*.bin
+
+temp_pytest/
