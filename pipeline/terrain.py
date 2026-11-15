@@ -143,12 +143,13 @@ def compute_effective_radius_km(lat_deg: float, lon_deg_east: float) -> float:
     return round(float(effective_r_km), 1)
 
 
-def acquire_site_levels(site: dict) -> dict:
+def acquire_site_levels(site: dict, variant: str = "dem80") -> dict:
     """
     Acquire near, mid, far terrain levels for a given site dict.
     near: 0 to 15 km (20 m DEM, or 5 m if available)
     mid: 15 to 60 km (20 m or 40 m DEM)
     far: 60 to 300 km (80 m DEM)
+    variant: "dem80" (default) or "dem20" (0-60km from 20m DEM)
     """
     cfg = load_config()
     site_id = site["id"]
@@ -156,6 +157,7 @@ def acquire_site_levels(site: dict) -> dict:
     lon = site["lon_deg_east"]
 
     dem_80m_url = cfg["DEM_80M_URL"]
+    dem_20m_url = cfg.get("DEM_20M_URL", "https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_20MPP_ADJ.TIF")
     local_dem = cache_dir() / Path(dem_80m_url).name
     dem_source = str(local_dem) if (local_dem.exists() and local_dem.stat().st_size > 10_000_000) else dem_80m_url
 
@@ -170,7 +172,7 @@ def acquire_site_levels(site: dict) -> dict:
     transformer = Transformer.from_crs(moon_lonlat, crs, always_xy=True)
     site_x, site_y = transformer.transform(lon, lat)
 
-    # Level 1: Far terrain (80 m DEM) - up to 300 km
+    # Far terrain (80 m DEM) - up to 300 km
     far_level = acquire_window_from_raster(
         raster_url_or_path=dem_80m_url,
         center_x=site_x,
@@ -179,23 +181,39 @@ def acquire_site_levels(site: dict) -> dict:
         cache_tag=f"{site_id}_far_80m"
     )
 
-    # Level 2: Mid terrain (40 m or 80 m) - up to 60 km
-    mid_level = acquire_window_from_raster(
-        raster_url_or_path=dem_80m_url,  # 80m is reliable and fast over HTTP range reads
-        center_x=site_x,
-        center_y=site_y,
-        half_width_m=65000.0,
-        cache_tag=f"{site_id}_mid_80m"
-    )
-
-    # Level 3: Near terrain (20 m or 80 m) - up to 15 km
-    near_level = acquire_window_from_raster(
-        raster_url_or_path=dem_80m_url,
-        center_x=site_x,
-        center_y=site_y,
-        half_width_m=16000.0,
-        cache_tag=f"{site_id}_near_80m"
-    )
+    if variant == "dem20":
+        # Mid terrain (0 to 60 km from 20m DEM)
+        mid_level = acquire_window_from_raster(
+            raster_url_or_path=dem_20m_url,
+            center_x=site_x,
+            center_y=site_y,
+            half_width_m=65000.0,
+            cache_tag=f"{site_id}_mid_20m"
+        )
+        # Near terrain (0 to 15 km from 20m DEM)
+        near_level = acquire_window_from_raster(
+            raster_url_or_path=dem_20m_url,
+            center_x=site_x,
+            center_y=site_y,
+            half_width_m=16000.0,
+            cache_tag=f"{site_id}_near_20m"
+        )
+    else:
+        # dem80 baseline
+        mid_level = acquire_window_from_raster(
+            raster_url_or_path=dem_80m_url,
+            center_x=site_x,
+            center_y=site_y,
+            half_width_m=65000.0,
+            cache_tag=f"{site_id}_mid_80m"
+        )
+        near_level = acquire_window_from_raster(
+            raster_url_or_path=dem_80m_url,
+            center_x=site_x,
+            center_y=site_y,
+            half_width_m=16000.0,
+            cache_tag=f"{site_id}_near_80m"
+        )
 
     return {
         "near": near_level,

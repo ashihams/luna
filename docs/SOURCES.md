@@ -6,16 +6,16 @@
 
 ---
 
-## D1 – LOLA 20 m South Polar DEM (80–90°S)
+## D1 – LOLA 20 m South Polar DEM (80–90°S) — **VERIFIED 2026-11-15**
 
 - **Product**: LDEM_80S_20MPP_ADJ.TIF
 - **URL**: https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_20MPP_ADJ.TIF
-- **Size**: ~2.6 GB (cloud-optimized GeoTIFF)
-- **CRS**: Polar stereographic, MOON_ME body-fixed frame (DE421)
-- **Heights**: Surface heights in metres relative to a 1737.4 km (1,737,400 m) reference sphere — **VERIFIED** from PGDA product documentation
+- **Size**: 2,752,384,188 bytes (~2.56 GB cloud-optimized GeoTIFF)
+- **CRS**: Polar Stereographic (`MOON_ME`), Central Meridian 0.0°, Latitude of True Scale -90.0°, R = 1,737,400 m
+- **Resolution**: 20 m/pixel (52400 × 52400 pixels covering 80°S to 90°S)
+- **Heights**: Surface heights in metres relative to a 1737.4 km (1,737,400 m) reference sphere
 - **Height formula**: `Elevation = R_measured − 1,737,400 m`
-- **Status**: URL listed on PGDA page; range reads to be tested in M0
-
+- **Access Method**: HTTP range requests via `rasterio` windowed reads caching regional near (0–15 km) and mid (15–60 km) elevation slices into `data/cache/` for all 13 Artemis landing candidate sites.
 ## D2 – LOLA 40 m and 80 m South Polar DEMs
 
 - **40 m**: LDEM_80S_40MPP_ADJ.TIF (~685 MB)

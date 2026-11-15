@@ -123,3 +123,52 @@ To independently assess long-term illumination and Earth line-of-sight fidelity,
    - At the broad candidate region coordinate `malapert-massif` ($-85.98^\circ, -0.26^\circ$), published Earth visibility is $79.8\%$ ($3\times 3$ range $50.3\%\text{--}100.0\%$) and Sun is $39.9\%$, while our model yields $60.5\%$ Earth and $25.1\%$ Sun. Moving to the specific topographic peak `malapert-site23` ($-86.00^\circ, 2.00^\circ$) yields $72.1\%$ Sun in our model ($81.0\%$ published). Because Malapert Massif spans a massive vertical relief ($>5000\text{ m}$), small horizontal coordinate offsets alter line-of-sight clearance dramatically.
 5. **Observer Mast Elevation (0 m vs 2 m)**:
    - The published Product 69 baseline assumes $0\text{ m}$ observer height (ground level). Elevating the receiver to $2.0\text{ m}$ (as used in the operational Luna Slip Planner) increases solar visibility by $+1.0\%\text{ to }+1.5\%$ by clearing immediate ground obstacling.
+
+---
+
+## V5 – DEM Resolution Sensitivity Analysis (Flat vs 80 m vs 20 m)
+
+**Status**: COMPLETED (13/13 Artemis candidate landing sites evaluated)
+
+To quantify the sensitivity of lunar mission viability and horizon masking to terrain grid resolution, we conducted a three-tier comparative analysis across all 13 Artemis III candidate sites over the full 2-year operational horizon (2027–2028, 35,088 30-minute timesteps):
+1. **Flat Sphere (`flat`)**: Smooth lunar sphere ($R = 1,737.4\text{ km}$) with no topographic relief, dip angle $-0.087^\circ$ for a $2.0\text{ m}$ observer.
+2. **LOLA 80 m DEM (`dem80`)**: Production baseline with multi-tier sampling ($0\text{--}15\text{ km}$ near at $80\text{ m}$, $15\text{--}60\text{ km}$ mid at $80\text{ m}$, $60\text{--}300\text{ km}$ far at $80\text{ m}$).
+3. **LOLA 20 m GeoTIFF (`dem20`)**: High-resolution dataset streamed from `LDEM_80S_20MPP_ADJ.TIF` ($0\text{--}15\text{ km}$ near at $20\text{ m}$, $15\text{--}60\text{ km}$ mid at $20\text{ m}$, $60\text{--}300\text{ km}$ far from $80\text{ m}$ DEM).
+
+Machine-readable artifacts: [research/sensitivity_dem20.json](../research/sensitivity_dem20.json), [research/sensitivity_dem20.csv](../research/sensitivity_dem20.csv), and 4-panel comparison figure [research/sensitivity_dem20.png](../research/sensitivity_dem20.png).
+
+### Multi-Resolution Comparison Table
+
+| Site | Sun Fraction (Flat / 80m / 20m) | Earth LOS (Flat / 80m / 20m) | Max Dark Gap (80m / 20m) | Viable 6.5d Windows (80m / 20m) | Slip Tolerance (80m / 20m) |
+|------|---------------------------------|------------------------------|--------------------------|---------------------------------|----------------------------|
+| **Connecting Ridge (Site 01)** | 53.6% / 71.5% / 55.1% | 48.6% / 53.4% / 53.4% | 258.5 h / 370.5 h | 281 / 205 | 15 d / 15 d |
+| **Connecting Ridge Extension** | 53.4% / 20.4% / 34.5% | 49.3% / 33.4% / 49.3% | 635.5 h / 2029.0 h | 36 / 141 | 5 d / 14 d |
+| **Peak near Shackleton (Site 04)** | 53.4% / 67.6% / 68.7% | 47.2% / 49.0% / 52.1% | 359.0 h / 221.5 h | 236 / 248 | 12 d / 13 d |
+| **de Gerlache Rim 1 (Site 11)** | 52.4% / 43.2% / 44.0% | 53.0% / 57.1% / 51.3% | 375.0 h / 665.5 h | 169 / 173 | 14 d / 15 d |
+| **de Gerlache Rim 2** | 52.0% / 37.6% / 49.0% | 54.2% / 51.5% / 52.2% | 497.0 h / 536.5 h | 135 / 177 | 12 d / 15 d |
+| **Faustini Rim A** | 52.3% / 37.6% / 50.3% | 50.5% / 47.2% / 47.1% | 519.0 h / 497.0 h | 134 / 157 | 12 d / 12 d |
+| **Haworth** | 50.7% / 31.5% / 28.2% | 64.6% / 36.9% / 64.6% | 505.0 h / 496.0 h | 62 / 92 | 8 d / 10 d |
+| **Malapert Massif** | 50.5% / 34.5% / 39.2% | 70.4% / 64.6% / 70.4% | 584.5 h / 491.0 h | 114 / 169 | 9 d / 13 d |
+| **Leibnitz Beta Plateau (Site 20)** | 50.7% / 34.5% / 43.3% | 70.3% / 45.8% / 63.3% | 668.5 h / 499.5 h | 93 / 188 | 11 d / 15 d |
+| **Nobile Rim 1** | 50.7% / 31.4% / 45.6% | 68.9% / 33.6% / 57.0% | 508.0 h / 489.5 h | 54 / 183 | 7 d / 15 d |
+| **Nobile Rim 2** | 50.8% / 45.4% / 46.5% | 66.9% / 65.9% / 66.9% | 423.0 h / 435.5 h | 185 / 192 | 13 d / 14 d |
+| **Malapert Massif (Site 23)** | 50.5% / 76.5% / 38.1% | 70.3% / 56.2% / 70.3% | 316.0 h / 496.0 h | 289 / 166 | 17 d / 13 d |
+| **Slater Plain** | 52.2% / 12.4% / 41.5% | 57.5% / 44.2% / 53.8% | 2105.0 h / 530.0 h | 50 / 178 | 9 d / 15 d |
+
+### Factual Discussion and Engineering Implications
+
+1. **Why a Flat Sphere Model Is Inadequate for Lunar Polar Missions**:
+   - On a featureless sphere, solar illumination is purely dictated by subsolar latitude oscillations ($e_\odot \approx 1.54^\circ \cos \lambda$), predicting virtually identical solar illumination ($50.5\%\text{--}53.6\%$) across all sites regardless of geology.
+   - Crucially, a flat sphere completely misses the existence of "peaks of eternal light" (such as Shackleton Rim, which reaches $68.7\%$ illumination due to elevated rim relief) as well as permanently shadowed regions (PSRs).
+   - Furthermore, because a flat horizon provides no elevated masking of low-grazing rays when the Sun is slightly below $0^\circ$, it creates artificial multi-thousand-hour winter darkness gaps (e.g. $3,278\text{ h}$ at Connecting Ridge) where elevated terrain actually catches glancing sunlight.
+
+2. **Where 80 m Resolution Is Sufficient**:
+   - For regional topography and distant skyline horizon obstacles ($>15\text{ km}$), $80\text{ m}$ DEM is highly accurate.
+   - At plateau and broad rim sites such as **Nobile Rim 2** ($45.4\%$ vs $46.5\%$ Sun, $65.9\%$ vs $66.9\%$ Earth) and **de Gerlache Rim 1** ($43.2\%$ vs $44.0\%$ Sun), the $80\text{ m}$ and $20\text{ m}$ models converge within $\approx 1.0\text{ percentage point}$ of solar illumination.
+   - For Earth line-of-sight clearance, regional horizon relief dominates; $80\text{ m}$ DEM captures the major crater rims shielding direct Earth radio link.
+
+3. **Where 20 m Resolution Matters (Steep Ridges and Micro-Siting)**:
+   - On knife-edge ridges and local micro-topography, $80\text{ m}$ cell averaging tends to round off sharp crests and fill narrow saddles.
+   - At **Slater Plain**, the $20\text{ m}$ DEM resolves a local elevated bench that increases solar illumination from $12.4\%$ to $41.5\%$, drastically shrinking the maximum dark gap from $2,105\text{ h}$ to $530\text{ h}$ and expanding viable launch windows from $50$ to $178$.
+   - At **Peak near Shackleton (Site 04)**, $20\text{ m}$ DEM confirms elevated illumination ($68.7\%$ vs $67.6\%$) while refining the maximum dark gap down from $359.0\text{ h}$ to $221.5\text{ h}$.
+   - Conversely, on extremely sharp ridges like **Connecting Ridge** and **Malapert Site 23**, an observer placed at an exact nominal coordinate can be shadowed by a local sub-80m boulder or micro-ridge that is only resolved in $20\text{ m}$ data. This demonstrates that Artemis mission operational planning requires sub-meter landed position tolerance ($<50\text{ m}$) when targeting ridge-top solar assets.

@@ -294,6 +294,12 @@ def compute_horizon(site: dict,
                 ("mid", (15000.0, 60000.0, 120.0)),
                 ("far", (60000.0, 300000.0, 400.0))
             ]
+    elif variant == "dem20":
+        levels_to_run = [
+            ("near", (20.0, 15000.0, 40.0)),
+            ("mid", (15000.0, 60000.0, 120.0)),
+            ("far", (60000.0, 300000.0, 400.0))
+        ]
     else:
         for lvl_name in ["near", "mid", "far"]:
             if lvl_name in levels and levels[lvl_name] is not None:
