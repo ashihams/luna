@@ -1,0 +1,125 @@
+[
+  {
+    "product": "Site01",
+    "url": "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/Site01/Site01_final_adj_5mpp_surf.tif",
+    "bounds": [
+      -19000.0,
+      -20000.0,
+      -3000.0,
+      -4000.0
+    ],
+    "point_checks": [
+      {
+        "lat": -89.305,
+        "lon": 123.623,
+        "x": 17549.12115345351,
+        "y": -11669.765290695952,
+        "inside": false
+      },
+      {
+        "lat": -89.46,
+        "lon": 136.68,
+        "x": 11234.249821183075,
+        "y": -11913.161959881501,
+        "inside": false
+      },
+      {
+        "lat": -88.81,
+        "lon": 124.68,
+        "x": 29675.128177459228,
+        "y": -20532.711501540765,
+        "inside": false
+      },
+      {
+        "lat": -89.46,
+        "lon": -136.68,
+        "x": -11234.249821183075,
+        "y": -11913.161959881501,
+        "inside": true,
+        "basis": "Corrected Collins Table 1 coordinate, tested against fetched PGDA header bounds"
+      }
+    ]
+  },
+  {
+    "product": "Site04",
+    "url": "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/Site04/Site04_final_adj_5mpp_surf.tif",
+    "bounds": [
+      -9000.0,
+      -15000.0,
+      7000.0,
+      1000.0
+    ],
+    "point_checks": [
+      {
+        "lat": -89.305,
+        "lon": 123.623,
+        "x": 17549.12115345351,
+        "y": -11669.765290695952,
+        "inside": false
+      },
+      {
+        "lat": -89.46,
+        "lon": 136.68,
+        "x": 11234.249821183075,
+        "y": -11913.161959881501,
+        "inside": false
+      },
+      {
+        "lat": -88.81,
+        "lon": 124.68,
+        "x": 29675.128177459228,
+        "y": -20532.711501540765,
+        "inside": false
+      },
+      {
+        "lat": -89.46,
+        "lon": -136.68,
+        "x": -11234.249821183075,
+        "y": -11913.161959881501,
+        "inside": false,
+        "basis": "Corrected Collins Table 1 coordinate, tested against fetched PGDA header bounds"
+      }
+    ]
+  },
+  {
+    "product": "Site07",
+    "url": "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/Site07/Site07_final_adj_5mpp_surf.tif",
+    "bounds": [
+      22000.0,
+      -28000.0,
+      38000.0,
+      -12000.0
+    ],
+    "point_checks": [
+      {
+        "lat": -89.305,
+        "lon": 123.623,
+        "x": 17549.12115345351,
+        "y": -11669.765290695952,
+        "inside": false
+      },
+      {
+        "lat": -89.46,
+        "lon": 136.68,
+        "x": 11234.249821183075,
+        "y": -11913.161959881501,
+        "inside": false
+      },
+      {
+        "lat": -88.81,
+        "lon": 124.68,
+        "x": 29675.128177459228,
+        "y": -20532.711501540765,
+        "inside": true
+      },
+      {
+        "lat": -89.46,
+        "lon": -136.68,
+        "x": -11234.249821183075,
+        "y": -11913.161959881501,
+        "inside": false,
+        "basis": "Corrected Collins Table 1 coordinate, tested against fetched PGDA header bounds"
+      }
+    ]
+  }
+]

@@ -1,0 +1,256 @@
+{
+  "status": "PASS",
+  "scope": "Internal reproducibility, not independent scientific validation",
+  "sites": [
+    {
+      "site": "connecting-ridge",
+      "latitude": -89.46,
+      "longitude_east": -136.68,
+      "ground_height_m": 1945.051025390625,
+      "max_field_error": {
+        "sun_az": 0.005017089843761369,
+        "sun_el": 0.004999985694885245,
+        "earth_az": 0.0050048828125,
+        "earth_el": 0.005000076293945277,
+        "earth_clearance": 0.005000305175781428,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "3770e635308a45d791d0542cd48143f19010d812c53c002413ea92969a5fb6e5"
+    },
+    {
+      "site": "connecting-ridge-ext",
+      "latitude": -88.99,
+      "longitude_east": -104.47,
+      "ground_height_m": 990.8121948242188,
+      "max_field_error": {
+        "sun_az": 0.00501586914060681,
+        "sun_el": 0.0050000000000000044,
+        "earth_az": 0.0050048828125,
+        "earth_el": 0.005000209808349254,
+        "earth_clearance": 0.004999961853027202,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "ab719f42cd565b173db2c9a7159f163a68e1d6d9cd22b48f3f3eca09e7ac955c"
+    },
+    {
+      "site": "shackleton-rim",
+      "latitude": -88.81,
+      "longitude_east": 124.68,
+      "ground_height_m": 1620.8775634765625,
+      "max_field_error": {
+        "sun_az": 0.005019531250013642,
+        "sun_el": 0.004999876022338867,
+        "earth_az": 0.0050097656250045475,
+        "earth_el": 0.0049996471405027165,
+        "earth_clearance": 0.005000038146972585,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "152b86be2017c7a83a0eb9cecb5a520dc7b622a742de2863e5ff4c2285df4ba3"
+    },
+    {
+      "site": "de-gerlache-rim1",
+      "latitude": -88.67,
+      "longitude_east": -66.37,
+      "ground_height_m": 1580.619140625,
+      "max_field_error": {
+        "sun_az": 0.005018310546859084,
+        "sun_el": 0.004999912381172172,
+        "earth_az": 0.0050021362304732975,
+        "earth_el": 0.004999980926513992,
+        "earth_clearance": 0.004999952316284251,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "ecade457734417427d5a0c9198cdf98a777f383220b26e44ec20dc28d9f823a1"
+    },
+    {
+      "site": "de-gerlache-rim2",
+      "latitude": -88.22,
+      "longitude_east": -63.43,
+      "ground_height_m": -175.77857971191406,
+      "max_field_error": {
+        "sun_az": 0.005019531250013642,
+        "sun_el": 0.004999982118606555,
+        "earth_az": 0.0050021362304732975,
+        "earth_el": 0.004999999999999893,
+        "earth_clearance": 0.005000247955321946,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "b9b4dcb0dd067e706a6b0bf779a7367d471cd1aa976e737d85e4c2bed68483c1"
+    },
+    {
+      "site": "faustini-rim-a",
+      "latitude": -87.86,
+      "longitude_east": 90.0,
+      "ground_height_m": 41.83736801147461,
+      "max_field_error": {
+        "sun_az": 0.005019531250013642,
+        "sun_el": 0.004999858140945446,
+        "earth_az": 0.0050097656250045475,
+        "earth_el": 0.004999837875366175,
+        "earth_clearance": 0.004999878406524605,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "acde69eaf99e25618b5014868f43f0c21c7d413d0ecf10cbb80e04a1f6d41395"
+    },
+    {
+      "site": "haworth",
+      "latitude": -86.75,
+      "longitude_east": -23.67,
+      "ground_height_m": 1551.120361328125,
+      "max_field_error": {
+        "sun_az": 0.00501586914060681,
+        "sun_el": 0.0049998998641966885,
+        "earth_az": 0.005000915527343608,
+        "earth_el": 0.004999842643737873,
+        "earth_clearance": 0.004999756813049316,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "c4ac505ff303bbcea0db6b4410c3ab402c003be7473b49fd073c58a2ae9cc78d"
+    },
+    {
+      "site": "malapert-massif",
+      "latitude": -85.98,
+      "longitude_east": -0.26,
+      "ground_height_m": 4816.71728515625,
+      "max_field_error": {
+        "sun_az": 0.005019531250013642,
+        "sun_el": 0.004999623298645117,
+        "earth_az": 0.005019531250013642,
+        "earth_el": 0.0050001525878906605,
+        "earth_clearance": 0.005000114440917969,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "8e41aa9b8a9ba04236a7001804ad9902d54c97065626f13ce2fde1dfae6390ad"
+    },
+    {
+      "site": "leibnitz-beta",
+      "latitude": -85.43,
+      "longitude_east": 31.83,
+      "ground_height_m": 6396.77001953125,
+      "max_field_error": {
+        "sun_az": 0.005019531250013642,
+        "sun_el": 0.004999752044677841,
+        "earth_az": 0.005019531250013642,
+        "earth_el": 0.004999923706055398,
+        "earth_clearance": 0.0050001335144038705,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "9441ca6742772b2b93e418fa162d0efaec3219a2175cd6352fe3864048757d51"
+    },
+    {
+      "site": "nobile-rim1",
+      "latitude": -85.44,
+      "longitude_east": 37.44,
+      "ground_height_m": 5927.00634765625,
+      "max_field_error": {
+        "sun_az": 0.005017089843761369,
+        "sun_el": 0.0049999427795413,
+        "earth_az": 0.005019531250013642,
+        "earth_el": 0.0049999427795413,
+        "earth_clearance": 0.0050004577636713066,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "e9bd583cde3baa79a794b11ff0d13545412abdb30930c386e7e670b9bfff4b2e"
+    },
+    {
+      "site": "nobile-rim2",
+      "latitude": -83.95,
+      "longitude_east": 58.74,
+      "ground_height_m": 988.80029296875,
+      "max_field_error": {
+        "sun_az": 0.005018310546859084,
+        "sun_el": 0.0050001525878906605,
+        "earth_az": 0.0050097656250045475,
+        "earth_el": 0.005000305175781428,
+        "earth_clearance": 0.00499998092651377,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "00658151a58dd62f0700262601468688d4a5b529106cc45ed0354b58395138b7"
+    },
+    {
+      "site": "malapert-site23",
+      "latitude": -86.0,
+      "longitude_east": 2.0,
+      "ground_height_m": 5152.92626953125,
+      "max_field_error": {
+        "sun_az": 0.005017089843761369,
+        "sun_el": 0.005000038146972585,
+        "earth_az": 0.005019531250013642,
+        "earth_el": 0.004999771118164631,
+        "earth_clearance": 0.0049998283386232245,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "3365109da3240f3c09fc37f9be6217d6f3466cfeeef800d48e040107f1a879f3"
+    },
+    {
+      "site": "slater-plain",
+      "latitude": -88.3,
+      "longitude_east": -28.0,
+      "ground_height_m": -910.7103881835938,
+      "max_field_error": {
+        "sun_az": 0.005018310546859084,
+        "sun_el": 0.004999918937683034,
+        "earth_az": 0.005000991821290768,
+        "earth_el": 0.0050001525878906605,
+        "earth_clearance": 0.004999675750732457,
+        "sun_vis_pct": 0.0,
+        "earth_vis_pct": 0.0
+      },
+      "track_sha256": "6b6062bd894230c2ad3352401118809bcea835e132b993e283a64d9d5284f540"
+    }
+  ],
+  "input_files": [
+    {
+      "file": "LDEM_80S_80MPP_ADJ.TIF",
+      "bytes": 189158392,
+      "sha256": "82030dcbdd7c4bb0c7d858e9b4b293b9f2cda5a543ba31ec0f42784bd6beee5a"
+    },
+    {
+      "file": "de421.bsp",
+      "bytes": 16790528,
+      "sha256": "08b20db2ae22488650641c5a9033e5bfda4b1c4b440cfeaf20f621cfa18ecdb3"
+    },
+    {
+      "file": "moon_080317.tf",
+      "bytes": 21437,
+      "sha256": "78732477b96f9863e7b0d65bcee3c22b8707ca5ed0db56d1173319cb2e8c7993"
+    },
+    {
+      "file": "moon_pa_de421_1900-2050.bpc",
+      "bytes": 1770496,
+      "sha256": "656f90616403d75a75f0cd6c8830fc5b44f8cb4facb5ccb8915e752b397520cf"
+    },
+    {
+      "file": "naif0012.tls",
+      "bytes": 5257,
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+    },
+    {
+      "file": "pck00011.tpc",
+      "bytes": 131226,
+      "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1"
+    },
+    {
+      "file": "AVGVISIB_65S_240M_201608.TIF",
+      "bytes": 60394652,
+      "sha256": "822fbf4618852311d4f494012e74e9cfb0147807a54ecb3302293c4266d2068d"
+    },
+    {
+      "file": "AVGVISIB_65S_240M_201608_EARTH.TIF",
+      "bytes": 22963503,
+      "sha256": "8a6d5fa8079c83e2159adf58ce33cd1cd9c09be6c19023bf5b6cc304f51568b7"
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "status": "COMPUTED",
+  "period": "2027-01-01 to 2029-01-01 exclusive",
+  "observer_height_m": 2,
+  "terrain": "dem80, corrected pixel-center sampling and coordinates",
+  "parameters": {
+    "stay_days": 6.5,
+    "lit_threshold_pct": 50,
+    "min_sun_fraction": 0.85,
+    "min_earth_fraction": 0.8,
+    "max_dark_gap_hours": 24,
+    "antenna_mask_deg": 0
+  },
+  "results": [
+    {
+      "site_id": "connecting-ridge",
+      "sun_fraction_pct": 50.22,
+      "earth_fraction_pct": 54.29,
+      "max_dark_gap_h": 448.0,
+      "viable_windows": 119,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 12
+    },
+    {
+      "site_id": "connecting-ridge-ext",
+      "sun_fraction_pct": 31.47,
+      "earth_fraction_pct": 0.0,
+      "max_dark_gap_h": 529.0,
+      "viable_windows": 0,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 0
+    },
+    {
+      "site_id": "shackleton-rim",
+      "sun_fraction_pct": 68.05,
+      "earth_fraction_pct": 52.33,
+      "max_dark_gap_h": 378.5,
+      "viable_windows": 138,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 10
+    },
+    {
+      "site_id": "de-gerlache-rim1",
+      "sun_fraction_pct": 42.24,
+      "earth_fraction_pct": 57.04,
+      "max_dark_gap_h": 397.5,
+      "viable_windows": 103,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 11
+    },
+    {
+      "site_id": "de-gerlache-rim2",
+      "sun_fraction_pct": 37.72,
+      "earth_fraction_pct": 51.42,
+      "max_dark_gap_h": 500.0,
+      "viable_windows": 81,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 10
+    },
+    {
+      "site_id": "faustini-rim-a",
+      "sun_fraction_pct": 37.65,
+      "earth_fraction_pct": 47.26,
+      "max_dark_gap_h": 524.5,
+      "viable_windows": 73,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 9
+    },
+    {
+      "site_id": "haworth",
+      "sun_fraction_pct": 31.45,
+      "earth_fraction_pct": 36.76,
+      "max_dark_gap_h": 508.0,
+      "viable_windows": 27,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 5
+    },
+    {
+      "site_id": "malapert-massif",
+      "sun_fraction_pct": 39.65,
+      "earth_fraction_pct": 76.42,
+      "max_dark_gap_h": 533.5,
+      "viable_windows": 97,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 8
+    },
+    {
+      "site_id": "leibnitz-beta",
+      "sun_fraction_pct": 30.85,
+      "earth_fraction_pct": 44.96,
+      "max_dark_gap_h": 698.5,
+      "viable_windows": 37,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 7
+    },
+    {
+      "site_id": "nobile-rim1",
+      "sun_fraction_pct": 31.15,
+      "earth_fraction_pct": 33.55,
+      "max_dark_gap_h": 511.0,
+      "viable_windows": 20,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 4
+    },
+    {
+      "site_id": "nobile-rim2",
+      "sun_fraction_pct": 34.42,
+      "earth_fraction_pct": 65.08,
+      "max_dark_gap_h": 516.5,
+      "viable_windows": 81,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 8
+    },
+    {
+      "site_id": "malapert-site23",
+      "sun_fraction_pct": 64.8,
+      "earth_fraction_pct": 54.0,
+      "max_dark_gap_h": 469.5,
+      "viable_windows": 139,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 11
+    },
+    {
+      "site_id": "slater-plain",
+      "sun_fraction_pct": 16.24,
+      "earth_fraction_pct": 44.09,
+      "max_dark_gap_h": 689.5,
+      "viable_windows": 19,
+      "total_windows": 725,
+      "max_viable_launch_streak_days": 5
+    }
+  ]
+}

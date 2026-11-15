@@ -61,9 +61,16 @@ def sample_raster_neighborhood(src: rasterio.DatasetReader,
     col_start = max(0, col - 1)
     col_stop = min(src.width, col + 2)
 
-    win = src.read(1, window=((row_start, row_stop), (col_start, col_stop)))
+    if not 0 <= row < src.height or not 0 <= col < src.width:
+        raise ValueError('Study coordinate is outside the published visibility map')
+    win = src.read(1, window=((row_start, row_stop), (col_start, col_stop)), masked=True)
+    if np.any(np.ma.getmaskarray(win)):
+        raise ValueError('Published visibility neighborhood contains missing data')
     # DN to percentage (scaling factor 0.00004 maps 25000 -> 1.0 -> 100%)
-    win_pct = win.astype(np.float64) * scaling_factor * 100.0
+    # Rasterio returns raw DNs; explicitly check the product's scale/offset.
+    if src.scales[0] not in (1.0, scaling_factor) or src.offsets[0] != 0:
+        raise ValueError('Unexpected visibility raster scale/offset')
+    win_pct = np.asarray(win, dtype=np.float64) * scaling_factor * 100.0
 
     # Relative center inside window
     center_r = row - row_start
@@ -141,13 +148,13 @@ def evaluate_visibility(az: np.ndarray,
     return any_frac_pct, center_pct
 
 
-def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
+def run_pgda_comparison(output_dir: Path = None, variant: str = 'dem80') -> Dict[str, Any]:
     """
     Execute full V4 validation comparing model to PGDA Product 69 rasters.
     """
     p_root = project_root()
     if output_dir is None:
-        output_dir = p_root / "data" / "out_longrun"
+        output_dir = p_root / 'data' / f'out_longrun_{variant}'
     output_dir.mkdir(parents=True, exist_ok=True)
 
     sun_path, earth_path = get_pgda_raster_paths()
@@ -195,8 +202,8 @@ def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
             pgda_earth = sample_raster_neighborhood(src_earth, proj, lat, lon)
 
             # Terrain & 0m Horizon (matching published observer height)
-            levels = acquire_site_levels(site)
-            h_0m, info_0m = compute_horizon(site, levels, obs_height_m=0.0, az_step_deg=0.5, variant="dem80")
+            levels = acquire_site_levels(site, variant=variant)
+            h_0m, info_0m = compute_horizon(site, levels, obs_height_m=0.0, az_step_deg=0.5, variant=variant)
             z0_m = info_0m.get("z0_m", 0.0)
 
             # Persist 0m horizon to data/out_longrun/
@@ -226,7 +233,7 @@ def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
             earth_any_pct, earth_center_pct = evaluate_visibility(earth_az, earth_el, earth_rho, h_0m)
 
             # Also compute 2m observer height for comparison
-            h_2m, _ = compute_horizon(site, levels, obs_height_m=2.0, az_step_deg=0.5, variant="dem80")
+            h_2m, _ = compute_horizon(site, levels, obs_height_m=2.0, az_step_deg=0.5, variant=variant)
             sun_az_2m, sun_el_2m, sun_rho_2m, earth_az_2m, earth_el_2m, earth_rho_2m = compute_longrun_ephemeris(
                 ets=ets,
                 site=site,
@@ -265,6 +272,10 @@ def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
                 "delta_sun_percentage_pts": round(delta_sun, 2),
                 "delta_earth_percentage_pts": round(delta_earth, 2)
             }
+            record['outside_3x3'] = {
+                'sun': not pgda_sun['min_pct'] <= sun_any_pct <= pgda_sun['max_pct'],
+                'earth': not pgda_earth['min_pct'] <= earth_any_pct <= pgda_earth['max_pct'],
+            }
             site_comparisons.append(record)
 
             # Persist summary stats per site
@@ -280,6 +291,11 @@ def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
         "status": "COMPLETED",
         "validation_level": "V4 - Published Map Comparison",
         "reference_dataset": "PGDA Product 69 (Mazarico et al. 2011)",
+        "limitations": [
+            "The chosen full-cycle epoch is recorded; exact epoch equivalence to the reference raster has not been independently established.",
+            "Upper-limb-at-center-azimuth is an approximation to any-part-of-disc visibility over an azimuth-varying skyline.",
+            "A 3x3 pixel range describes spatial variation, not a confidence interval or proof of the cause of disagreement."
+        ],
         "reference_files": {
             "solar_map": sun_path.name,
             "earth_map": earth_path.name
@@ -289,7 +305,8 @@ def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
             "n_steps": n_hours,
             "step_hours": 1.0,
             "observer_height_m": 0.0,
-            "horizon_variant": "dem80",
+            "horizon_variant": variant,
+            "terrain_sampling": "integer windows; bilinear pixel centers; missing ground rejected",
             "solar_criterion": "Upper limb above horizon (any fraction of disc)",
             "earth_criterion": "Upper limb above horizon (any fraction of disc)"
         },
@@ -297,7 +314,13 @@ def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
         "results": site_comparisons
     }
 
-    report_path = p_root / "docs" / "pgda_comparison.json"
+    full_report['summary'] = {
+        'median_abs_sun_difference_pp': round(float(np.median([abs(r['delta_sun_percentage_pts']) for r in site_comparisons])), 2),
+        'earth_within_0_4_pp': sum(abs(r['delta_earth_percentage_pts']) <= 0.4 for r in site_comparisons),
+        'outside_3x3_count': sum(sum(r['outside_3x3'].values()) for r in site_comparisons),
+        'interpretation': 'Comparison completed, not certification. Neighborhood ranges are not confidence intervals; causes of residual differences remain unresolved.',
+    }
+    report_path = p_root / 'docs' / ('pgda_comparison.json' if variant == 'dem80' else f'pgda_comparison_{variant}.json')
     report_path.write_text(json.dumps(full_report, indent=2), encoding="utf-8")
     print("-" * 80)
     print(f"Saved machine-readable comparison report to: {report_path}")
@@ -308,4 +331,7 @@ def run_pgda_comparison(output_dir: Path = None) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    run_pgda_comparison()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--variant', choices=['dem80', 'dem20'], default='dem80')
+    run_pgda_comparison(variant=parser.parse_args().variant)

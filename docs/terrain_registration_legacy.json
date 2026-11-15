@@ -1,0 +1,184 @@
+[
+  {
+    "site": "connecting-ridge",
+    "variant": "80m",
+    "dx_km": -6.315,
+    "dy_km": -0.243,
+    "ground_m": 1303.45556640625
+  },
+  {
+    "site": "connecting-ridge",
+    "variant": "20m",
+    "dx_km": -5.889,
+    "dy_km": -5.87,
+    "ground_m": 1304.67919921875
+  },
+  {
+    "site": "connecting-ridge-ext",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": -0.0,
+    "ground_m": 33.866249084472656
+  },
+  {
+    "site": "connecting-ridge-ext",
+    "variant": "20m",
+    "dx_km": -22.016,
+    "dy_km": -21.987,
+    "ground_m": 0.0
+  },
+  {
+    "site": "shackleton-rim",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": -0.0,
+    "ground_m": 1620.892822265625
+  },
+  {
+    "site": "shackleton-rim",
+    "variant": "20m",
+    "dx_km": -9.155,
+    "dy_km": -9.127,
+    "ground_m": 1622.483642578125
+  },
+  {
+    "site": "de-gerlache-rim1",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": -0.0,
+    "ground_m": 1591.7562255859375
+  },
+  {
+    "site": "de-gerlache-rim1",
+    "variant": "20m",
+    "dx_km": 20.77,
+    "dy_km": 20.794,
+    "ground_m": 0.0
+  },
+  {
+    "site": "de-gerlache-rim2",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": 0.0,
+    "ground_m": -159.4951629638672
+  },
+  {
+    "site": "de-gerlache-rim2",
+    "variant": "20m",
+    "dx_km": 24.119,
+    "dy_km": 24.135,
+    "ground_m": 0.0
+  },
+  {
+    "site": "faustini-rim-a",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": -0.0,
+    "ground_m": 42.152950286865234
+  },
+  {
+    "site": "faustini-rim-a",
+    "variant": "20m",
+    "dx_km": -64.9,
+    "dy_km": -64.88,
+    "ground_m": 0.0
+  },
+  {
+    "site": "haworth",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": -0.0,
+    "ground_m": 1553.938720703125
+  },
+  {
+    "site": "haworth",
+    "variant": "20m",
+    "dx_km": -50.724,
+    "dy_km": -50.704,
+    "ground_m": 0.0
+  },
+  {
+    "site": "malapert-massif",
+    "variant": "80m",
+    "dx_km": -0.0,
+    "dy_km": 0.0,
+    "ground_m": 4811.47021484375
+  },
+  {
+    "site": "malapert-massif",
+    "variant": "20m",
+    "dx_km": -121.407,
+    "dy_km": -121.389,
+    "ground_m": 0.0
+  },
+  {
+    "site": "leibnitz-beta",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": 0.0,
+    "ground_m": 6401.1279296875
+  },
+  {
+    "site": "leibnitz-beta",
+    "variant": "20m",
+    "dx_km": -190.945,
+    "dy_km": -190.92,
+    "ground_m": 0.0
+  },
+  {
+    "site": "nobile-rim1",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": -0.0,
+    "ground_m": 5926.431640625
+  },
+  {
+    "site": "nobile-rim1",
+    "variant": "20m",
+    "dx_km": -193.966,
+    "dy_km": -193.947,
+    "ground_m": 0.0
+  },
+  {
+    "site": "nobile-rim2",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": 0.0,
+    "ground_m": 1025.34228515625
+  },
+  {
+    "site": "nobile-rim2",
+    "variant": "20m",
+    "dx_km": -253.108,
+    "dy_km": -253.084,
+    "ground_m": 0.0
+  },
+  {
+    "site": "malapert-site23",
+    "variant": "80m",
+    "dx_km": -0.0,
+    "dy_km": 0.0,
+    "ground_m": 5154.44873046875
+  },
+  {
+    "site": "malapert-site23",
+    "variant": "20m",
+    "dx_km": -125.515,
+    "dy_km": -125.489,
+    "ground_m": 0.0
+  },
+  {
+    "site": "slater-plain",
+    "variant": "80m",
+    "dx_km": 0.0,
+    "dy_km": -0.0,
+    "ground_m": -910.3973999023438
+  },
+  {
+    "site": "slater-plain",
+    "variant": "20m",
+    "dx_km": -21.317,
+    "dy_km": -21.299,
+    "ground_m": 0.0
+  }
+]

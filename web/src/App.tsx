@@ -10,6 +10,7 @@ const PoleOverview = lazy(() => import('./three/PoleOverview').then(m => ({ defa
 import { LandingPage } from './views/LandingPage';
 import { ComparisonDrawer } from './views/ComparisonDrawer';
 import { AlertCircle } from 'lucide-react';
+import { ModelNotice } from './components/ModelNotice';
 
 export const App: React.FC = () => {
   const { loading, error, initialize, activeTab } = usePlannerStore();
@@ -61,7 +62,7 @@ export const App: React.FC = () => {
               Luna Slip <span className="text-shimmer">Engine</span>
             </h1>
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-neutral-400 leading-relaxed">
-              Loading 35,088-step SPICE ephemeris and LOLA 80m horizons for all 13 Artemis sites...
+              Loading 35,088-step SPICE ephemeris and LOLA 80m horizons for 13 study sites...
             </p>
           </div>
         </div>
@@ -91,6 +92,7 @@ export const App: React.FC = () => {
   return (
     <div className="planner-app w-screen h-screen flex flex-col bg-[#030303] overflow-hidden font-sans text-white">
       <Header />
+      <ModelNotice />
 
       <main className="planner-main flex-1 min-h-0 w-full overflow-hidden">
         <Suspense fallback={<p className="p-8" role="status">Loading view…</p>}>

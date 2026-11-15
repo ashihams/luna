@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import * as THREE from 'three';
+import { lunarPolarXY } from '../data/science';
 import { usePlannerStore } from '../state/usePlannerStore';
 import { fetchPoleOverview, PoleOverviewData } from '../data/loader';
 import { Globe, RotateCcw, ZoomIn, ZoomOut, CheckCircle2, AlertTriangle } from 'lucide-react';
@@ -147,13 +148,7 @@ export const PoleOverview: React.FC = () => {
         // Place Site Markers
         sites.forEach((site) => {
           // Lunar polar stereographic transformation
-          const latRad = ((site.lat_deg) * Math.PI) / 180;
-          const lonRad = (site.lon_deg_east * Math.PI) / 180;
-          const colat = Math.PI / 2 + latRad; // colatitude in radians from South Pole
-          const rho = 2 * rMoon * Math.tan(colat / 2);
-
-          const x = rho * Math.sin(lonRad);
-          const yStereo = -rho * Math.cos(lonRad);
+          const [x, yStereo] = lunarPolarXY(site.lat_deg, site.lon_deg_east);
           const z = -yStereo;
 
           const viability = siteViabilityMap.get(site.id);
@@ -305,7 +300,7 @@ export const PoleOverview: React.FC = () => {
           </div>
           <p className="text-[11px] text-neutral-400 leading-relaxed">
             Full LOLA 80 m polar stereographic digital elevation model covering 80°S to 90°S.
-            Markers indicate the 13 candidate Artemis sites, color-coded by mission viability on the selected date.
+            Markers indicate the 13 selected lunar study points, color-coded by mission viability on the selected date.
           </p>
           <div className="flex items-center space-x-4 mt-2.5 text-[10px] font-medium border-t border-white/10 pt-2">
             <div className="flex items-center space-x-1.5 text-emerald-400">

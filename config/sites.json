@@ -2,11 +2,11 @@
   {
     "id": "connecting-ridge",
     "name": "Connecting Ridge (Site 01)",
-    "lat_deg": -89.305,
-    "lon_deg_east": 123.623,
+    "lat_deg": -89.46,
+    "lon_deg_east": -136.68,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site01; ridge crest verified",
-    "notes": "Ridge between Shackleton and de Gerlache craters. Ridge crest elevation +1304m. 5m DEM available.",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
+    "notes": "Ridge between Shackleton and de Gerlache craters. Ground elevation is sampled from the selected DEM. 5m DEM available.",
     "obs_height_m": 2.0,
     "has_5m_dem": true
   },
@@ -14,21 +14,21 @@
     "id": "connecting-ridge-ext",
     "name": "Connecting Ridge Extension",
     "lat_deg": -88.99,
-    "lon_deg_east": 104.47,
+    "lon_deg_east": -104.47,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022)",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "Extension of the connecting ridge between Shackleton and de Gerlache.",
     "obs_height_m": 2.0,
     "has_5m_dem": false
   },
   {
     "id": "shackleton-rim",
-    "name": "Peak near Shackleton (Site 04)",
+    "name": "Peak near Shackleton (Site 07)",
     "lat_deg": -88.81,
     "lon_deg_east": 124.68,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site04",
-    "notes": "Elevated area on rim of Shackleton crater. 5m DEM available (Site04_final_adj_5mpp_surf.tif).",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
+    "notes": "Mosaic center within the PGDA Site07 footprint. ID retained for compatibility; this is not Site04.",
     "obs_height_m": 2.0,
     "has_5m_dem": true
   },
@@ -38,7 +38,7 @@
     "lat_deg": -88.67,
     "lon_deg_east": -66.37,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site11",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "5m DEM available (Site11_final_adj_5mpp_surf.tif).",
     "obs_height_m": 2.0,
     "has_5m_dem": true
@@ -49,7 +49,7 @@
     "lat_deg": -88.22,
     "lon_deg_east": -63.43,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022; retained in Oct 2024 update)",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "Retained in the October 2024 updated list of 9 regions.",
     "obs_height_m": 2.0,
     "has_5m_dem": false
@@ -60,7 +60,7 @@
     "lat_deg": -87.86,
     "lon_deg_east": 90.0,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022)",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "On the rim of Faustini crater.",
     "obs_height_m": 2.0,
     "has_5m_dem": false
@@ -71,7 +71,7 @@
     "lat_deg": -86.75,
     "lon_deg_east": -23.67,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "Retained in October 2024 updated list.",
     "obs_height_m": 2.0,
     "has_5m_dem": false
@@ -82,8 +82,8 @@
     "lat_deg": -85.98,
     "lon_deg_east": -0.26,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
-    "notes": "Retained in October 2024 updated list. Near-permanent Earth visibility.",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
+    "notes": "Published mosaic center. Earth visibility is calculated, not assumed near-permanent.",
     "obs_height_m": 2.0,
     "has_5m_dem": false
   },
@@ -93,7 +93,7 @@
     "lat_deg": -85.43,
     "lon_deg_east": 31.83,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022); PGDA Product 78 Site20",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "Relatively flat plateau. 5m DEM available (Site20_final_adj_5mpp_surf.tif).",
     "obs_height_m": 2.0,
     "has_5m_dem": true
@@ -104,7 +104,7 @@
     "lat_deg": -85.44,
     "lon_deg_east": 37.44,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "Retained in October 2024 updated list.",
     "obs_height_m": 2.0,
     "has_5m_dem": false
@@ -112,10 +112,10 @@
   {
     "id": "nobile-rim2",
     "name": "Nobile Rim 2",
-    "lat_deg": -83.93,
+    "lat_deg": -83.95,
     "lon_deg_east": 58.74,
     "program": "artemis",
-    "source": "NASA Artemis III candidate regions (Aug 2022; retained Oct 2024)",
+    "source": "Collins et al. 2024, LPSC 1775, Table 1 (mosaic center; not an approved touchdown point): https://www.hou.usra.edu/meetings/lpsc2024/pdf/1775.pdf",
     "notes": "Retained in October 2024 updated list.",
     "obs_height_m": 2.0,
     "has_5m_dem": false
@@ -126,7 +126,7 @@
     "lat_deg": -86.0,
     "lon_deg_east": 2.0,
     "program": "artemis",
-    "source": "PGDA Product 78 Site23",
+    "source": "Project-selected approximate study point; no exact official landing-coordinate attribution.",
     "notes": "5m DEM available (Site23_final_adj_5mpp_surf.tif). Malapert region alternate.",
     "obs_height_m": 2.0,
     "has_5m_dem": true
@@ -137,7 +137,7 @@
     "lat_deg": -88.3,
     "lon_deg_east": -28.0,
     "program": "artemis",
-    "source": "NASA Artemis III updated candidate regions (Oct 2024)",
+    "source": "Project-selected approximate study point; no exact official landing-coordinate attribution.",
     "notes": "New addition in October 2024 update.",
     "obs_height_m": 2.0,
     "has_5m_dem": false

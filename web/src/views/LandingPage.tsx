@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ModelNotice } from '../components/ModelNotice';
 import { usePlannerStore } from '../state/usePlannerStore';
 import {
   ArrowRight,
@@ -22,29 +23,35 @@ export const LandingPage: React.FC = () => {
   const { setActiveTab } = usePlannerStore();
   const [copied, setCopied] = useState(false);
 
-  const handleCopyCode = () => {
-    const codeSnippet = `import { SiteMetricsHelper } from './workers/metrics';
-import { fetchTracks, fetchHorizon } from './data/loader';
+  const codeSnippet = `import { SiteMetricsHelper } from './workers/metrics';
+import { fetchManifest, fetchTracks, fetchHorizon } from './data/loader';
 
-// Compute 6.5-day Artemis sortie viability under LOLA 720-azimuth occlusion
-const helper = new SiteMetricsHelper('connecting-ridge', tracks, horizon);
-const metrics = helper.evaluateWindow(plannedDayIndex + slipDays, {
-  stay_days: 6.5,
-  min_sun_fraction: 0.85,
-  max_dark_gap_hours: 24.0,
-  min_earth_fraction: 0.80,
-  antenna_mask_deg: 0.0,
-});
+const manifest = await fetchManifest();
+const site = manifest.sites.find(s => s.id === 'connecting-ridge');
+if (!site) throw new Error('Study site unavailable');
+const tracks = await fetchTracks(site);
+const horizon = await fetchHorizon(site);
+const params = {
+  stay_days: 6.5, lit_threshold_pct: 50,
+  min_sun_fraction: 0.85, max_dark_gap_hours: 24,
+  min_earth_fraction: 0.80, antenna_mask_deg: 0,
+};
+const helper = new SiteMetricsHelper(tracks);
+const metrics = helper.evaluateWindow(12 * 48, 6.5 * 48, params, horizon.variants.best);
+console.log({ viable: metrics.viable, sunFraction: metrics.sun_fraction });`;
 
-console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipToleranceDays}d\`);`;
-
-    navigator.clipboard.writeText(codeSnippet);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(codeSnippet);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   const tickerItems = [
-    { label: 'CANDIDATE SITES', value: '13 ARTEMIS SITES' },
+    { label: 'CANDIDATE SITES', value: '13 STUDY POINTS' },
     { label: 'AZIMUTHAL RESOLUTION', value: '720 AZIMUTHS (0.5°)' },
     { label: 'COMPUTATION SPEED', value: 'COMPACT VISIBILITY TABLES' },
     { label: 'EPHEMERIS RANGE', value: '35,088 SPICE INTERVALS' },
@@ -66,7 +73,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
     {
       icon: Zap,
       title: 'Interactive Slip Matrix',
-      desc: 'Evaluate over 9,503 landing windows (13 candidate sites × 731 dates in 2027–2028) using typed visibility tables and prefix sums. Immediately alerts on fragile launch windows with less than 3 days of slip tolerance.',
+      desc: 'Evaluate over 9,503 landing windows (13 study points × 731 dates in 2027–2028) using typed visibility tables and prefix sums. Immediately alerts on fragile launch windows with less than 3 days of slip tolerance.',
       tag: 'PRECOMPUTED VISIBILITY DATA',
       accent: 'text-cyan-400',
       action: () => setActiveTab('planner'),
@@ -82,7 +89,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
     {
       icon: Compass,
       title: '3D First-Person Surface Scene',
-      desc: 'Stand 2.0 meters above the lunar regolith. A local 513×513 DEM mesh paired with a procedural 19 km horizon occlusion cylinder casts true grazing shadows and models terrain signal cutoff.',
+      desc: 'Stand 2.0 meters above the lunar regolith. A local 513×513 DEM mesh paired with a procedural 19 km horizon occlusion cylinder illustrates terrain occlusion; textures and stars are procedural.',
       tag: 'THREE.JS FIRST-PERSON EYE LEVEL',
       accent: 'text-violet-400',
       action: () => setActiveTab('site'),
@@ -107,6 +114,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
 
   return (
     <div className="relative min-h-screen bg-[#030303] text-white font-sans antialiased overflow-x-hidden selection:bg-[#8B5CF6] selection:text-white">
+      <div className="pt-24"><ModelNotice /></div>
       {/* 1. FIXED FLOATING NAVIGATION PILL */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-[672px] rounded-full bg-[#0a0a0a]/70 backdrop-blur-xl border border-white/10 px-5 py-2.5 flex items-center justify-between shadow-2xl shadow-black/80">
         {/* Left: Logo (4px gradient circle + Instrument Serif text) */}
@@ -181,8 +189,8 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
 
           {/* Subtext */}
           <p className="max-w-2xl mx-auto font-sans text-base sm:text-lg text-neutral-400 font-light leading-relaxed">
-            Standard flat geometric spheres overestimate lunar south pole illumination by up to 18%.
-            Evaluate true 720-azimuth LOLA topography and NAIF SPICE orbits across 9,503 landing windows with precomputed visibility data.
+            Terrain can substantially change lunar south pole illumination; model uncertainty remains.
+            Explore 720-azimuth LOLA terrain horizons and NAIF SPICE orbits across 9,503 landing windows with precomputed visibility data.
           </p>
 
           {/* Interactive Action Row: Shiny Border Button & Secondary Link */}
@@ -344,51 +352,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
             </button>
           </div>
 
-          {/* Code Window Body */}
-          <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto text-neutral-300">
-            <div className="space-y-1">
-              <div>
-                <span className="text-[#8B5CF6]">import</span> {'{'} <span className="text-[#06B6D4]">SiteMetricsHelper</span> {'}'} <span className="text-[#8B5CF6]">from</span> <span className="text-[#10B981]">'./workers/metrics'</span>;
-              </div>
-              <div>
-                <span className="text-[#8B5CF6]">import</span> {'{'} <span className="text-[#06B6D4]">fetchTracks</span>, <span className="text-[#06B6D4]">fetchHorizon</span> {'}'} <span className="text-[#8B5CF6]">from</span> <span className="text-[#10B981]">'./data/loader'</span>;
-              </div>
-              <div className="pt-3 text-neutral-500">
-                // Initialize topocentric SPICE ephemeris and LOLA 720-azimuth horizons
-              </div>
-              <div>
-                <span className="text-[#8B5CF6]">const</span> helper = <span className="text-[#8B5CF6]">new</span> <span className="text-[#06B6D4]">SiteMetricsHelper</span>(<span className="text-[#10B981]">'connecting-ridge'</span>, tracks, horizon);
-              </div>
-              <div className="pt-2 text-neutral-500">
-                // Evaluate 6.5-day Artemis sortie window under 24h battery constraint
-              </div>
-              <div>
-                <span className="text-[#8B5CF6]">const</span> metrics = helper.<span className="text-[#06B6D4]">evaluateWindow</span>(plannedDayIndex + slipDays, {'{'}
-              </div>
-              <div className="pl-6">
-                stay_days: <span className="text-[#10B981]">6.5</span>,
-              </div>
-              <div className="pl-6">
-                min_sun_fraction: <span className="text-[#10B981]">0.85</span>,
-              </div>
-              <div className="pl-6">
-                max_dark_gap_hours: <span className="text-[#10B981]">24.0</span>,
-              </div>
-              <div className="pl-6">
-                min_earth_fraction: <span className="text-[#10B981]">0.80</span>,
-              </div>
-              <div className="pl-6">
-                antenna_mask_deg: <span className="text-[#10B981]">0.0</span>,
-              </div>
-              <div>{'}'});</div>
-              <div className="pt-3 text-neutral-500">
-                // Instant slip tolerance verification in precomputed visibility data
-              </div>
-              <div>
-                console.<span className="text-[#06B6D4]">log</span>(<span className="text-[#10B981]">'Viable: true | Slip: +6d'</span>);
-              </div>
-            </div>
-          </div>
+          <pre className="p-6 sm:p-8 font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto text-neutral-300">{codeSnippet}</pre>
         </div>
       </section>
 
@@ -405,7 +369,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
                 </span>
               </div>
               <p className="font-sans text-xs text-neutral-400 font-light leading-relaxed">
-                Precision lunar landing site feasibility and slip planning for the Artemis era.
+                Exploratory lunar landing site feasibility and slip planning for the Artemis era.
                 Engineered for the NASA Space Apps Challenge 2026.
               </p>
             </div>
@@ -448,7 +412,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
                 <li>NASA NAIF SPICE DE421</li>
                 <li>LOLA 80 m Polar Stereographic</li>
                 <li>JPL Horizons ephemeris cross-checks</li>
-                <li>PGDA published-map validation: pending</li>
+                <li>PGDA comparison completed; disagreements remain</li>
               </ul>
             </div>
 

@@ -1,0 +1,364 @@
+{
+  "url": "https://lunaslipplanner.vercel.app",
+  "deployment_id": "dpl_AEqAG7sKUnbqCtw9DTpCCeb97dnQ",
+  "deployment_url": "https://lunar-slip-planner-o5vgbrv91.vercel.app",
+  "verified_utc": "2026-11-15T10:30:07.119Z",
+  "status": "PASS_FOR_TESTED_SCOPE",
+  "browser": [
+    {
+      "mode": "desktop",
+      "ready_ms": 1685,
+      "console_errors": 0,
+      "failed_requests": 0,
+      "horizon_paths": 1,
+      "scene_height_px": 811,
+      "scrub_positions": 4,
+      "threshold_status": "Sunlit \u00b7 threshold 90%",
+      "site_selections": [
+        "connecting-ridge",
+        "connecting-ridge-ext",
+        "shackleton-rim",
+        "de-gerlache-rim1",
+        "de-gerlache-rim2",
+        "faustini-rim-a",
+        "haworth",
+        "malapert-massif",
+        "leibnitz-beta",
+        "nobile-rim1",
+        "nobile-rim2",
+        "malapert-site23",
+        "slater-plain"
+      ],
+      "pole_canvas_count": 1
+    },
+    {
+      "mode": "mobile-4g",
+      "ready_ms": 5566,
+      "console_errors": 0,
+      "failed_requests": 0,
+      "horizon_paths": 1,
+      "scene_height_px": 470,
+      "scrub_positions": 4,
+      "threshold_status": "Sunlit \u00b7 threshold 90%",
+      "site_selections": [],
+      "pole_canvas_count": 1
+    }
+  ],
+  "data_integrity": {
+    "checkedAt": "2026-11-15T10:30:07.119Z",
+    "base": "https://lunaslipplanner.vercel.app",
+    "status": "PASS",
+    "sites": 13,
+    "assets": 44,
+    "rows": [
+      {
+        "file": "data/catalog.json",
+        "bytes": 17275,
+        "sha256": "62ed210c756bf447bc92a7669e4204b2e8cd71648a653f08dcdba6d0bbf9a4e8",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/pole_overview_meta.json?v=16abb1dbe6305cf1",
+        "bytes": 105,
+        "sha256": "16abb1dbe6305cf13f7d6e1d8963fb65ba4ced5aa450fa878d275a29f820734b",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/manifest.json",
+        "bytes": 27219,
+        "sha256": "090ef1747aa0198d47a2f45e4605aa62b4f25dc9237103ca301b6797af284a30",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_connecting-ridge.json?v=e4471130c43ba005",
+        "bytes": 31828,
+        "sha256": "e4471130c43ba0050faf833860576e5595314f22f2855f29bfda7bda9430be65",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/metrics-6ea949ec6bf9cd56.bin",
+        "bytes": 1368432,
+        "sha256": "6ea949ec6bf9cd565fe8ddeacec168a1e8337e8cbfce9ebd8b51440ab891db46",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_connecting-ridge-ext.json?v=ad503a7e656ecf20",
+        "bytes": 31842,
+        "sha256": "ad503a7e656ecf208a7da0b2a752cbc8289dac0a66c2cf1e2ee60483013c4294",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_connecting-ridge.bin?v=3770e635308a45d7",
+        "bytes": 421056,
+        "sha256": "3770e635308a45d791d0542cd48143f19010d812c53c002413ea92969a5fb6e5",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_connecting-ridge-ext.bin?v=ab719f42cd565b17",
+        "bytes": 421056,
+        "sha256": "ab719f42cd565b173db2c9a7159f163a68e1d6d9cd22b48f3f3eca09e7ac955c",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/pole_overview.bin?v=894aa26566bfb4c6",
+        "bytes": 524288,
+        "sha256": "894aa26566bfb4c67a03633ce8802a18e2467c24e8b5b03ec34946190cd17caf",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_shackleton-rim.bin?v=152b86be2017c7a8",
+        "bytes": 421056,
+        "sha256": "152b86be2017c7a83a0eb9cecb5a520dc7b622a742de2863e5ff4c2285df4ba3",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_shackleton-rim.json?v=a2889c1ab21d68fa",
+        "bytes": 32269,
+        "sha256": "a2889c1ab21d68fa8a498a5ded7e4264bce16a127d770935d7ea23d9da68c3a7",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_de-gerlache-rim1.json?v=2e8332cf3873367b",
+        "bytes": 32166,
+        "sha256": "2e8332cf3873367b98e6b0eb1dcdcb04565043eb8a4f0eaaba14529558204e03",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_connecting-ridge.bin?v=e8770ee3b940fd05",
+        "bytes": 526338,
+        "sha256": "e8770ee3b940fd0546b7dc41a91d017d6bfef8bbb186c656eb818f3e16a515f0",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_shackleton-rim.bin?v=27de2b0e93d9f158",
+        "bytes": 526338,
+        "sha256": "27de2b0e93d9f1588af830669bf64a0fd2f949dedb8933a7b5a0982021ffa4f6",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_de-gerlache-rim1.bin?v=ecade45773441742",
+        "bytes": 421056,
+        "sha256": "ecade457734417427d5a0c9198cdf98a777f383220b26e44ec20dc28d9f823a1",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_de-gerlache-rim2.json?v=4babb0ac8bd49069",
+        "bytes": 31916,
+        "sha256": "4babb0ac8bd49069a5be969aa30f39e52fd0ac7e0d0a3fd6a0bbb67e68aa1ed3",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_de-gerlache-rim2.bin?v=b9b4dcb0dd067e70",
+        "bytes": 421056,
+        "sha256": "b9b4dcb0dd067e706a6b0bf779a7367d471cd1aa976e737d85e4c2bed68483c1",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_de-gerlache-rim1.bin?v=00934018511d8b41",
+        "bytes": 526338,
+        "sha256": "00934018511d8b41fdb6fe5031a975e763658c5a272572eb46ac2c1600379ebc",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_faustini-rim-a.json?v=ad1731c2f6b96efa",
+        "bytes": 31386,
+        "sha256": "ad1731c2f6b96efaf0206dd03ae4901a2dcbfa4dc4e386bd1e1b8d00eaad5232",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_connecting-ridge-ext.bin?v=1968ca216f88bbf2",
+        "bytes": 526338,
+        "sha256": "1968ca216f88bbf214be03b28796d257474314f50329c7c7cf8418a38fe28dc5",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_faustini-rim-a.bin?v=acde69eaf99e2561",
+        "bytes": 421056,
+        "sha256": "acde69eaf99e25618b5014868f43f0c21c7d413d0ecf10cbb80e04a1f6d41395",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_de-gerlache-rim2.bin?v=5086687b09f517a3",
+        "bytes": 526338,
+        "sha256": "5086687b09f517a3db1b945d9d2f0195b9815288f6e023a02f8854f7a07132f7",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_haworth.json?v=dc6165a7d9fcd214",
+        "bytes": 31553,
+        "sha256": "dc6165a7d9fcd21491ec54fd5632765b68814711f79083d8af3f3c5faecd82a0",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_haworth.bin?v=c4ac505ff303bbce",
+        "bytes": 421056,
+        "sha256": "c4ac505ff303bbcea0db6b4410c3ab402c003be7473b49fd073c58a2ae9cc78d",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_haworth.bin?v=5baa8d4a945dcadd",
+        "bytes": 526338,
+        "sha256": "5baa8d4a945dcaddd4b1f1d93edbdeac99689f9fa55f59655691f13e7f60808f",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_faustini-rim-a.bin?v=b632808c39b5892c",
+        "bytes": 526338,
+        "sha256": "b632808c39b5892cea1708c9d0d0cdd096b7ee02087deabc168f16393b38c3c2",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_malapert-massif.json?v=1976461fc0848dcd",
+        "bytes": 31729,
+        "sha256": "1976461fc0848dcd6dcd6004fb0247cbdd88e11d65c51273f9db1ef0ed9c21d6",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_malapert-massif.bin?v=cf0416ea4c538dad",
+        "bytes": 526338,
+        "sha256": "cf0416ea4c538dadb3cd92d019d1b23cf16d98fd92acc653f1a9fbf3609f4a54",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_leibnitz-beta.json?v=75826fa976cc8e74",
+        "bytes": 31831,
+        "sha256": "75826fa976cc8e748491064d5e89e012882f79e7bad0874a2f24f38cb6056410",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_leibnitz-beta.bin?v=9441ca6742772b2b",
+        "bytes": 421056,
+        "sha256": "9441ca6742772b2b93e418fa162d0efaec3219a2175cd6352fe3864048757d51",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_malapert-massif.bin?v=8e41aa9b8a9ba042",
+        "bytes": 421056,
+        "sha256": "8e41aa9b8a9ba04236a7001804ad9902d54c97065626f13ce2fde1dfae6390ad",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_leibnitz-beta.bin?v=309d8701ee832a94",
+        "bytes": 526338,
+        "sha256": "309d8701ee832a946d58c2e1b0226e9ddf089cf07a7526d9a078969ea345c575",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_nobile-rim1.json?v=25f0f434416b2d12",
+        "bytes": 31993,
+        "sha256": "25f0f434416b2d12118c0d196b021405280f3da8fb2ad838470a3d4fe494b814",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_nobile-rim1.bin?v=e9bd583cde3baa79",
+        "bytes": 421056,
+        "sha256": "e9bd583cde3baa79a794b11ff0d13545412abdb30930c386e7e670b9bfff4b2e",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_nobile-rim2.json?v=450d5f52720793d9",
+        "bytes": 31197,
+        "sha256": "450d5f52720793d96afb78b9f32a5d7c2024df486420d88ba2045f6486dd3ffc",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_malapert-site23.json?v=0d41378b9c9e1a1b",
+        "bytes": 31865,
+        "sha256": "0d41378b9c9e1a1b3d9c08c7f9a197c6d1ed929c87ecde5610a68843c9beef11",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_nobile-rim2.bin?v=00658151a58dd62f",
+        "bytes": 421056,
+        "sha256": "00658151a58dd62f0700262601468688d4a5b529106cc45ed0354b58395138b7",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_nobile-rim2.bin?v=a56fa7f9436f8a0b",
+        "bytes": 526338,
+        "sha256": "a56fa7f9436f8a0b3ff93b776fdf5a585d2a9215822c85047f4cd114bc603a05",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_malapert-site23.bin?v=c9742ee769e28d90",
+        "bytes": 526338,
+        "sha256": "c9742ee769e28d90e7debe16d0fb71cbc5ff76fa24c93ba43ab2e44ee403b737",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_malapert-site23.bin?v=3365109da3240f3c",
+        "bytes": 421056,
+        "sha256": "3365109da3240f3c09fc37f9be6217d6f3466cfeeef800d48e040107f1a879f3",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/horizon_slater-plain.json?v=adc6d2f4eaf3d795",
+        "bytes": 31160,
+        "sha256": "adc6d2f4eaf3d795db59a2e2b5ca26befd8ac0f2c662d210ffb057033a5773a8",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/tracks_slater-plain.bin?v=6b6062bd894230c2",
+        "bytes": 421056,
+        "sha256": "6b6062bd894230c2ad3352401118809bcea835e132b993e283a64d9d5284f540",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_slater-plain.bin?v=10773b530b4bc7a9",
+        "bytes": 526338,
+        "sha256": "10773b530b4bc7a90a306b169b4ab6179291925ee62d25e1bdc6cfb21d5edd44",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      },
+      {
+        "file": "data/terrain_nobile-rim1.bin?v=d08b9b8918cbf024",
+        "bytes": 526338,
+        "sha256": "d08b9b8918cbf0242440802950d83fe3fdca27c8b05a09e756d333806448f9ac",
+        "match": true,
+        "cacheControl": "public, max-age=0, must-revalidate"
+      }
+    ]
+  }
+}

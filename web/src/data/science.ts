@@ -25,3 +25,10 @@ export function validateHorizon(value: unknown, siteId: string): HorizonData {
 
 export const isLit = (visiblePct: number, threshold: number): boolean => visiblePct > 0 && visiblePct >= threshold;
 export const hasEarthLOS = (clearance: number, mask: number): boolean => clearance >= mask;
+
+/** South polar stereographic, longitude east, true scale at pole, meters. */
+export function lunarPolarXY(lat: number, lonEast: number): [number, number] {
+  const rho = 2 * 1737400 * Math.tan((Math.PI / 2 + lat * Math.PI / 180) / 2);
+  const lon = lonEast * Math.PI / 180;
+  return [rho * Math.sin(lon), rho * Math.cos(lon)];
+}

@@ -38,17 +38,17 @@ from pipeline.visibility import compute_disc_visibility, compute_earth_clearance
 def compute_metrics_for_tracks(sun_vis_pct: np.ndarray,
                                earth_clearance: np.ndarray,
                                stay_days: float = 6.5,
-                               lit_threshold_pct: float = 10.0,
-                               min_sun_fraction: float = 0.50,
-                               min_earth_fraction: float = 0.50,
-                               max_dark_gap_hours: float = 48.0) -> Dict[str, Any]:
+                               lit_threshold_pct: float = 50.0,
+                               min_sun_fraction: float = 0.85,
+                               min_earth_fraction: float = 0.80,
+                               max_dark_gap_hours: float = 24.0) -> Dict[str, Any]:
     """
     Compute operational metrics over the 2-year window (35,088 30-min steps):
       - sun_fraction (% mean)
       - earth_fraction (% with LOS)
       - max_dark_gap_h (longest continuous dark period)
       - viable_windows (number of 6.5-day mission windows satisfying thresholds)
-      - slip_tolerance_days (maximum consecutive viable launch days)
+      - max_viable_launch_streak_days (maximum consecutive viable launch days)
     """
     n_steps = len(sun_vis_pct)
     window_steps = int(round(stay_days * 48))  # 312 steps for 6.5 days
@@ -121,7 +121,7 @@ def compute_metrics_for_tracks(sun_vis_pct: np.ndarray,
         "max_dark_gap_h": round(max_dark_gap_h, 1),
         "viable_windows": int(viable_windows),
         "total_windows": int(n_launches),
-        "slip_tolerance_days": int(max_slip)
+        "max_viable_launch_streak_days": int(max_slip)
     }
 
 
@@ -137,7 +137,7 @@ def export_dem20_tracks_bin(out_path: Path,
       earth_clearance (int16, centi-deg),
       sun_vis_pct (uint8), earth_vis_pct (uint8)
     """
-    earth_vis_pct = np.where(earth_clearance >= 0.0, 100, 0).astype(np.uint8)
+    earth_vis_pct = compute_disc_visibility(ephem['earth_az'], ephem['earth_el'], ephem['earth_rho'], horizon_deg)
 
     sun_az = np.clip(np.round(ephem["sun_az"] * 100.0), 0, 65535).astype("<u2")
     sun_el = np.clip(np.round(ephem["sun_el"] * 100.0), -32768, 32767).astype("<i2")
@@ -146,26 +146,9 @@ def export_dem20_tracks_bin(out_path: Path,
     clearance = np.clip(np.round(earth_clearance * 100.0), -32768, 32767).astype("<i2")
 
     n_steps = len(sun_az)
-    # Interleave into structured record
-    dtype = np.dtype([
-        ('sun_az', '<u2'),
-        ('sun_el', '<i2'),
-        ('earth_az', '<u2'),
-        ('earth_el', '<i2'),
-        ('earth_clearance', '<i2'),
-        ('sun_vis_pct', 'u1'),
-        ('earth_vis_pct', 'u1')
-    ])
-    buf = np.empty(n_steps, dtype=dtype)
-    buf['sun_az'] = sun_az
-    buf['sun_el'] = sun_el
-    buf['earth_az'] = earth_az
-    buf['earth_el'] = earth_el
-    buf['earth_clearance'] = clearance
-    buf['sun_vis_pct'] = sun_vis_pct
-    buf['earth_vis_pct'] = earth_vis_pct
-
-    out_path.write_bytes(buf.tobytes())
+    # Production stores contiguous fields, not interleaved records.
+    out_path.write_bytes(b''.join(a.tobytes() for a in
+        [sun_az, sun_el, earth_az, earth_el, clearance, sun_vis_pct, earth_vis_pct]))
 
 
 def run_dem20_sensitivity_study() -> Dict[str, Any]:
@@ -213,6 +196,8 @@ def run_dem20_sensitivity_study() -> Dict[str, Any]:
         # C: DEM 20m
         levels_20 = acquire_site_levels(site, variant="dem20")
         h_20, info_20 = compute_horizon(site, levels_20, obs_height_m=2.0, az_step_deg=0.5, variant="dem20")
+        ephem_80 = compute_ephemeris_for_site(site, z0=info_80['z0_m'], obs_height_m=2.0)
+        ephem_20 = compute_ephemeris_for_site(site, z0=info_20['z0_m'], obs_height_m=2.0)
 
         # Persist DEM 20m horizon to data/out_dem20/
         h20_path = out_dem20_dir / f"horizon_dem20_{sid}.json"
@@ -231,18 +216,18 @@ def run_dem20_sensitivity_study() -> Dict[str, Any]:
         m_flat = compute_metrics_for_tracks(sun_vis_flat, earth_clear_flat)
 
         # DEM 80m
-        sun_vis_80 = compute_disc_visibility(ephem["sun_az"], ephem["sun_el"], ephem["sun_rho"], h_80)
-        earth_clear_80 = compute_earth_clearance(ephem["earth_az"], ephem["earth_el"], h_80)
+        sun_vis_80 = compute_disc_visibility(ephem_80["sun_az"], ephem_80["sun_el"], ephem_80["sun_rho"], h_80)
+        earth_clear_80 = compute_earth_clearance(ephem_80["earth_az"], ephem_80["earth_el"], h_80)
         m_80 = compute_metrics_for_tracks(sun_vis_80, earth_clear_80)
 
         # DEM 20m
-        sun_vis_20 = compute_disc_visibility(ephem["sun_az"], ephem["sun_el"], ephem["sun_rho"], h_20)
-        earth_clear_20 = compute_earth_clearance(ephem["earth_az"], ephem["earth_el"], h_20)
+        sun_vis_20 = compute_disc_visibility(ephem_20["sun_az"], ephem_20["sun_el"], ephem_20["sun_rho"], h_20)
+        earth_clear_20 = compute_earth_clearance(ephem_20["earth_az"], ephem_20["earth_el"], h_20)
         m_20 = compute_metrics_for_tracks(sun_vis_20, earth_clear_20)
 
         # Persist DEM 20m tracks and summary
         tracks_bin_path = out_dem20_dir / f"tracks_{sid}.bin"
-        export_dem20_tracks_bin(tracks_bin_path, ephem, h_20, sun_vis_20, earth_clear_20)
+        export_dem20_tracks_bin(tracks_bin_path, ephem_20, h_20, sun_vis_20, earth_clear_20)
 
         summary_path = out_dem20_dir / f"tracks_summary_{sid}.json"
         summary_path.write_text(json.dumps({
@@ -277,7 +262,7 @@ def run_dem20_sensitivity_study() -> Dict[str, Any]:
                 "earth_fraction_pp": round(m_20["earth_fraction_pct"] - m_80["earth_fraction_pct"], 2),
                 "dark_gap_diff_h": round(m_20["max_dark_gap_h"] - m_80["max_dark_gap_h"], 1),
                 "viable_windows_diff": m_20["viable_windows"] - m_80["viable_windows"],
-                "slip_tolerance_diff_days": m_20["slip_tolerance_days"] - m_80["slip_tolerance_days"]
+                "viable_launch_streak_diff_days": m_20["max_viable_launch_streak_days"] - m_80["max_viable_launch_streak_days"]
             }
         }
         site_results.append(res)
@@ -286,7 +271,7 @@ def run_dem20_sensitivity_study() -> Dict[str, Any]:
         print(f"  Earth LOS: Flat={m_flat['earth_fraction_pct']:5.1f}% | 80m={m_80['earth_fraction_pct']:5.1f}% | 20m={m_20['earth_fraction_pct']:5.1f}% [d20-80: {res['delta_dem20_minus_dem80']['earth_fraction_pp']:+4.1f}%]")
         print(f"  Dark Gap:  Flat={m_flat['max_dark_gap_h']:5.1f}h | 80m={m_80['max_dark_gap_h']:5.1f}h | 20m={m_20['max_dark_gap_h']:5.1f}h [d20-80: {res['delta_dem20_minus_dem80']['dark_gap_diff_h']:+4.1f}h]")
         print(f"  Viable:    Flat={m_flat['viable_windows']:3d}    | 80m={m_80['viable_windows']:3d}    | 20m={m_20['viable_windows']:3d}    [d20-80: {res['delta_dem20_minus_dem80']['viable_windows_diff']:+3d} win]")
-        print(f"  Slip Tol:  Flat={m_flat['slip_tolerance_days']:3d}d   | 80m={m_80['slip_tolerance_days']:3d}d   | 20m={m_20['slip_tolerance_days']:3d}d   [d20-80: {res['delta_dem20_minus_dem80']['slip_tolerance_diff_days']:+3d} days]")
+        print(f"  Streak:  Flat={m_flat['max_viable_launch_streak_days']:3d}d   | 80m={m_80['max_viable_launch_streak_days']:3d}d   | 20m={m_20['max_viable_launch_streak_days']:3d}d   [d20-80: {res['delta_dem20_minus_dem80']['viable_launch_streak_diff_days']:+3d} days]")
 
     spice.kclear()
 
@@ -308,7 +293,7 @@ def run_dem20_sensitivity_study() -> Dict[str, Any]:
         writer.writerow([
             "Site ID", "Site Name", "Variant",
             "Sun Fraction (%)", "Earth LOS (%)",
-            "Max Dark Gap (h)", "Viable Windows", "Slip Tolerance (days)"
+            "Max Dark Gap (h)", "Viable Windows", "Longest viable launch streak (days)"
         ])
         for r in site_results:
             sid = r["site_id"]
@@ -318,7 +303,7 @@ def run_dem20_sensitivity_study() -> Dict[str, Any]:
                 writer.writerow([
                     sid, name, var,
                     m["sun_fraction_pct"], m["earth_fraction_pct"],
-                    m["max_dark_gap_h"], m["viable_windows"], m["slip_tolerance_days"]
+                    m["max_dark_gap_h"], m["viable_windows"], m["max_viable_launch_streak_days"]
                 ])
     print(f"Saved CSV report to: {csv_path}")
 
@@ -381,7 +366,7 @@ def generate_sensitivity_plot(site_results: List[Dict[str, Any]], png_path: Path
 
     axes[0, 0].legend(loc='lower right', facecolor='#1e293b', edgecolor='#475569', labelcolor='#f1f5f9', fontsize=9)
 
-    fig.suptitle("Artemis III Candidate Landing Sites — Topographic Resolution Sensitivity\nGeometric Flat Sphere vs LOLA 80 m DEM vs LOLA 20 m DEM",
+    fig.suptitle("Lunar South Pole Study Points — Topographic Resolution Sensitivity\nGeometric Flat Sphere vs LOLA 80 m DEM vs LOLA 20 m DEM",
                  color='#f8fafc', fontsize=14, fontweight='bold', y=0.98)
 
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])

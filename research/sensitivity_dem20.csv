@@ -1,4 +1,4 @@
-Site ID,Site Name,Variant,Sun Fraction (%),Earth LOS (%),Max Dark Gap (h),Viable Windows,Slip Tolerance (days)
+WITHDRAWN_INVALID_REGISTRATION: DO NOT USE; Site ID,Site Name,Variant,Sun Fraction (%),Earth LOS (%),Max Dark Gap (h),Viable Windows,Slip Tolerance (days)
 connecting-ridge,Connecting Ridge (Site 01),flat,53.57,48.63,3278.0,187,14
 connecting-ridge,Connecting Ridge (Site 01),dem80,71.53,53.4,258.5,281,15
 connecting-ridge,Connecting Ridge (Site 01),dem20,55.07,53.38,370.5,205,15

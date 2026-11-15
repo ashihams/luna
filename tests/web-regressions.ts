@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { SiteMetricsHelper, computeHeatmapMatrix, computeRescueCandidates, computeLunarDistanceKm } from '../web/src/workers/metrics';
-import { parseUtc, horizonAt, validateHorizon, isLit, hasEarthLOS, lastStartDay } from '../web/src/data/science';
+import { parseUtc, horizonAt, validateHorizon, isLit, hasEarthLOS, lastStartDay, lunarPolarXY } from '../web/src/data/science';
 import { fetchManifest, fetchMetrics, fetchTracks } from '../web/src/data/loader';
 import { usePlannerStore } from '../web/src/state/usePlannerStore';
 
@@ -19,6 +19,10 @@ assert.equal(horizonAt([0,10,20,30],45),5);
 assert.equal(horizonAt([0,10,20,30],315),15);
 assert.equal(horizonAt([0,10,20,30],-45),15);
 assert.equal(lastStartDay(35088,6.5),724);
+// Independent pyproj coordinates in the official PGDA south-polar CRS.
+const [polarX, polarY] = lunarPolarXY(-89.46, -136.68);
+assert.ok(Math.abs(polarX + 11234.249821) < .001);
+assert.ok(Math.abs(polarY + 11913.161960) < .001);
 const horizon=validateHorizon(JSON.parse(fs.readFileSync(base+'data/horizon_connecting-ridge.json','utf8')),'connecting-ridge');
 assert.throws(()=>validateHorizon({...horizon,variants:{best:{elev_deg:horizon.variants.best}}},'connecting-ridge'));
 assert.throws(()=>validateHorizon(horizon,'wrong-site'));
@@ -36,9 +40,13 @@ for(let s=0;s<full.length;s++) for(let day=0;day<731;day++) {
 const helper=new SiteMetricsHelper(full[0]);
 assert.equal(helper.evaluateWindow(-1,312,params).viable,false);
 assert.equal(helper.evaluateWindow(35040,312,params).complete,false);
-const diagnostic=helper.evaluateWindow(26*48,312,params,horizon.variants.best);
-assert.ok(Math.abs(diagnostic.dark_gap_start_horizon+.349)<.02);
-assert.ok(diagnostic.longest_dark_gap_h>90);
+// Locate an actual dark window in the current dataset. A fixed old date may
+// legitimately become fully lit when erroneous site coordinates are corrected.
+const darkDay = fullMatrix[0].findIndex(cell => cell.complete && cell.longest_dark_gap_h > 0);
+assert.ok(darkDay >= 0, 'Dataset must exercise dark-gap diagnostics');
+const diagnostic=helper.evaluateWindow(darkDay*48,312,params,horizon.variants.best);
+assert.ok(diagnostic.longest_dark_gap_h > 0);
+assert.equal(diagnostic.dark_gap_start_horizon, horizonAt(horizon.variants.best, full[0].sun_az[diagnostic.dark_gap_start_step]));
 const rescue=computeRescueCandidates(fullMatrix,manifest.sites.map(s=>({id:s.id,name:s.name})),0,724,manifest.time.t0_utc);
 for(const row of [...rescue.altDates,...rescue.altSites,...rescue.topOverall]) assert.ok(row.dayIndex<=724);
 // Unit tests for lunar surface distance & rescue ranking (Task A)
@@ -49,6 +57,13 @@ const equatorQuarterKm = computeLunarDistanceKm(0, 0, 0, 90);
 assert.ok(Math.abs(equatorQuarterKm - 2729.1038) < 0.01, `Equator 90 deg step expected ~2729.10 km, got ${equatorQuarterKm}`);
 const crToCreKm = computeLunarDistanceKm(-89.305, 123.623, -88.99, 104.47);
 assert.ok(Math.abs(crToCreKm - 12.8) < 0.2, `CR to CRE expected ~12.8 km, got ${crToCreKm}`);
+
+const ridge = manifest.sites.find(s => s.id === 'connecting-ridge')!;
+const extension = manifest.sites.find(s => s.id === 'connecting-ridge-ext')!;
+assert.equal(ridge.lat_deg, -89.46);
+assert.equal(ridge.lon_deg_east, -136.68);
+assert.equal(extension.lon_deg_east, -104.47);
+assert.ok(computeLunarDistanceKm(ridge.lat_deg, ridge.lon_deg_east, extension.lat_deg, extension.lon_deg_east) > 18);
 
 // (b) Zero distance for same site
 assert.equal(computeLunarDistanceKm(-89.305, 123.623, -89.305, 123.623), 0, 'Self-distance must be exactly 0');

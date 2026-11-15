@@ -11,6 +11,7 @@ from scipy.ndimage import map_coordinates
 from pyproj import Transformer, CRS
 
 from pipeline.config_loader import load_config
+from pipeline.raster_sampling import sample_projected
 
 
 def calculate_elevation_angle(r_t, r_o, theta):
@@ -182,26 +183,7 @@ def compute_horizon_for_raster_level(level: dict,
     proj_x = proj_x.reshape(lats.shape)
     proj_y = proj_y.reshape(lats.shape)
 
-    # Invert affine transform to get fractional pixel row/col indices:
-    inv_transform = ~transform
-    cols, rows = inv_transform * (proj_x, proj_y)
-
-    # Sample heights using bilinear interpolation (order=1)
-    # Any point outside the raster bounds is marked as NaN
-    H, W = data.shape
-    valid_mask = (rows >= 0) & (rows < H - 1) & (cols >= 0) & (cols < W - 1)
-
-    # Fill invalid coords with 0 for map_coordinates, then mask out
-    rows_safe = np.clip(rows, 0, H - 1)
-    cols_safe = np.clip(cols, 0, W - 1)
-
-    coords = np.vstack([rows_safe.ravel(), cols_safe.ravel()])
-    sampled_z = map_coordinates(data, coords, order=1, mode='nearest').reshape(rows.shape)
-
-    # Set out-of-bounds to NaN
-    sampled_z[~valid_mask] = np.nan
-    if nodata is not None and not (isinstance(nodata, float) and np.isnan(nodata)):
-        sampled_z[sampled_z == nodata] = np.nan
+    sampled_z = sample_projected(level, proj_x, proj_y)
 
     # Check NaN fraction
     nan_frac = np.isnan(sampled_z).mean()
@@ -217,9 +199,9 @@ def compute_horizon_for_raster_level(level: dict,
     elev_rad_clean = np.where(np.isnan(elev_rad), -np.inf, elev_rad)
     max_elev_rad = np.max(elev_rad_clean, axis=0)
 
-    # Convert to degrees, replace any remaining -inf with geometric dip
-    geometric_dip_deg = -np.degrees(np.sqrt(2.0 * obs_height_m / R_moon_m))
-    max_elev_deg = np.where(np.isneginf(max_elev_rad), geometric_dip_deg, np.degrees(max_elev_rad))
+    # Missing terrain is not a flat sphere. Other valid levels may supply a ray;
+    # the caller rejects any ray still unsupported after combining levels.
+    max_elev_deg = np.degrees(max_elev_rad)
 
     return max_elev_deg, nan_frac
 
@@ -263,12 +245,12 @@ def compute_horizon(site: dict,
     if near_level is not None:
         z0 = sample_point_height(near_level, site["lat_deg"], site["lon_deg_east"], R)
     else:
-        z0 = 0.0
+        raise ValueError('A terrain horizon requires a near DEM at the observer')
 
     site_with_z0 = dict(site)
     site_with_z0["ground_height_m"] = z0
 
-    overall_horizon = np.full(n_az, -90.0, dtype=np.float64)
+    overall_horizon = np.full(n_az, -np.inf, dtype=np.float64)
     levels_used = []
     total_nan_samples = 0
     total_samples = 0
@@ -317,12 +299,16 @@ def compute_horizon(site: dict,
             distances_m=distances,
             R_moon_m=R
         )
+        if lvl_name in ('near', 'mid') and nan_frac > 0:
+            raise ValueError(f'Missing {lvl_name} terrain for {site.get("id", "site")}: {nan_frac:.4%}')
         overall_horizon = np.maximum(overall_horizon, lvl_elev)
         levels_used.append(lvl_name)
         total_nan_samples += nan_frac * len(distances) * n_az
         total_samples += len(distances) * n_az
 
     nan_fraction = total_nan_samples / max(total_samples, 1)
+    if not np.all(np.isfinite(overall_horizon)):
+        raise ValueError('Cannot compute a horizon from missing terrain')
 
     return np.round(overall_horizon, 3), {
         "variant": variant,
@@ -343,11 +329,7 @@ def sample_point_height(level: dict, lat_deg: float, lon_deg_east: float, R_moon
     transformer = Transformer.from_crs(moon_lonlat, crs, always_xy=True)
 
     x, y = transformer.transform(lon_deg_east, lat_deg)
-    inv_t = ~transform
-    col, row = inv_t * (x, y)
-
-    H, W = data.shape
-    if 0 <= row < H - 1 and 0 <= col < W - 1:
-        z = map_coordinates(data, [[row], [col]], order=1, mode='nearest')[0]
-        return float(z)
-    return 0.0
+    z = float(sample_projected(level, x, y))
+    if not np.isfinite(z):
+        raise ValueError(f'Observer ({lat_deg}, {lon_deg_east}) has no valid DEM ground height')
+    return z

@@ -12,13 +12,14 @@ import json
 import hashlib
 import numpy as np
 import rasterio
-from rasterio.windows import from_bounds
+from rasterio.windows import from_bounds, Window
 from pyproj import Transformer, CRS
 from scipy.ndimage import map_coordinates
 from pathlib import Path
 
 from pipeline.config_loader import load_config, cache_dir
 from pipeline.horizon import get_site_local_frame, compute_sphere_ray_coords
+from pipeline.raster_sampling import sample_projected
 
 
 def get_site_projected_xy(lat_deg: float, lon_deg_east: float, crs, R_moon_m: float = 1737400.0):
@@ -42,23 +43,18 @@ def acquire_window_from_raster(raster_url_or_path: str,
     npy_path = cdir / f"{cache_tag}.npy"
     meta_path = cdir / f"{cache_tag}_meta.json"
 
-    # Return cached window if available
+    request = dict(source=raster_url_or_path, center_x=float(center_x),
+                   center_y=float(center_y), half_width_m=float(half_width_m),
+                   schema_version=2)
+    # A site name alone is not a cache identity: coordinates and source can change.
     if npy_path.exists() and meta_path.exists():
         with open(meta_path, "r") as f:
             meta = json.load(f)
-        data = np.load(str(npy_path))
-        # Reconstruct affine transform
-        transform = rasterio.Affine(*meta["transform"])
-        crs = CRS.from_wkt(meta["crs_wkt"])
-        return {
-            "data": data,
-            "transform": transform,
-            "crs": crs,
-            "nodata": meta["nodata"],
-            "resolution": meta["resolution"],
-            "shape": data.shape,
-            "cached": True
-        }
+        if meta.get('request') == request:
+            data = np.load(str(npy_path))
+            return dict(data=data, transform=rasterio.Affine(*meta['transform']),
+                        crs=CRS.from_wkt(meta['crs_wkt']), nodata=meta['nodata'],
+                        resolution=meta['resolution'], shape=data.shape, cached=True)
 
     # Check if a local cached copy of the raster file exists
     local_name = Path(raster_url_or_path).name
@@ -91,8 +87,15 @@ def acquire_window_from_raster(raster_url_or_path: str,
         top = center_y + half_width_m
 
         window = from_bounds(left, bottom, right, top, transform)
-        # Read with bounds clipping
-        data = src.read(1, window=window, boundless=True, fill_value=np.nan)
+        # Use an integer pixel window. A fractional request can be resampled while
+        # retaining a mismatched affine, shifting the represented terrain.
+        col0, row0 = int(np.floor(window.col_off)), int(np.floor(window.row_off))
+        col1 = int(np.ceil(window.col_off + window.width))
+        row1 = int(np.ceil(window.row_off + window.height))
+        window = Window(col0, row0, col1-col0, row1-row0)
+        data = src.read(1, window=window, boundless=True, masked=True,
+                        out_dtype='float32').filled(np.nan)
+        data = data * src.scales[0] + src.offsets[0]
         # Compute the window's own transform
         win_transform = rasterio.windows.transform(window, transform)
 
@@ -112,6 +115,7 @@ def acquire_window_from_raster(raster_url_or_path: str,
             "nan_fraction": float(nan_frac),
             "source": raster_url_or_path
         }
+        meta['request'] = request
         with open(meta_path, "w") as f:
             json.dump(meta, f, indent=2)
 
@@ -292,15 +296,9 @@ def extract_local_terrain_mesh(site: dict,
     proj_x = proj_x.reshape(lats_deg.shape)
     proj_y = proj_y.reshape(lats_deg.shape)
 
-    inv_t = ~transform
-    cols, rows = inv_t @ (proj_x, proj_y)
-
-    H, W = data.shape
-    rows_safe = np.clip(rows, 0, H - 1)
-    cols_safe = np.clip(cols, 0, W - 1)
-
-    coords = np.vstack([rows_safe.ravel(), cols_safe.ravel()])
-    sampled_z = map_coordinates(data, coords, order=1, mode='nearest').reshape(rows.shape)
+    sampled_z = sample_projected(level, proj_x, proj_y)
+    if not np.all(np.isfinite(sampled_z)):
+        raise ValueError(f'Missing terrain in local mesh for {site["id"]}')
 
     # Center ground height z0
     z0 = float(sampled_z[grid_n // 2, grid_n // 2])

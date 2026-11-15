@@ -5,6 +5,8 @@ data/cache
 data/kernels
 data/out_dem20
 data/out_longrun
+data/out_longrun_dem80
+data/out_longrun_dem20
 pipeline
 research
 docs

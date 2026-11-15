@@ -12,6 +12,8 @@ venv/
 data/cache/*
 !data/cache/.gitignore
 data/out_longrun/
+data/out_longrun_dem80/
+data/out_longrun_dem20/
 data/out_dem20/
 
 # Generated web data (tracked for zero-setup static deployment)

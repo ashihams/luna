@@ -1,0 +1,535 @@
+{
+  "status": "SUPERSEDED_COORDINATES",
+  "validation_level": "V4 - Published Map Comparison",
+  "reference_dataset": "PGDA Product 69 (Mazarico et al. 2011)",
+  "reference_files": {
+    "solar_map": "AVGVISIB_65S_240M_201608.TIF",
+    "earth_map": "AVGVISIB_65S_240M_201608_EARTH.TIF"
+  },
+  "model_parameters": {
+    "start_time_utc": "2009-07-13T17:33:17",
+    "n_steps": 163165,
+    "step_hours": 1.0,
+    "observer_height_m": 0.0,
+    "horizon_variant": "dem80",
+    "terrain_sampling": "integer windows; bilinear pixel centers; missing ground rejected",
+    "solar_criterion": "Upper limb above horizon (any fraction of disc)",
+    "earth_criterion": "Upper limb above horizon (any fraction of disc)"
+  },
+  "sites_evaluated": 13,
+  "results": [
+    {
+      "site_id": "connecting-ridge",
+      "name": "Connecting Ridge (Site 01)",
+      "lat_deg": -89.305,
+      "lon_deg_east": 123.623,
+      "elevation_z0_m": 1298.2,
+      "published_sun": {
+        "raster_row": 3258,
+        "raster_col": 3283,
+        "center_pct": 64.9,
+        "min_pct": 14.85,
+        "max_pct": 70.4,
+        "median_pct": 53.0
+      },
+      "published_earth": {
+        "raster_row": 3258,
+        "raster_col": 3283,
+        "center_pct": 50.05,
+        "min_pct": 0.0,
+        "max_pct": 55.85,
+        "median_pct": 50.05
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 53.93,
+        "sun_center_pct": 49.43,
+        "earth_any_pct": 56.2,
+        "earth_center_pct": 51.64
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 60.17,
+        "earth_any_pct": 56.24
+      },
+      "delta_sun_percentage_pts": -10.97,
+      "delta_earth_percentage_pts": 6.15,
+      "outside_3x3": {
+        "sun": false,
+        "earth": true
+      }
+    },
+    {
+      "site_id": "connecting-ridge-ext",
+      "name": "Connecting Ridge Extension",
+      "lat_deg": -88.99,
+      "lon_deg_east": 104.47,
+      "elevation_z0_m": 40.6,
+      "published_sun": {
+        "raster_row": 3241,
+        "raster_col": 3333,
+        "center_pct": 26.76,
+        "min_pct": 20.74,
+        "max_pct": 33.0,
+        "median_pct": 26.76
+      },
+      "published_earth": {
+        "raster_row": 3241,
+        "raster_col": 3333,
+        "center_pct": 44.1,
+        "min_pct": 38.22,
+        "max_pct": 48.52,
+        "median_pct": 42.42
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 22.64,
+        "sun_center_pct": 20.54,
+        "earth_any_pct": 37.89,
+        "earth_center_pct": 32.83
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 26.36,
+        "earth_any_pct": 43.13
+      },
+      "delta_sun_percentage_pts": -4.12,
+      "delta_earth_percentage_pts": -6.21,
+      "outside_3x3": {
+        "sun": false,
+        "earth": true
+      }
+    },
+    {
+      "site_id": "shackleton-rim",
+      "name": "Shackleton Rim (Site 04)",
+      "lat_deg": -88.81,
+      "lon_deg_east": 124.68,
+      "elevation_z0_m": 1620.9,
+      "published_sun": {
+        "raster_row": 3295,
+        "raster_col": 3333,
+        "center_pct": 70.85,
+        "min_pct": 42.08,
+        "max_pct": 70.85,
+        "median_pct": 58.53
+      },
+      "published_earth": {
+        "raster_row": 3295,
+        "raster_col": 3333,
+        "center_pct": 56.24,
+        "min_pct": 36.13,
+        "max_pct": 58.56,
+        "median_pct": 46.37
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 65.48,
+        "sun_center_pct": 57.76,
+        "earth_any_pct": 54.63,
+        "earth_center_pct": 50.09
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 71.85,
+        "earth_any_pct": 55.43
+      },
+      "delta_sun_percentage_pts": -5.37,
+      "delta_earth_percentage_pts": -1.61,
+      "outside_3x3": {
+        "sun": false,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim1",
+      "name": "de Gerlache Rim 1 (Site 11)",
+      "lat_deg": -88.67,
+      "lon_deg_east": -66.37,
+      "elevation_z0_m": 1580.6,
+      "published_sun": {
+        "raster_row": 3142,
+        "raster_col": 3056,
+        "center_pct": 46.84,
+        "min_pct": 37.82,
+        "max_pct": 47.81,
+        "median_pct": 46.23
+      },
+      "published_earth": {
+        "raster_row": 3142,
+        "raster_col": 3056,
+        "center_pct": 60.49,
+        "min_pct": 60.22,
+        "max_pct": 60.77,
+        "median_pct": 60.49
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 44.1,
+        "sun_center_pct": 41.22,
+        "earth_any_pct": 60.63,
+        "earth_center_pct": 55.93
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 45.32,
+        "earth_any_pct": 60.64
+      },
+      "delta_sun_percentage_pts": -2.74,
+      "delta_earth_percentage_pts": 0.14,
+      "outside_3x3": {
+        "sun": false,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "de-gerlache-rim2",
+      "name": "de Gerlache Rim 2",
+      "lat_deg": -88.22,
+      "lon_deg_east": -63.43,
+      "elevation_z0_m": -175.8,
+      "published_sun": {
+        "raster_row": 3109,
+        "raster_col": 3008,
+        "center_pct": 38.42,
+        "min_pct": 37.65,
+        "max_pct": 38.64,
+        "median_pct": 38.16
+      },
+      "published_earth": {
+        "raster_row": 3109,
+        "raster_col": 3008,
+        "center_pct": 54.26,
+        "min_pct": 53.9,
+        "max_pct": 54.62,
+        "median_pct": 54.26
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 38.82,
+        "sun_center_pct": 37.63,
+        "earth_any_pct": 54.39,
+        "earth_center_pct": 49.86
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 39.61,
+        "earth_any_pct": 54.39
+      },
+      "delta_sun_percentage_pts": 0.4,
+      "delta_earth_percentage_pts": 0.13,
+      "outside_3x3": {
+        "sun": true,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "faustini-rim-a",
+      "name": "Faustini Rim A",
+      "lat_deg": -87.86,
+      "lon_deg_east": 90.0,
+      "elevation_z0_m": 41.8,
+      "published_sun": {
+        "raster_row": 3210,
+        "raster_col": 3480,
+        "center_pct": 38.55,
+        "min_pct": 28.34,
+        "max_pct": 41.7,
+        "median_pct": 38.55
+      },
+      "published_earth": {
+        "raster_row": 3210,
+        "raster_col": 3480,
+        "center_pct": 50.56,
+        "min_pct": 48.99,
+        "max_pct": 50.63,
+        "median_pct": 50.43
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 38.75,
+        "sun_center_pct": 36.74,
+        "earth_any_pct": 50.57,
+        "earth_center_pct": 46.06
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 39.67,
+        "earth_any_pct": 50.58
+      },
+      "delta_sun_percentage_pts": 0.2,
+      "delta_earth_percentage_pts": 0.01,
+      "outside_3x3": {
+        "sun": false,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "haworth",
+      "name": "Haworth",
+      "lat_deg": -86.75,
+      "lon_deg_east": -23.67,
+      "elevation_z0_m": 1551.1,
+      "published_sun": {
+        "raster_row": 2833,
+        "raster_col": 3045,
+        "center_pct": 32.74,
+        "min_pct": 31.84,
+        "max_pct": 33.74,
+        "median_pct": 32.7
+      },
+      "published_earth": {
+        "raster_row": 2833,
+        "raster_col": 3045,
+        "center_pct": 40.72,
+        "min_pct": 38.38,
+        "max_pct": 42.68,
+        "median_pct": 40.72
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 32.65,
+        "sun_center_pct": 31.88,
+        "earth_any_pct": 40.16,
+        "earth_center_pct": 35.27
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 32.7,
+        "earth_any_pct": 40.23
+      },
+      "delta_sun_percentage_pts": -0.09,
+      "delta_earth_percentage_pts": -0.56,
+      "outside_3x3": {
+        "sun": false,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "malapert-massif",
+      "name": "Malapert Massif",
+      "lat_deg": -85.98,
+      "lon_deg_east": -0.26,
+      "elevation_z0_m": 4816.7,
+      "published_sun": {
+        "raster_row": 2701,
+        "raster_col": 3207,
+        "center_pct": 39.88,
+        "min_pct": 38.8,
+        "max_pct": 60.55,
+        "median_pct": 43.1
+      },
+      "published_earth": {
+        "raster_row": 2701,
+        "raster_col": 3207,
+        "center_pct": 79.75,
+        "min_pct": 50.26,
+        "max_pct": 100.0,
+        "median_pct": 79.54
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 36.18,
+        "sun_center_pct": 33.74,
+        "earth_any_pct": 77.39,
+        "earth_center_pct": 71.08
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 42.86,
+        "earth_any_pct": 82.05
+      },
+      "delta_sun_percentage_pts": -3.7,
+      "delta_earth_percentage_pts": -2.36,
+      "outside_3x3": {
+        "sun": true,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "leibnitz-beta",
+      "name": "Leibnitz Beta Plateau (Site 20)",
+      "lat_deg": -85.43,
+      "lon_deg_east": 31.83,
+      "elevation_z0_m": 6396.8,
+      "published_sun": {
+        "raster_row": 2719,
+        "raster_col": 3514,
+        "center_pct": 31.12,
+        "min_pct": 22.22,
+        "max_pct": 73.8,
+        "median_pct": 35.74
+      },
+      "published_earth": {
+        "raster_row": 2719,
+        "raster_col": 3514,
+        "center_pct": 48.02,
+        "min_pct": 45.9,
+        "max_pct": 56.66,
+        "median_pct": 50.2
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 32.18,
+        "sun_center_pct": 27.62,
+        "earth_any_pct": 47.14,
+        "earth_center_pct": 42.55
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 36.73,
+        "earth_any_pct": 48.11
+      },
+      "delta_sun_percentage_pts": 1.06,
+      "delta_earth_percentage_pts": -0.88,
+      "outside_3x3": {
+        "sun": false,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "nobile-rim1",
+      "name": "Nobile Rim 1",
+      "lat_deg": -85.44,
+      "lon_deg_east": 37.44,
+      "elevation_z0_m": 5927.0,
+      "published_sun": {
+        "raster_row": 2752,
+        "raster_col": 3560,
+        "center_pct": 31.86,
+        "min_pct": 29.54,
+        "max_pct": 37.8,
+        "median_pct": 31.86
+      },
+      "published_earth": {
+        "raster_row": 2752,
+        "raster_col": 3560,
+        "center_pct": 34.04,
+        "min_pct": 7.77,
+        "max_pct": 46.19,
+        "median_pct": 34.04
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 31.43,
+        "sun_center_pct": 30.65,
+        "earth_any_pct": 34.17,
+        "earth_center_pct": 28.66
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 31.65,
+        "earth_any_pct": 34.33
+      },
+      "delta_sun_percentage_pts": -0.43,
+      "delta_earth_percentage_pts": 0.13,
+      "outside_3x3": {
+        "sun": false,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "nobile-rim2",
+      "name": "Nobile Rim 2",
+      "lat_deg": -83.93,
+      "lon_deg_east": 58.74,
+      "elevation_z0_m": 1015.6,
+      "published_sun": {
+        "raster_row": 2811,
+        "raster_col": 3866,
+        "center_pct": 42.0,
+        "min_pct": 34.04,
+        "max_pct": 46.24,
+        "median_pct": 41.44
+      },
+      "published_earth": {
+        "raster_row": 2811,
+        "raster_col": 3866,
+        "center_pct": 69.0,
+        "min_pct": 59.96,
+        "max_pct": 69.24,
+        "median_pct": 68.42
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 33.42,
+        "sun_center_pct": 32.63,
+        "earth_any_pct": 69.04,
+        "earth_center_pct": 63.78
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 36.27,
+        "earth_any_pct": 69.09
+      },
+      "delta_sun_percentage_pts": -8.58,
+      "delta_earth_percentage_pts": 0.04,
+      "outside_3x3": {
+        "sun": true,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "malapert-site23",
+      "name": "Malapert Massif (Site 23)",
+      "lat_deg": -86.0,
+      "lon_deg_east": 2.0,
+      "elevation_z0_m": 5152.9,
+      "published_sun": {
+        "raster_row": 2704,
+        "raster_col": 3227,
+        "center_pct": 80.96,
+        "min_pct": 12.37,
+        "max_pct": 82.01,
+        "median_pct": 63.8
+      },
+      "published_earth": {
+        "raster_row": 2704,
+        "raster_col": 3227,
+        "center_pct": 62.85,
+        "min_pct": 0.0,
+        "max_pct": 82.46,
+        "median_pct": 59.95
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 54.73,
+        "sun_center_pct": 50.38,
+        "earth_any_pct": 52.39,
+        "earth_center_pct": 47.85
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 69.63,
+        "earth_any_pct": 57.35
+      },
+      "delta_sun_percentage_pts": -26.23,
+      "delta_earth_percentage_pts": -10.46,
+      "outside_3x3": {
+        "sun": false,
+        "earth": false
+      }
+    },
+    {
+      "site_id": "slater-plain",
+      "name": "Slater Plain",
+      "lat_deg": -88.3,
+      "lon_deg_east": -28.0,
+      "elevation_z0_m": -910.7,
+      "published_sun": {
+        "raster_row": 3020,
+        "raster_col": 3109,
+        "center_pct": 21.62,
+        "min_pct": 17.32,
+        "max_pct": 26.07,
+        "median_pct": 21.62
+      },
+      "published_earth": {
+        "raster_row": 3020,
+        "raster_col": 3109,
+        "center_pct": 47.27,
+        "min_pct": 46.64,
+        "max_pct": 48.38,
+        "median_pct": 47.37
+      },
+      "model_18yr_0m": {
+        "sun_any_pct": 14.94,
+        "sun_center_pct": 11.86,
+        "earth_any_pct": 47.18,
+        "earth_center_pct": 42.6
+      },
+      "model_18yr_2m": {
+        "sun_any_pct": 20.33,
+        "earth_any_pct": 47.24
+      },
+      "delta_sun_percentage_pts": -6.68,
+      "delta_earth_percentage_pts": -0.09,
+      "outside_3x3": {
+        "sun": true,
+        "earth": false
+      }
+    }
+  ],
+  "summary": {
+    "median_abs_sun_difference_pp": 3.7,
+    "earth_within_0_4_pp": 6,
+    "outside_3x3_count": 6,
+    "interpretation": "Comparison completed, not certification. Neighborhood ranges are not confidence intervals; causes of residual differences remain unresolved."
+  }
+}

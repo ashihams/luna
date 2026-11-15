@@ -15,7 +15,7 @@ import numpy as np
 import spiceypy as spice
 from datetime import datetime
 
-from pipeline.config_loader import load_config, project_root
+from pipeline.config_loader import load_config, load_sites, project_root
 from pipeline.ephemeris import furnish_kernels, compute_ephemeris_for_site
 from pipeline.horizon import get_site_local_frame
 
@@ -99,10 +99,7 @@ def run_horizons_cross_check():
     furnish_kernels()
     cfg = load_config()
 
-    sites_to_test = [
-        {"id": "shackleton-rim", "name": "Shackleton Rim", "lat_deg": -88.81, "lon_deg_east": 124.68, "z0_km": 0.0},
-        {"id": "connecting-ridge", "name": "Connecting Ridge", "lat_deg": -89.305, "lon_deg_east": 123.623, "z0_km": 0.0}
-    ]
+    sites_to_test = [s for s in load_sites() if s['id'] in ('shackleton-rim', 'connecting-ridge')]
 
     dates_to_test = [
         "2027-01-01 00:00",
