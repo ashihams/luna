@@ -1,0 +1,3 @@
+# Preserve downloaded evidence byte-for-byte, including original whitespace.
+sources/** -text -whitespace
+frozen_horizon_0m_connecting-ridge.json -text -whitespace
