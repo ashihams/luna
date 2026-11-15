@@ -97,7 +97,7 @@ console.log({ viable: metrics.viable, sunFraction: metrics.sun_fraction });`;
     {
       icon: Radio,
       title: 'Sub-Earth Libration Tracking',
-      desc: 'Models the Moon’s complex 14-day libration cycle where Earth wobbles by ±8.5° in elevation. Evaluates customizable antenna elevation masks from 0° to 5° to prevent terrain multipath loss.',
+      desc: 'Models the Moon’s complex 14-day libration cycle where Earth wobbles by ±8.5° in elevation. Applies a configurable geometric elevation mask (0° to 5°); radio-link and multipath performance are not modeled.',
       tag: '±8.5° LIBRATION MODEL',
       accent: 'text-cyan-400',
       action: () => setActiveTab('planner'),

@@ -12,8 +12,13 @@ def test_side_of_disc_visible_while_center_upper_limb_is_blocked():
     # is partly visible to the right, although its top at (180, 1) is blocked.
     horizon = np.full(720, 2.0)
     horizon[362] = 0
-    old, _ = evaluate_visibility(np.array([180.]), np.array([0.]), np.array([1.]), horizon)
-    assert old == 0
+    # evaluate_visibility now returns (corrected_any_disc_pct, legacy_center_az_pct).
+    # The corrected result should find the disc visible (100 %); the legacy
+    # center-azimuth approximation should still report blocked (0 %).
+    corrected, legacy = evaluate_visibility(np.array([180.]), np.array([0.]), np.array([1.]), horizon)
+    assert legacy == 0, f"Legacy center-az comparator should report blocked; got {legacy}"
+    assert corrected == 100.0, f"Corrected any-disc comparator should find visibility; got {corrected}"
+    # Confirm the witness from any_disc_visible independently
     visible, witness = any_disc_visible(180, 0, 1, horizon)
     assert visible
     a, e = witness

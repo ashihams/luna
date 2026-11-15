@@ -23,7 +23,7 @@ def main():
     commands = [
         ('pytest', [str(ROOT / '.venv/Scripts/python.exe'), '-m', 'pytest',
                     'pipeline/validate', '-vv', '-p', 'no:cacheprovider',
-                    '--basetemp=data/out_accuracy/pytest-full'], ROOT),
+                    '--basetemp=data/out_accuracy/pytest-suite'], ROOT),
         ('npm', ['npm.cmd', 'test'], isolated),
     ]
     records = []

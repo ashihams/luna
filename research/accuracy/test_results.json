@@ -10,7 +10,7 @@
         "-vv",
         "-p",
         "no:cacheprovider",
-        "--basetemp=data/out_accuracy/pytest-full"
+        "--basetemp=data/out_accuracy/pytest-suite"
       ],
       "cwd": "D:\\project\\nasa space apps",
       "exit_code": 0,
