@@ -72,15 +72,26 @@
 - **Quantities**: `'4'` = Apparent Azimuth & Elevation
 - **Note**: Two separate requests needed (one per target body)
 
-## D7 – Mazarico et al. 2011 Illumination Maps — **VERIFIED 2026-11-14**
+## D7 – Mazarico et al. 2011 Illumination & Earth Visibility Maps (PGDA Product 69) — **VERIFIED 2026-11-15**
 
 - **Product page**: https://pgda.gsfc.nasa.gov/products/69
 - **Citation**: Mazarico, E., et al. 2011. *Illumination conditions of the lunar polar regions using LOLA topography*. Icarus 211, 1066–1081.
-- **DEM resolution**: 240 m/pixel (original paper); also 120 m (75°S–90°S) and 60 m (85°S–90°S)
-- **Observer height**: Baseline at **0 m** (surface); variants at **2 m** and **10 m** in extended products
-- **Modeled period**: Full ~18.6 year lunar precession/nutation cycle, hourly timesteps
-- **Products**: Average Solar Illumination, Earth Visibility, Sky Visibility, PSRs
-- **File formats**: .IMG (PDS3), .JP2, .TIF, .COG
+- **Downloaded Files & SHA-256 Checksums**:
+  - Solar Illumination: `AVGVISIB_65S_240M_201608.TIF` (60,394,652 bytes)
+    - URL: https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608.TIF
+    - SHA-256: `822fbf4618852311d4f494012e74e9cfb0147807a54ecb3302293c4266d2068d`
+    - PDS Label: `AVGVISIB_65S_240M_201608.LBL`
+  - Earth Visibility: `AVGVISIB_65S_240M_201608_EARTH.TIF` (22,963,503 bytes)
+    - URL: https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608_EARTH.TIF
+    - SHA-256: `8a6d5fa8079c83e2159adf58ce33cd1cd9c09be6c19023bf5b6cc304f51568b7`
+    - PDS Label: `AVGVISIB_65S_240M_201608_EARTH.LBL`
+- **Spatial Resolution & Grid**: 240 m/pixel (126.347 pix/deg true at the pole), 6420 × 6420 grid covering 65°S to 90°S.
+- **Projection**: Polar Stereographic, spherical with Moon radius $R = 1737.4\text{ km}$, center ($-90^\circ, 0^\circ$), pixel offset $(3209.5, 3209.5)$, coordinate frame `MEAN EARTH/POLAR AXIS OF DE421` (`MOON_ME`).
+- **Observer Height**: Baseline **0 m** (surface level on LDEM_65S_240M).
+- **Time Span and Cadence**: Full 18.6-year lunar nodal precession cycle (~18.613 years), sampled at 1-hour cadence (~163,165 time steps).
+- **Solar Illumination Criterion**: Any fraction of the finite solar disc visible above the horizon (solar disc upper limb elevation > horizon).
+- **Earth Visibility Criterion**: Any fraction of the finite Earth disc visible above the horizon (Earth disc upper limb elevation > horizon).
+- **Data Scaling**: Digital numbers stored as 16-bit integers (`LSB_INTEGER`), scaled to average visibility by multiplying by `0.00004` (DN 0..25000 corresponds to 0.0 to 1.0, or 0% to 100%).
 
 ## D8 – LROC WAC South Pole Movie — **VERIFIED 2026-11-14**
 
