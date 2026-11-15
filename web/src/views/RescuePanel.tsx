@@ -137,9 +137,9 @@ export const RescuePanel: React.FC = () => {
                   </div>
 
                   {item.distance_km !== undefined && (
-                    <div className="flex items-center space-x-1.5 text-[11px] font-mono text-violet-300 bg-violet-950/20 px-2 py-1 rounded-lg border border-violet-500/20">
-                      <MapPin className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" />
-                      <span>{item.distance_km.toFixed(1)} km surface distance</span>
+                    <div className="flex items-center space-x-1.5 text-[11px] font-mono text-cyan-400 bg-cyan-950/20 px-2 py-1 rounded-lg border border-cyan-500/20">
+                      <MapPin className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                      <span>{item.distance_km === 0 ? 'Same site (0.0 km)' : `${item.distance_km.toFixed(1)} km surface distance`}</span>
                     </div>
                   )}
 

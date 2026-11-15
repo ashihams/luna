@@ -319,6 +319,7 @@ export function computeRescueCandidates(
       sun_fraction: m.sun_fraction,
       earth_fraction: m.earth_fraction,
       longest_dark_gap_h: m.longest_dark_gap_h,
+      distance_km: 0,
     });
   }
 
@@ -365,12 +366,12 @@ export function computeRescueCandidates(
     });
   }
 
-  // Viable alternatives ranked primarily by surface proximity (closest distance first); non-viable by score
+  // Sort alt_site candidates: viable first, then ascending distance, then descending score
   altSites.sort((a, b) => {
     if (a.viable !== b.viable) return a.viable ? -1 : 1;
-    if (a.viable && b.viable && a.distance_km !== undefined && b.distance_km !== undefined) {
-      return a.distance_km - b.distance_km;
-    }
+    const distA = a.distance_km ?? Infinity;
+    const distB = b.distance_km ?? Infinity;
+    if (distA !== distB) return distA - distB;
     return b.score - a.score;
   });
 

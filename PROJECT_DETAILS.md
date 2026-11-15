@@ -34,7 +34,7 @@ Luna Slip Planner resolves this operational challenge through an integrated thre
 ### C. Automated Mission Rescue & Multi-Scenario Comparison
 * **Rescue Recommendation Algorithm:** When a slip breaches mission constraints, the engine scans the spatiotemporal solution space to compute and rank viable contingency options:
   1. **Slip Recovery:** The nearest subsequent viable launch window at the original landing site.
-  2. **Geometric Site Hop:** Evaluates alternative candidate Artemis sites on the slipped date, calculating great-circle surface distance ($R_{\text{Moon}} = 1737.4\text{ km}$) and ranking viable alternatives by proximity (closest distance first) to minimize surface relocation distance.
+  2. **Geometric Site Hop:** Nearest viable alternative site on the slipped date, calculating great-circle surface distance ($R_{\text{Moon}} = 1737.4\text{ km}$) and ranking candidates with viable sites first, ordered by ascending surface distance (km), then descending score.
 * **Side-by-Side Comparison Drawer:** Allows flight directors to pin multiple scenarios, compare multi-criteria score deltas, and review trade-offs between stay duration, dark gaps, and Earth visibility.
 
 ### D. 3D Surface Scene & Physical Obstruction "Why Box"

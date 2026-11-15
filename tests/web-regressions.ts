@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { SiteMetricsHelper, computeHeatmapMatrix, computeRescueCandidates } from '../web/src/workers/metrics';
+import { SiteMetricsHelper, computeHeatmapMatrix, computeRescueCandidates, computeLunarDistanceKm } from '../web/src/workers/metrics';
 import { parseUtc, horizonAt, validateHorizon, isLit, hasEarthLOS, lastStartDay } from '../web/src/data/science';
 import { fetchManifest, fetchMetrics, fetchTracks } from '../web/src/data/loader';
 import { usePlannerStore } from '../web/src/state/usePlannerStore';
@@ -41,6 +41,69 @@ assert.ok(Math.abs(diagnostic.dark_gap_start_horizon+.349)<.02);
 assert.ok(diagnostic.longest_dark_gap_h>90);
 const rescue=computeRescueCandidates(fullMatrix,manifest.sites.map(s=>({id:s.id,name:s.name})),0,724,manifest.time.t0_utc);
 for(const row of [...rescue.altDates,...rescue.altSites,...rescue.topOverall]) assert.ok(row.dayIndex<=724);
+// Unit tests for lunar surface distance & rescue ranking (Task A)
+// (a) Known pairs
+const poleStepKm = computeLunarDistanceKm(-90, 0, -89, 0);
+assert.ok(Math.abs(poleStepKm - 30.3233) < 0.01, `Pole 1 deg step expected ~30.32 km, got ${poleStepKm}`);
+const equatorQuarterKm = computeLunarDistanceKm(0, 0, 0, 90);
+assert.ok(Math.abs(equatorQuarterKm - 2729.1038) < 0.01, `Equator 90 deg step expected ~2729.10 km, got ${equatorQuarterKm}`);
+const crToCreKm = computeLunarDistanceKm(-89.305, 123.623, -88.99, 104.47);
+assert.ok(Math.abs(crToCreKm - 12.8) < 0.2, `CR to CRE expected ~12.8 km, got ${crToCreKm}`);
+
+// (b) Zero distance for same site
+assert.equal(computeLunarDistanceKm(-89.305, 123.623, -89.305, 123.623), 0, 'Self-distance must be exactly 0');
+assert.equal(computeLunarDistanceKm(0, 45, 0, 45), 0, 'Self-distance must be exactly 0');
+
+// (c) Symmetry
+assert.equal(
+  computeLunarDistanceKm(-89.305, 123.623, -88.99, 104.47),
+  computeLunarDistanceKm(-88.99, 104.47, -89.305, 123.623),
+  'Distance calculation must be symmetric'
+);
+assert.equal(
+  computeLunarDistanceKm(-85.43, 31.83, -88.81, 124.68),
+  computeLunarDistanceKm(-88.81, 124.68, -85.43, 31.83),
+  'Distance calculation must be symmetric for arbitrary sites'
+);
+
+// (d) Ordering rule in computeRescueCandidates
+const siteListWithCoords = manifest.sites.map(s => ({
+  id: s.id,
+  name: s.name,
+  lat_deg: s.lat_deg,
+  lon_deg_east: s.lon_deg_east
+}));
+const rescueWithCoords = computeRescueCandidates(fullMatrix, siteListWithCoords, 0, 100, manifest.time.t0_utc);
+
+// All altDates must have distance_km === 0
+assert.ok(rescueWithCoords.altDates.length > 0);
+for (const cand of rescueWithCoords.altDates) {
+  assert.equal(cand.distance_km, 0, `alt_date candidate must have distance_km === 0, got ${cand.distance_km}`);
+}
+
+// altSites must have valid distances and follow ordering rule: viable first, then ascending distance, then descending score
+assert.ok(rescueWithCoords.altSites.length > 0);
+let seenNonViable = false;
+for (let i = 0; i < rescueWithCoords.altSites.length; i++) {
+  const cand = rescueWithCoords.altSites[i];
+  assert.ok(typeof cand.distance_km === 'number' && cand.distance_km > 0, 'alt_site must have distance_km > 0');
+  if (cand.viable) {
+    assert.equal(seenNonViable, false, 'Viable candidate must never appear after a non-viable candidate');
+  } else {
+    seenNonViable = true;
+  }
+  if (i > 0) {
+    const prev = rescueWithCoords.altSites[i - 1];
+    if (prev.viable === cand.viable) {
+      if (prev.distance_km! === cand.distance_km!) {
+        assert.ok(prev.score >= cand.score, 'Equal distance must sort by score descending');
+      } else {
+        assert.ok(prev.distance_km! <= cand.distance_km!, 'Viable sites must sort by ascending distance');
+      }
+    }
+  }
+}
+
 // Independently scan classifications to validate editable thresholds, not just default presets.
 for(const threshold of [10,40,50,90]) for(const mask of [0,1.5,5]) {
   const p={...params,lit_threshold_pct:threshold,antenna_mask_deg:mask};
@@ -65,4 +128,4 @@ assert.equal(usePlannerStore.getState().slipDays,0);
 // Racing selections must retain the last requested site's horizon and tracks.
 await Promise.all([usePlannerStore.getState().setSelectedSiteId('shackleton-rim'),usePlannerStore.getState().setSelectedSiteId('nobile-rim2')]);
 assert.equal(usePlannerStore.getState().currentHorizon?.site_id,'nobile-rim2');
-console.log('PASS: UTC, horizon schema/interpolation, 10,234 compact/full window comparisons, thresholds, data boundaries, rescue filtering, site-selection races.');
+console.log('PASS: UTC, horizon schema/interpolation, 10,234 compact/full window comparisons, thresholds, data boundaries, rescue filtering, site-selection races, lunar great-circle distance & rescue ranking (Task A).');
