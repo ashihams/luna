@@ -1,18 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { usePlannerStore } from './state/usePlannerStore';
 import { Header } from './components/Header';
 import { ControlPanel } from './views/ControlPanel';
 import { Heatmap } from './charts/Heatmap';
 import { SlipControl } from './views/SlipControl';
 import { RescuePanel } from './views/RescuePanel';
-import { SiteView } from './views/SiteView';
-import { PoleOverview } from './three/PoleOverview';
+const SiteView = lazy(() => import('./views/SiteView').then(m => ({ default: m.SiteView })));
+const PoleOverview = lazy(() => import('./three/PoleOverview').then(m => ({ default: m.PoleOverview })));
 import { LandingPage } from './views/LandingPage';
 import { ComparisonDrawer } from './views/ComparisonDrawer';
 import { AlertCircle } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { loading, error, initialize, activeTab } = usePlannerStore();
+  const [mobilePanel, setMobilePanel] = useState<'constraints' | 'rescue' | null>(null);
 
   useEffect(() => {
     initialize();
@@ -60,7 +61,7 @@ export const App: React.FC = () => {
               Luna Slip <span className="text-shimmer">Engine</span>
             </h1>
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-neutral-400 leading-relaxed">
-              Loading 35,088-step SPICE ephemeris and LOLA 80m horizons for all 14 Artemis sites...
+              Loading 35,088-step SPICE ephemeris and LOLA 80m horizons for all 13 Artemis sites...
             </p>
           </div>
         </div>
@@ -88,28 +89,34 @@ export const App: React.FC = () => {
 
   // 2. Synapse Mission Dashboard View
   return (
-    <div className="w-screen h-screen flex flex-col bg-[#030303] overflow-hidden font-sans text-white">
+    <div className="planner-app w-screen h-screen flex flex-col bg-[#030303] overflow-hidden font-sans text-white">
       <Header />
 
-      <main className="flex-1 w-full h-[calc(100vh-3.5rem)] overflow-hidden">
+      <main className="planner-main flex-1 min-h-0 w-full overflow-hidden">
+        <Suspense fallback={<p className="p-8" role="status">Loading view…</p>}>
         {activeTab === 'planner' ? (
-          <div className="w-full h-full flex overflow-hidden">
-            <ControlPanel />
+          <div className="planner-frame w-full h-full flex overflow-hidden">
+            <div className="mobile-panel-tabs">
+              <button aria-expanded={mobilePanel === 'constraints'} onClick={() => setMobilePanel(mobilePanel === 'constraints' ? null : 'constraints')}>Mission constraints</button>
+              <button aria-expanded={mobilePanel === 'rescue'} onClick={() => setMobilePanel(mobilePanel === 'rescue' ? null : 'rescue')}>Rescue alternatives</button>
+            </div>
+            <div className={`planner-constraints ${mobilePanel === 'constraints' ? 'is-open' : ''}`}><ControlPanel /></div>
 
-            <div className="flex-1 h-full flex flex-col overflow-hidden bg-[#030303]">
-              <div className="flex-1 w-full overflow-hidden p-2.5 pb-0">
+            <div className="planner-workspace flex-1 min-w-0 h-full flex flex-col overflow-hidden bg-[#030303]">
+              <div className="planner-heatmap flex-1 w-full overflow-auto p-2.5 pb-0">
                 <Heatmap />
               </div>
               <SlipControl />
             </div>
 
-            <RescuePanel />
+            <div className={`planner-rescue ${mobilePanel === 'rescue' ? 'is-open' : ''}`}><RescuePanel /></div>
           </div>
         ) : activeTab === 'pole' ? (
           <PoleOverview />
         ) : (
           <SiteView />
         )}
+        </Suspense>
       </main>
 
       {/* Two-Scenario Comparison Drawer */}

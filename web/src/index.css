@@ -6,6 +6,52 @@
   color-scheme: dark;
 }
 
+/* Keep the planning controls usable before the three-column desktop breakpoint. */
+.planner-frame { display: grid; grid-template-columns: 260px minmax(0, 1fr) 280px; }
+.planner-constraints, .planner-rescue { min-height: 0; overflow: auto; }
+.planner-constraints > div, .planner-rescue > div { width: 100%; }
+.planner-workspace { min-height: 0; }
+.planner-heatmap { min-height: 270px; }
+.slip-control { flex-shrink: 0; max-height: 55vh; overflow: auto; }
+.mobile-panel-tabs { display: none; }
+.sky-pane { height: 390px; flex-shrink: 0; }
+.site-analysis-pane { flex-shrink: 0; width: 480px; }
+button:disabled { opacity: .35; cursor: not-allowed; }
+@media (max-width: 1279px) {
+  .planner-app { height: 100dvh; }
+  .planner-main { overflow-y: auto; }
+  .planner-header { height: auto; min-height: 96px; padding: 10px 12px; flex-wrap: wrap; gap: 8px; }
+  .planner-header > div { min-width: 0; }
+  .planner-header > div:nth-child(2), .planner-header > div:nth-child(3) { display: none; }
+  .planner-header > div:last-child { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+  .planner-header > div:last-child > div:last-child { order: -1; }
+  .planner-frame { height: auto; min-height: 100%; display: flex; flex-direction: column; overflow: visible; }
+  .mobile-panel-tabs { display: flex; gap: 8px; padding: 10px 12px; }
+  .mobile-panel-tabs button { flex: 1; border: 1px solid #ffffff30; border-radius: 10px; padding: 10px; font-size: 12px; }
+  .mobile-panel-tabs button[aria-expanded="true"] { background: #5b21b6; }
+  .planner-constraints, .planner-rescue { display: none; }
+  .planner-constraints.is-open, .planner-rescue.is-open { display: block; order: 1; height: auto; max-height: 65vh; }
+  .planner-rescue > div { height: auto; }
+  .planner-workspace { order: 2; height: auto; flex: none; overflow: visible; }
+  .planner-heatmap { order: 2; flex: none; height: 440px; overflow: auto; }
+  .heatmap-chart { min-width: 800px; }
+  .slip-control { order: 1; max-height: none; overflow: visible; padding: 12px; }
+  .site-view { height: auto; overflow: visible; display: flex; flex-direction: column; }
+  .site-scene-pane { flex: none; height: 440px; width: 100%; }
+  .site-analysis-pane { flex: none; height: auto; width: 100%; }
+  .sky-pane { height: 410px; }
+}
+@media (max-width: 480px) {
+  .planner-header > div:first-child span:last-child { display: none; }
+  .planner-header > div:last-child { width: 100%; }
+  .planner-header > div:last-child > div:last-child { width: 100%; justify-content: space-around; }
+  .planner-header > div:last-child > button { padding: 6px 12px; }
+  .site-scene-pane { height: 470px; }
+  .site-scene-pane > div:first-child { right: 12px; }
+  .site-scene-pane [class*="top-3 right-3"] { top: 170px; }
+  .site-scene-pane [class*="top-14 right-3"] { top: 210px; }
+}
+
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "test": "node scripts/prepare-web-data.mjs && node scripts/test-web.mjs",
     "build": "npm run build --prefix web",
     "web:dev": "npm run dev --prefix web",
     "web:build": "npm run build --prefix web"

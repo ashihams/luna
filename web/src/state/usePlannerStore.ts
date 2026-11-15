@@ -9,7 +9,8 @@ import {
   RescueCandidate,
   HorizonData,
 } from '../types';
-import { fetchManifest, fetchTracks, fetchHorizon } from '../data/loader';
+import { fetchManifest, fetchMetrics, fetchTracks, fetchHorizon } from '../data/loader';
+import { lastStartDay, parseUtc } from '../data/science';
 import {
   SiteMetricsHelper,
   computeHeatmapMatrix,
@@ -45,6 +46,8 @@ interface PlannerState {
   helpers: SiteMetricsHelper[];
   heatmapMatrix: CellMetrics[][] | null;
   currentHorizon: HorizonData | null;
+  detailLoading: boolean;
+  detailError: string | null;
   pinnedScenarios: PinnedScenario[];
 
   // Actions
@@ -128,6 +131,8 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
   helpers: [],
   heatmapMatrix: null,
   currentHorizon: null,
+  detailLoading: false,
+  detailError: null,
   pinnedScenarios: [],
   isComparisonOpen: false,
   setIsComparisonOpen: (open: boolean) => set({ isComparisonOpen: open }),
@@ -138,18 +143,17 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
       const manifest = await fetchManifest();
       const sites = manifest.sites;
 
-      // Load all site tracks in parallel to enable instant heatmap computation
-      const tracksPromises = sites.map((site) => fetchTracks(site));
-      const allTracks = await Promise.all(tracksPromises);
+      // All-site metrics are losslessly packed; only the selected sky track is needed.
+      const selectedSite = sites[0];
+      const [allTracks, selectedTracks, initialHorizon] = await Promise.all([
+        fetchMetrics(manifest), fetchTracks(selectedSite), fetchHorizon(selectedSite),
+      ]);
+      allTracks[0] = selectedTracks;
 
       const helpers = allTracks.map((tracks) => new SiteMetricsHelper(tracks));
 
       // Compute initial heatmap matrix
       const heatmapMatrix = computeHeatmapMatrix(helpers, get().parameters, 731);
-
-      // Select initial site
-      const selectedSite = sites[0];
-      const initialHorizon = await fetchHorizon(selectedSite);
 
       set({
         loading: false,
@@ -171,27 +175,32 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const site = sites.find((s) => s.id === siteId);
     if (!site) return;
 
-    set({ selectedSiteId: siteId, scrubStep: 0 });
+    set({ selectedSiteId: siteId, scrubStep: 0, currentHorizon: null, detailLoading: true, detailError: null, isPlaying: false });
     try {
-      const horizon = await fetchHorizon(site);
-      set({ currentHorizon: horizon });
+      const [horizon, tracks] = await Promise.all([fetchHorizon(site), fetchTracks(site)]);
+      if (get().selectedSiteId !== siteId) return;
+      const helpers = [...get().helpers];
+      helpers[sites.findIndex(s => s.id === siteId)] = new SiteMetricsHelper(tracks);
+      set({ currentHorizon: horizon, helpers, detailLoading: false });
     } catch (e) {
-      console.error('Failed to load horizon:', e);
+      if (get().selectedSiteId === siteId) set({ detailLoading: false, detailError: String(e) });
     }
   },
 
   setPlannedDayIndex: (day: number) => {
-    const clamped = Math.max(0, Math.min(730, day));
-    set({ plannedDayIndex: clamped, scrubStep: 0 });
+    const max = lastStartDay(get().manifest?.time.n_steps ?? 35088, get().parameters.stay_days);
+    const clamped = Math.max(0, Math.min(max, Math.round(day)));
+    set({ plannedDayIndex: clamped, slipDays: Math.max(-clamped, Math.min(get().slipDays, max - clamped)), scrubStep: 0 });
   },
 
   setSlipDays: (slip: number) => {
-    const clamped = Math.max(-15, Math.min(60, slip));
-    set({ slipDays: clamped, scrubStep: 0 });
+    const max = lastStartDay(get().manifest?.time.n_steps ?? 35088, get().parameters.stay_days);
+    const clamped = Math.max(-15, -get().plannedDayIndex, Math.min(60, max - get().plannedDayIndex, Math.round(slip)));
+    set({ slipDays: clamped || 0, scrubStep: 0 });
   },
 
   setScrubStep: (step: number) => {
-    set({ scrubStep: step });
+    set({ scrubStep: Math.max(0, Math.min(Math.round(get().parameters.stay_days * 48) - 1, Math.round(step))) });
   },
 
   setIsPlaying: (playing: boolean) => {
@@ -227,7 +236,10 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const { helpers } = get();
     if (helpers.length > 0) {
       const heatmapMatrix = computeHeatmapMatrix(helpers, newParams, 731);
-      set({ parameters: newParams, heatmapMatrix });
+      const max = lastStartDay(get().manifest?.time.n_steps ?? 35088, newParams.stay_days);
+      const plannedDayIndex = Math.min(get().plannedDayIndex, max);
+      const slipDays = Math.max(-plannedDayIndex, Math.min(get().slipDays, max - plannedDayIndex));
+      set({ parameters: newParams, heatmapMatrix, plannedDayIndex, slipDays, scrubStep: 0 });
     } else {
       set({ parameters: newParams });
     }
@@ -252,7 +264,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const slippedDay = Math.max(0, Math.min(730, plannedDayIndex + slipDays));
     const cellMetrics = heatmapMatrix[siteIdx][slippedDay];
 
-    const d = new Date(manifest.time.t0_utc);
+    const d = parseUtc(manifest.time.t0_utc);
     d.setUTCDate(d.getUTCDate() + slippedDay);
     const dateUtc = d.toISOString().split('T')[0];
 
@@ -283,7 +295,14 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const siteIdx = sites.findIndex((s) => s.id === selectedSiteId);
     if (siteIdx === -1) return null;
 
-    return calculateSlipAnalysis(heatmapMatrix, siteIdx, plannedDayIndex, slipDays, 731);
+    const analysis = calculateSlipAnalysis(heatmapMatrix, siteIdx, plannedDayIndex, slipDays, 731);
+    const { currentHorizon, helpers, parameters } = get();
+    if (currentHorizon?.site_id === selectedSiteId && helpers[siteIdx].tracks.sun_az.length) {
+      analysis.cellMetrics = helpers[siteIdx].evaluateWindow(
+        analysis.slippedDayIndex * 48, Math.round(parameters.stay_days * 48), parameters, currentHorizon.variants.best,
+      );
+    }
+    return analysis;
   },
 
   getRescueCandidates: () => {

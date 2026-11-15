@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { parseUtc } from '../data/science';
 import { usePlannerStore, PinnedScenario } from '../state/usePlannerStore';
 import { X, Layers, Sun, Radio, Moon, Trophy } from 'lucide-react';
 
@@ -30,7 +31,7 @@ export const ComparisonDrawer: React.FC = () => {
   if (!isComparisonOpen || !manifest) return null;
 
   // Build live scenario object for selection
-  const baseDate = new Date(manifest.time.t0_utc);
+  const baseDate = parseUtc(manifest.time.t0_utc);
   const slippedDay = Math.max(0, Math.min(730, plannedDayIndex + slipDays));
   const liveDate = new Date(baseDate);
   liveDate.setUTCDate(liveDate.getUTCDate() + slippedDay);
@@ -45,6 +46,7 @@ export const ComparisonDrawer: React.FC = () => {
     dateUtc: liveDateStr,
     slipDays: slipDays,
     metrics: currentAnalysis ? currentAnalysis.cellMetrics : {
+      complete: false,
       sun_fraction: 0,
       earth_fraction: 0,
       longest_dark_gap_h: 0,

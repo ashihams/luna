@@ -109,7 +109,6 @@ All from NASA Artemis III candidate regions (Aug 2022, updated Oct 2024) and PGD
 | de-gerlache-rim1 | de Gerlache Rim 1 (Site 11) | -88.67 | -66.37 | Artemis III Aug 2022; PGDA Site11 |
 | de-gerlache-rim2 | de Gerlache Rim 2 | -88.22 | -63.43 | Artemis III Aug 2022; Oct 2024 |
 | faustini-rim-a | Faustini Rim A | -87.86 | 90.0 | Artemis III Aug 2022 |
-| peak-near-shackleton | Peak near Shackleton (Site 07) | -88.81 | 124.68 | PGDA Site07 |
 | haworth | Haworth | -86.75 | -23.67 | Artemis III Aug 2022; Oct 2024 |
 | malapert-massif | Malapert Massif | -85.98 | -0.26 | Artemis III Aug 2022; Oct 2024 |
 | leibnitz-beta | Leibnitz Beta Plateau (Site 20) | -85.43 | 31.83 | Artemis III Aug 2022; PGDA Site20 |

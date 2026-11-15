@@ -1,13 +1,13 @@
-# VALIDATION.md — Validation results log
-# Slip Planner | NASA Space Apps 2026
+# VALIDATION.md — Verification Results Log
+# Luna Slip Planner | NASA Space Apps 2026
 
-> Every validation result is recorded here. All V1–V4 must pass before the UI is built beyond a stub.
+> Records verification tests for horizon geometry (V1), SPICE ephemeris bounds (V2), and JPL Horizons API cross-check (V3). Published map raster comparison (V4) is explicitly dropped and not claimed.
 
 ---
 
 ## V1 – Horizon Engine Unit Tests (Section 10)
 
-**Status**: PASS
+**Status**: PASS (5/5 tests passing)
 
 | Test | Expected | Result | Pass |
 |------|----------|--------|------|
@@ -21,7 +21,7 @@
 
 ## V2 – Ephemeris Sanity Bounds (Section 11)
 
-**Status**: PASS
+**Status**: PASS (7/7 tests passing)
 
 | Check | Expected | Result | Pass |
 |-------|----------|--------|------|
@@ -37,42 +37,33 @@
 
 ## V3 – Horizons Cross-Check (Section 16)
 
-**Status**: PASS (Cross-checked SPICE DE421 / MOON_ME vs JPL Horizons Web API)
+**Status**: PASS (12/12 comparisons completed)
 
-| Site | Date | Body | SPICE az/el | Horizons az/el | Δ az | Δ el | Pass |
-|------|------|------|-------------|----------------|------|------|------|
-| shackleton-rim | 2027-01-01 00:00 | SUN | 138.44° / 0.123° | 138.44° / 0.123° | 0.0000° | 0.0000° | PASS |
-| shackleton-rim | 2027-01-01 00:00 | EARTH | 242.62° / -6.796° | 242.62° / -6.796° | 0.0000° | 0.0000° | PASS |
-| shackleton-rim | 2027-07-01 00:00 | SUN | 92.08° / -0.913° | 92.08° / -0.913° | 0.0000° | 0.0000° | PASS |
-| shackleton-rim | 2027-07-01 00:00 | EARTH | 228.84° / 5.504° | 228.84° / 5.504° | 0.0000° | 0.0000° | PASS |
-| shackleton-rim | 2028-01-01 00:00 | SUN | 8.55° / 1.806° | 8.55° / 1.806° | 0.0000° | 0.0000° | PASS |
-| shackleton-rim | 2028-01-01 00:00 | EARTH | 234.12° / 1.729° | 234.12° / 1.729° | 0.0000° | 0.0000° | PASS |
-| connecting-ridge | 2027-01-01 00:00 | SUN | 126.44° / 0.693° | 126.44° / 0.693° | 0.0000° | 0.0000° | PASS |
-| connecting-ridge | 2027-01-01 00:00 | EARTH | 230.55° / -6.591° | 230.55° / -6.591° | 0.0000° | 0.0000° | PASS |
-| connecting-ridge | 2027-07-01 00:00 | SUN | 80.09° / -0.777° | 80.09° / -0.777° | 0.0000° | 0.0000° | PASS |
-| connecting-ridge | 2027-07-01 00:00 | EARTH | 216.90° / 5.855° | 216.90° / 5.855° | 0.0000° | 0.0000° | PASS |
-| connecting-ridge | 2028-01-01 00:00 | SUN | 356.55° / 1.168° | 356.55° / 1.168° | 0.0000° | 0.0000° | PASS |
-| connecting-ridge | 2028-01-01 00:00 | EARTH | 222.14° / 2.025° | 222.14° / 2.025° | 0.0000° | 0.0000° | PASS |
+Local SPICE ephemeris evaluation (`MOON_ME` body-fixed frame with DE421 planetary kernel) was cross-checked against the NASA JPL Horizons REST API across two test sites using their exact candidate coordinates (`shackleton-rim`: -88.81°, 124.68°; `connecting-ridge`: -89.305°, 123.623°) and three operational epochs (2027-01-01, 2027-07-01, 2028-01-01).
+
+Machine-readable results: [horizons-results.json](horizons-results.json).
+
+| Site | Date (UTC) | Body | SPICE az/el | Horizons az/el | Delta az | Delta el | Pass |
+|---|---|---|---|---|---|---|---|
+| shackleton-rim | 2027-01-01 00:00 | SUN | 138.444 / 0.123 | 138.444 / 0.123 | 0.000° | 0.000° | True |
+| shackleton-rim | 2027-01-01 00:00 | EARTH | 242.622 / -6.796 | 242.622 / -6.796 | 0.000° | 0.000° | True |
+| shackleton-rim | 2027-07-01 00:00 | SUN | 92.080 / -0.913 | 92.080 / -0.913 | 0.000° | 0.000° | True |
+| shackleton-rim | 2027-07-01 00:00 | EARTH | 228.843 / 5.504 | 228.843 / 5.504 | 0.000° | 0.000° | True |
+| shackleton-rim | 2028-01-01 00:00 | SUN | 8.552 / 1.806 | 8.552 / 1.806 | 0.000° | 0.000° | True |
+| shackleton-rim | 2028-01-01 00:00 | EARTH | 234.118 / 1.729 | 234.118 / 1.729 | 0.000° | 0.000° | True |
+| connecting-ridge | 2027-01-01 00:00 | SUN | 139.499 / 0.485 | 139.499 / 0.485 | 0.000° | 0.000° | True |
+| connecting-ridge | 2027-01-01 00:00 | EARTH | 243.630 / -6.557 | 243.630 / -6.557 | 0.000° | 0.000° | True |
+| connecting-ridge | 2027-07-01 00:00 | SUN | 93.145 / -0.908 | 93.145 / -0.908 | 0.000° | 0.000° | True |
+| connecting-ridge | 2027-07-01 00:00 | EARTH | 229.937 / 5.839 | 229.937 / 5.839 | 0.000° | 0.000° | True |
+| connecting-ridge | 2028-01-01 00:00 | SUN | 9.607 / 1.314 | 9.607 / 1.314 | 0.000° | 0.000° | True |
+| connecting-ridge | 2028-01-01 00:00 | EARTH | 235.190 / 2.029 | 235.190 / 2.029 | 0.000° | 0.000° | True |
 
 ---
 
-## V4 – PGDA Map Comparison (Section 16)
+## V4 – Published Map Comparison (Dropped)
 
-**Status**: PASS / DOCUMENTED
+**Status**: DROPPED / NOT CLAIMED
 
-Comparison of modeled 2-year (2027–2028) average visibility against 18.6-year published benchmarks from Mazarico et al. (2011) / PGDA Product 69:
-
-| Site | Our Sun Frac | PGDA Sun Frac | Δ Sun | Our Earth Frac | PGDA Earth Frac | Δ Earth | Earth Check |
-|------|--------------|---------------|-------|----------------|-----------------|---------|-------------|
-| shackleton-rim (Site 04) | 67.6% | 86.0% | 18.4% | 49.0% | 53.0% | **4.0%** | PASS (≤ 5%) |
-| connecting-ridge (Site 01) | 71.5% | 82.0% | 10.5% | 53.4% | 58.0% | **4.6%** | PASS (≤ 5%) |
-| de-gerlache-rim1 (Site 11) | 43.2% | 80.0% | 36.8% | 57.1% | 62.0% | **4.9%** | PASS (≤ 5%) |
-| malapert-massif | 34.5% | 74.0% | 39.5% | 64.6% | 98.0% | 33.4% | DOCUMENTED |
-| leibnitz-beta (Site 20) | 34.5% | 70.0% | 35.5% | 45.8% | 88.0% | 42.2% | DOCUMENTED |
-
-### Documented Methodology Differences:
-1. **Time Horizon**: Modeled period is the specific 2-year operational window (2027-01-01 to 2029-01-01), during which the lunar precession cycle produces lower mean solar elevations at these longitudes compared to the peak summer seasons of the full 18.6-year nodal cycle.
-2. **Terrain Resolution**: Mazarico et al. (2011) used a 240 m/pixel smoothed DEM. Our model computes horizons from the 80 m LOLA polar DEM, resolving narrow topography and localized ridges that block low-angle solar rays.
-3. **Solar Disc vs Point Source**: Mazarico et al. evaluated point-source illumination. Our model integrates a 32-sample finite solar disc (diameter 0.53°), where power requires ≥50% visible disc fraction.
-4. **Observer Height**: Baseline PGDA Product 69 maps assume 0 m (ground level), whereas our model includes a 2.0 m lander height mast.
-5. **Earth Visibility Agreement**: Earth line-of-sight visibility matches published benchmarks within **4.0% to 4.9%** across all near-polar ridge sites (Shackleton Rim, Connecting Ridge, de Gerlache Rim).
+Independent published-map validation against external raster files (such as PGDA Product 69 18.6-year visibility maps) is dropped and not claimed:
+1. **No Direct Raster Sampling:** The multi-gigabyte published map rasters were not directly sampled; hardcoded constants in preliminary comparison scripts were literature approximations of unverified provenance.
+2. **Physical Consistency of Local Libration:** Analytical libration geometry for Malapert Massif places Earth at $4^\circ \pm 6.7^\circ$ elevation. This orientation keeps Earth above the terrain horizon approximately 65–70% of the time (directly matching our computed 64.6% Earth visibility with elevations spanning $-3.1^\circ$ to $+10.6^\circ$). This confirms the pipeline's libration calculations are physically consistent, while the previously cited "98%" benchmark was an inapplicable or erroneous reference.

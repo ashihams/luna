@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
   const isCLPS = parameters.stay_days === 14.0;
 
   return (
-    <header className="h-14 border-b border-white/10 bg-[#0a0a0a]/80 backdrop-blur-xl px-5 flex items-center justify-between z-20 select-none text-white">
+    <header className="planner-header h-14 shrink-0 border-b border-white/10 bg-[#0a0a0a]/80 backdrop-blur-xl px-5 flex items-center justify-between z-20 select-none text-white">
       {/* Brand & Mission */}
       <div className="flex items-center space-x-3">
         <div className="flex items-center space-x-2.5">

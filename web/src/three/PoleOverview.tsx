@@ -305,7 +305,7 @@ export const PoleOverview: React.FC = () => {
           </div>
           <p className="text-[11px] text-neutral-400 leading-relaxed">
             Full LOLA 80 m polar stereographic digital elevation model covering 80°S to 90°S.
-            Markers indicate the 14 candidate Artemis sites, color-coded by mission viability on the selected date.
+            Markers indicate the 13 candidate Artemis sites, color-coded by mission viability on the selected date.
           </p>
           <div className="flex items-center space-x-4 mt-2.5 text-[10px] font-medium border-t border-white/10 pt-2">
             <div className="flex items-center space-x-1.5 text-emerald-400">

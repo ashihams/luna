@@ -1,4 +1,5 @@
 import { Manifest, SiteMeta, SiteTracks, HorizonData } from '../types';
+import { validateHorizon } from './science';
 
 let cachedManifest: Manifest | null = null;
 const tracksCache: Map<string, SiteTracks> = new Map();
@@ -6,12 +7,30 @@ const horizonCache: Map<string, HorizonData> = new Map();
 
 export async function fetchManifest(): Promise<Manifest> {
   if (cachedManifest) return cachedManifest;
-  const res = await fetch('/data/manifest.json');
+  const res = await fetch('/data/catalog.json', { cache: 'no-cache' });
   if (!res.ok) {
     throw new Error(`Failed to load manifest.json: ${res.statusText}`);
   }
   cachedManifest = (await res.json()) as Manifest;
   return cachedManifest;
+}
+
+export async function fetchMetrics(manifest: Manifest): Promise<SiteTracks[]> {
+  const res = await fetch(`/${manifest.metrics_file}`);
+  if (!res.ok) throw new Error(`Failed to load metrics: ${res.status}`);
+  const buffer = await res.arrayBuffer();
+  const n = manifest.time.n_steps;
+  if (buffer.byteLength !== manifest.sites.length * n * 3) throw new Error('Invalid metrics bundle length');
+  return manifest.sites.map((_, index) => {
+    const offset = index * n * 3;
+    return {
+      n_steps: n,
+      sun_vis_pct: new Uint8Array(buffer, offset, n),
+      earth_clearance: Float32Array.from(new Int16Array(buffer, offset + n, n), v => v / 100),
+      sun_az: new Float32Array(0), sun_el: new Float32Array(0),
+      earth_az: new Float32Array(0), earth_el: new Float32Array(0), earth_vis_pct: new Uint8Array(0),
+    };
+  });
 }
 
 export async function fetchTracks(site: SiteMeta): Promise<SiteTracks> {
@@ -89,7 +108,7 @@ export async function fetchHorizon(site: SiteMeta): Promise<HorizonData> {
   if (!res.ok) {
     throw new Error(`Failed to load horizon for ${site.id}: ${res.statusText}`);
   }
-  const horizon = (await res.json()) as HorizonData;
+  const horizon = validateHorizon(await res.json(), site.id);
   horizonCache.set(site.id, horizon);
   return horizon;
 }
@@ -106,10 +125,11 @@ let cachedPoleOverview: PoleOverviewData | null = null;
 
 export async function fetchPoleOverview(): Promise<PoleOverviewData> {
   if (cachedPoleOverview) return cachedPoleOverview;
+  const manifest = await fetchManifest();
 
   const [metaRes, binRes] = await Promise.all([
-    fetch('/data/pole_overview_meta.json'),
-    fetch('/data/pole_overview.bin'),
+    fetch(`/${manifest.pole_files['pole_overview_meta.json']}`),
+    fetch(`/${manifest.pole_files['pole_overview.bin']}`),
   ]);
 
   if (!metaRes.ok || !binRes.ok) {

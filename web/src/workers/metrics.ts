@@ -1,4 +1,5 @@
 import { CellMetrics, PlannerParameters, SiteTracks, RescueCandidate, SlipAnalysis } from '../types';
+import { horizonAt, isLit, hasEarthLOS, parseUtc } from '../data/science';
 
 /**
  * Precomputed prefix sums and state arrays for a single site to enable
@@ -33,8 +34,9 @@ export class SiteMetricsHelper {
     const endStep = Math.min(startStep + windowSteps, this.nSteps);
     const actualSteps = endStep - startStep;
 
-    if (actualSteps <= 0) {
+    if (startStep < 0 || !Number.isInteger(startStep) || windowSteps <= 0 || actualSteps < windowSteps) {
       return {
+        complete: false,
         sun_fraction: 0,
         earth_fraction: 0,
         longest_dark_gap_h: 0,
@@ -75,7 +77,7 @@ export class SiteMetricsHelper {
 
     for (let i = startStep; i < endStep; i++) {
       // Earth LOS clearance check
-      if (earthClear[i] >= antennaMask) {
+      if (hasEarthLOS(earthClear[i], antennaMask)) {
         earthValidCount++;
         if (currentOutageSteps > maxOutageSteps) {
           maxOutageSteps = currentOutageSteps;
@@ -90,7 +92,7 @@ export class SiteMetricsHelper {
       }
 
       // Sun lit check
-      if (sunVis[i] >= litThreshold) {
+      if (isLit(sunVis[i], litThreshold)) {
         if (currentDarkSteps > maxDarkSteps) {
           maxDarkSteps = currentDarkSteps;
           darkGapStartStep = currentDarkStartStep;
@@ -138,14 +140,12 @@ export class SiteMetricsHelper {
     let outage_start_horizon = 0;
 
     if (horizonDeg && horizonDeg.length > 0) {
-      const azIdxSun = Math.round((dark_gap_start_az % 360) / 0.5) % horizonDeg.length;
-      dark_gap_start_horizon = horizonDeg[azIdxSun] || 0;
-
-      const azIdxEarth = Math.round((outage_start_az % 360) / 0.5) % horizonDeg.length;
-      outage_start_horizon = horizonDeg[azIdxEarth] || 0;
+      dark_gap_start_horizon = horizonAt(horizonDeg, dark_gap_start_az);
+      outage_start_horizon = horizonAt(horizonDeg, outage_start_az);
     }
 
     return {
+      complete: true,
       sun_fraction,
       earth_fraction,
       longest_dark_gap_h,
@@ -166,7 +166,7 @@ export class SiteMetricsHelper {
 
 /**
  * Compute the full heatmap matrix (sites x 731 days).
- * Highly optimized loop finishes in < 25ms.
+ * Uses compact visibility arrays; full sky tracks are loaded per selected site.
  */
 export function computeHeatmapMatrix(
   helpers: SiteMetricsHelper[],
@@ -269,7 +269,7 @@ export function computeRescueCandidates(
 } {
   const baseScore = matrix[siteIndex][slippedDayIndex]?.score || 0;
   const getDateString = (dayIdx: number) => {
-    const d = new Date(baseDateUtc);
+    const d = parseUtc(baseDateUtc);
     d.setUTCDate(d.getUTCDate() + dayIdx);
     return d.toISOString().split('T')[0];
   };
@@ -282,6 +282,7 @@ export function computeRescueCandidates(
   for (let d = minDay; d <= maxDay; d++) {
     if (d === slippedDayIndex) continue;
     const m = matrix[siteIndex][d];
+    if (!m.complete) continue;
     altDates.push({
       type: 'alt_date',
       siteId: siteNames[siteIndex].id,
@@ -308,6 +309,7 @@ export function computeRescueCandidates(
   for (let s = 0; s < siteNames.length; s++) {
     if (s === siteIndex) continue;
     const m = matrix[s][slippedDayIndex];
+    if (!m.complete) continue;
     altSites.push({
       type: 'alt_site',
       siteId: siteNames[s].id,

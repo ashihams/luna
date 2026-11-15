@@ -119,6 +119,7 @@ export const ControlPanel: React.FC = () => {
               max="28.0"
               step="0.5"
               value={parameters.stay_days}
+              aria-label="Stay duration days"
               onChange={(e) => updateParameters({ stay_days: parseFloat(e.target.value) })}
               className="w-full accent-[#8B5CF6] h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
@@ -195,6 +196,7 @@ export const ControlPanel: React.FC = () => {
               max="90"
               step="5"
               value={parameters.lit_threshold_pct}
+              aria-label="Solar disc threshold"
               onChange={(e) => updateParameters({ lit_threshold_pct: parseInt(e.target.value) })}
               className="w-full accent-[#06B6D4] h-1.5 bg-white/10 rounded-full cursor-pointer"
             />
@@ -239,6 +241,7 @@ export const ControlPanel: React.FC = () => {
               max="5.0"
               step="0.5"
               value={parameters.antenna_mask_deg}
+              aria-label="Antenna horizon mask"
               onChange={(e) => updateParameters({ antenna_mask_deg: parseFloat(e.target.value) })}
               className="w-full accent-purple-500 h-1.5 bg-white/10 rounded-full cursor-pointer"
             />

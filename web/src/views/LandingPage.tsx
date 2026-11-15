@@ -44,30 +44,30 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
   };
 
   const tickerItems = [
-    { label: 'CANDIDATE SITES', value: '14 ARTEMIS SITES' },
+    { label: 'CANDIDATE SITES', value: '13 ARTEMIS SITES' },
     { label: 'AZIMUTHAL RESOLUTION', value: '720 AZIMUTHS (0.5°)' },
-    { label: 'COMPUTATION SPEED', value: '<25MS MATRIX ENGINE' },
+    { label: 'COMPUTATION SPEED', value: 'COMPACT VISIBILITY TABLES' },
     { label: 'EPHEMERIS RANGE', value: '35,088 SPICE INTERVALS' },
-    { label: 'JPL HORIZONS DELTA', value: 'Δ = 0.0000° VERIFIED' },
-    { label: 'SUB-EARTH LIBRATION', value: '±8.5° NODAL BOUNDS' },
+    { label: 'JPL HORIZONS CHECK', value: 'SPICE vs HORIZONS API' },
+    { label: 'SUB-EARTH LIBRATION', value: 'SITE-DEPENDENT ELEVATION' },
     { label: 'PHYSICAL HORIZON', value: '19 KM OCCLUSION CYLINDER' },
-    { label: 'DATA RUNTIME', value: 'ZERO-RUNTIME OFFLINE' },
+    { label: 'DATA RUNTIME', value: 'PRECOMPUTED SCIENTIFIC DATA' },
   ];
 
   const featureCards = [
     {
       icon: Mountain,
       title: '720-Azimuth LOLA Horizons',
-      desc: 'Standard spherical approximations underestimate dark blackout gaps by up to 18%. Slip Planner traces LOLA 80 m polar stereographic DEMs across 300 km, subtracting spherical curvature at 0.5° intervals.',
+      desc: 'Flat-horizon approximations can miss terrain-driven shadows. Slip Planner traces LOLA 80 m polar stereographic DEMs across 300 km, subtracting spherical curvature at 0.5° intervals.',
       tag: '0.5° TOPOGRAPHIC RAY TRACE',
       accent: 'text-violet-400',
       action: () => setActiveTab('site'),
     },
     {
       icon: Zap,
-      title: 'Sub-Second Slip Matrix',
-      desc: 'Evaluate over 10,234 landing windows (14 candidate sites × 731 dates in 2027–2028) in under 25 milliseconds using typed prefix sums. Immediately alerts on fragile launch windows with less than 3 days of slip tolerance.',
-      tag: '<25MS PREFIX-SUM PIPELINE',
+      title: 'Interactive Slip Matrix',
+      desc: 'Evaluate over 9,503 landing windows (13 candidate sites × 731 dates in 2027–2028) using typed visibility tables and prefix sums. Immediately alerts on fragile launch windows with less than 3 days of slip tolerance.',
+      tag: 'PRECOMPUTED VISIBILITY DATA',
       accent: 'text-cyan-400',
       action: () => setActiveTab('planner'),
     },
@@ -75,7 +75,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
       icon: Globe,
       title: 'SPICE DE421 Ephemeris Engine',
       desc: 'Topocentric solar and Earth positions precomputed at 30-minute intervals across 35,088 timesteps using official NAIF SPICE DE421 kernels and pck00011.tpc in the MOON_ME reference frame.',
-      tag: 'Δ = 0.0000° JPL VERIFIED',
+      tag: 'JPL HORIZONS CROSS-CHECKED',
       accent: 'text-emerald-400',
       action: () => setActiveTab('planner'),
     },
@@ -182,7 +182,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
           {/* Subtext */}
           <p className="max-w-2xl mx-auto font-sans text-base sm:text-lg text-neutral-400 font-light leading-relaxed">
             Standard flat geometric spheres overestimate lunar south pole illumination by up to 18%.
-            Evaluate true 720-azimuth LOLA topography and NAIF SPICE orbits across 10,234 landing windows in under 25 milliseconds.
+            Evaluate true 720-azimuth LOLA topography and NAIF SPICE orbits across 9,503 landing windows with precomputed visibility data.
           </p>
 
           {/* Interactive Action Row: Shiny Border Button & Secondary Link */}
@@ -214,13 +214,13 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
           {/* Quick Metrics Badges */}
           <div className="pt-6 flex flex-wrap justify-center items-center gap-3 text-neutral-400 font-mono text-[11px] tracking-widest uppercase">
             <span className="px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/5">
-              14 Candidate Sites
+              13 Candidate Sites
             </span>
             <span className="px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/5">
               720 Azimuths (0.5°)
             </span>
             <span className="px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/5">
-              &lt;25ms Recomputation
+              Instant Slip Updates
             </span>
           </div>
         </div>
@@ -382,7 +382,7 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
               </div>
               <div>{'}'});</div>
               <div className="pt-3 text-neutral-500">
-                // Instant slip tolerance verification in &lt;25 microseconds per cell
+                // Instant slip tolerance verification in precomputed visibility data
               </div>
               <div>
                 console.<span className="text-[#06B6D4]">log</span>(<span className="text-[#10B981]">'Viable: true | Slip: +6d'</span>);
@@ -442,13 +442,13 @@ console.log(\`Viable: \${metrics.viable} | Slip Tolerance: \${metrics.slipTolera
             {/* Column 3: Science */}
             <div className="space-y-3">
               <div className="font-mono text-[10px] uppercase tracking-widest text-neutral-400 font-semibold">
-                Empirical Validation
+                Science & Validation
               </div>
               <ul className="space-y-2 font-sans text-xs text-neutral-400 font-light">
                 <li>NASA NAIF SPICE DE421</li>
                 <li>LOLA 80 m Polar Stereographic</li>
-                <li>JPL Horizons REST API (Δ=0.0000°)</li>
-                <li>Mazarico et al. 2011 (PGDA Product 69)</li>
+                <li>JPL Horizons ephemeris cross-checks</li>
+                <li>PGDA published-map validation: pending</li>
               </ul>
             </div>
 

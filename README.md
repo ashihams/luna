@@ -3,18 +3,18 @@
 
 **NASA Space Apps 2026 — Challenge: Lunar Landing Site Navigator**  
 **Live Application:** [https://lunaslipplanner.vercel.app](https://lunaslipplanner.vercel.app)  
-**Target Region:** Lunar South Pole (80°S to 90°S) • 14 Curated Artemis III Candidate Sites  
+**Target Region:** Lunar South Pole (80°S to 90°S) • 13 Curated Artemis III Candidate Sites  
 
 ---
 
 ## 1. Executive Summary
 
-At the lunar south pole, the Sun skims the rugged topographic horizon at grazing elevation angles between $-2^\circ$ and $+2^\circ$. A landing delay of even 24 to 48 hours dramatically shifts solar illumination vectors and direct line-of-sight to Earth.
+At the lunar south pole, the Sun skims the horizon at low elevation angles, with a range that depends on latitude and season. A landing delay of even 24 to 48 hours dramatically shifts solar illumination vectors and direct line-of-sight to Earth.
 
-**Slip Planner** provides mission architects, flight controllers, and the public with instant, rigorous feasibility assessments for lunar surface missions. Given a landing site, launch date, and stay duration, it answers:
+**Luna Slip Planner** provides mission architects, flight controllers, and the public with interactive model-based feasibility assessments for lunar surface missions. Given a landing site, launch date, and stay duration, it answers:
 1. **Is the mission still viable after an $N$-day launch slip?**
 2. **What physical terrain feature causes mission failure (exact azimuth and elevation)?**
-3. **What are the best rescue alternatives (alternate dates, adjacent sites, or optimal polar windows)?**
+3. **What are the best rescue alternatives (alternate dates or adjacent site hops)?**
 
 All metrics are derived strictly from precomputed tables combining **LOLA 80 m digital elevation models** and **JPL SPICE DE421 ephemerides** across 35,088 30-minute steps (2027–2028).
 
@@ -22,10 +22,10 @@ All metrics are derived strictly from precomputed tables combining **LOLA 80 m d
 
 ## 2. Key Architecture & Features
 
-- **Interactive Canvas Heatmap (60 FPS)**: Evaluates $>10,200$ mission windows across 14 sites $\times$ 731 dates in $<25\text{ ms}$ via TypedArray prefix sums.
+- **Interactive Canvas Heatmap**: Evaluates $>9,500$ mission windows across 13 sites $\times$ 731 dates using TypedArray visibility data and prefix sums.
 - **Slip Slider & Tolerance Engine**: Simulates delays from $-15$ to $+60$ days with continuous viable day calculation ($k$ days), fragile window indicators ($<3$ days), and earliest recovery window finder.
-- **D3 Sky Visibility Plot**: $0^\circ–360^\circ$ azimuth by $-5^\circ$ to $+10^\circ$ elevation displaying the true 720-azimuth LOLA terrain silhouette, wrapped celestial tracks, and discs at true angular size (Sun $\approx 0.26^\circ$, Earth $\approx 0.95^\circ$).
-- **Three.js First-Person Surface Scene**: 60% viewport 3D perspective at $2.0\text{ m}$ eye level with $513 \times 513$ local terrain mesh ($\pm 10\text{ km}$), subtracted spherical lunar curvature $\Delta z = -(e^2 + n^2)/(2R)$, and a procedural 19 km horizon occlusion ring.
+- **Sky Visibility Plot**: $0^\circ–360^\circ$ azimuth with an adaptive elevation range displaying the true 720-azimuth LOLA terrain silhouette, wrapped celestial tracks, and labeled center markers.
+- **Three.js First-Person Surface Scene**: 60% viewport 3D perspective at $2.0\text{ m}$ eye level with $513 \times 513$ local terrain mesh ($\pm 10\text{ km}$), subtracted spherical lunar curvature $\Delta z = -(e^2 + n^2)/(2R)$, and procedural Earth and solar rendering.
 - **Data-Driven "Why" Box & Countdown Badges**: Dynamic countdowns to sunset/sunrise and Earthset/Earthrise; physical obstruction diagnostics pinpointing the obstacle crest elevation and dip angle.
 - **Two-Scenario Comparison Drawer**: Side-by-side comparison matrix of baseline vs slipped plans with color-coded deltas ($\Delta$).
 - **3D Lunar South Pole Overview**: Full $300 \times 300\text{ km}$ regional polar cap model with interactive pins color-coded by real-time viability.
@@ -45,9 +45,9 @@ All metrics are derived strictly from precomputed tables combining **LOLA 80 m d
 
 ---
 
-## 4. Verification & Validation (V1 – V4)
+## 4. Verification & Validation (V1 – V3; V4 Dropped)
 
-Every pipeline step was validated against independent reference benchmarks before UI implementation:
+Validation coverage and limitations are recorded in [docs/VALIDATION.md](docs/VALIDATION.md). Synthetic and ephemeris checks are available; independent published-map validation is explicitly dropped. See the [deployment audit](docs/DEPLOYMENT_AUDIT.md) for browser and exported-data checks.
 
 ### V1. Synthetic Terrain Sanity Tests (`pipeline/validate/test_horizon.py`)
 - **Synthetic flat sphere**: Horizon equals $-0.087^\circ$ for a 2 m observer (geometric dip) across all azimuths (Pass: $-0.087^\circ \pm 0.001^\circ$).
@@ -60,16 +60,12 @@ Every pipeline step was validated against independent reference benchmarks befor
 - Solar distance $\approx 1.0\text{ AU}$, Earth distance $\approx 384,400\text{ km}$.
 
 ### V3. JPL Horizons API Independent Cross-Check (`pipeline/validate/horizons_check.py`)
-Cross-checked local SPICE `MOON_ME` vectors against the independent NASA JPL Horizons REST API across multiple sites and epochs in 2027 and 2028:
-$$\Delta\text{Azimuth} = 0.0000^\circ, \quad \Delta\text{Elevation} = 0.0000^\circ$$
-*(Full logs in [docs/VALIDATION.md](docs/VALIDATION.md))*.
+Cross-checked local SPICE `MOON_ME` vectors against the independent NASA JPL Horizons REST API across two candidate locations (`shackleton-rim` and `connecting-ridge`) and three epochs in 2027 and 2028 (12 comparisons rerun successfully on 2026-11-15):
+- Evaluates azimuth and elevation consistency between SPICE DE421 ephemerides and Horizons observer-table outputs.
+- *(Full logs in [docs/VALIDATION.md](docs/VALIDATION.md))*.
 
-### V4. PGDA Product 69 Comparison (`pipeline/validate/pgda_compare.py`)
-Compared long-term Earth visibility against Mazarico et al. (2011) / PGDA Product 69 (10 m observer height):
-- **Shackleton Rim**: 49.0% vs Mazarico 53.0% ($-4.0\%$ diff due to 80m vs 240m DEM sampling)
-- **Connecting Ridge Crest**: 53.4% vs Mazarico 58.0% ($-4.6\%$ diff)
-- **de Gerlache Rim**: 57.1% vs Mazarico 62.0% ($-4.9\%$ diff)  
-All within the required $\le 5.0\%$ target threshold.
+### V4. Published Map Comparison (Dropped)
+Published map raster validation is explicitly dropped and not claimed. The external 18.6-year visibility map rasters (PGDA Product 69) were not sampled locally, and previously cited literature figures were unverified constants. Specifically, libration geometry for Malapert Massif puts Earth at $4^\circ \pm 6.7^\circ$ elevation (above the local horizon roughly 65–70% of the time, matching our computed 64.6% data), showing that our model is physically consistent while the hardcoded 98% benchmark was an inapplicable reference.
 
 ---
 
@@ -91,16 +87,11 @@ Flat-horizon approximations fail catastrophically at the lunar poles:
 
 ## 6. Two-Minute Demo Script
 
-- **[0:00 - 0:25] The Slip Question**:
-  *"Welcome to Slip Planner. In lunar polar exploration, landing dates frequently slip due to orbital mechanics or launch delays. If our Artemis III landing at Connecting Ridge slips by 5 days, is the site still viable, or will the crew land in darkness?"*
-- **[0:25 - 0:50] Heatmap & Slip Slider**:
-  *"On the main planner, we see 14 candidate sites across 731 days of 2027 and 2028. We drag the slip slider to +5 days. The primary indicator stays green: our slip tolerance is 9 continuous days, with 89% sunlight and a maximum dark gap of only 11.5 hours."*
-- **[0:50 - 1:15] Simulating Failure & The Rescue Panel**:
-  *"Now let's drag the slip slider to +14 days. The badge flips to red: SLIP FAILED. The longest dark gap has spiked to 38 hours, exceeding the 24-hour battery endurance limit. Instantly, the Rescue Panel recommends alternatives: shifting the date by +3 days restores viability, or switching to Shackleton Rim provides an immediate 92% solar score."*
-- **[1:15 - 1:40] 3D First-Person Perspective & The 'Why' Box**:
-  *"We switch to the Site View. Sitting 2 meters above the lunar surface in full 3D, we scrub to the start of the dark gap. The 'Why' Box pinpoints the cause: terrain at azimuth 124.5° rising to +2.8° crest elevation occludes the Sun, which has dipped to +0.9°. The 19 km horizon occlusion ring physically cuts off the solar disc."*
-- **[1:40 - 2:00] Pole Overview & Summary**:
-  *"Finally, the 3D Pole Overview displays the entire 300 km polar cap, with interactive pins showing which candidate sites are viable on this slipped date. Slip Planner transforms complex orbital geometry into actionable, life-saving mission decisions."*
+- Start at Connecting Ridge, January 13, 2027 UTC, using the Artemis 6.5-day preset. The baseline has 100% Sun and Earth LOS; continuous slip tolerance is 5 days.
+- Set slip to +5 days: Sun remains 100%; Earth LOS is about 92%.
+- Set slip to +7 days: Sun falls to about 84%, Earth LOS to 62%, and the longest dark gap is 26.5 hours. The mission fails the selected constraints.
+- Open Site 3D and scrub the timeline. Compare the Sun marker against the measured terrain silhouette and the selected lit threshold. The Why Box describes the longest gap, not necessarily the current scrub time.
+- Open Rescue Alternatives and inspect viable dates/sites, then compare pinned scenarios.
 
 ---
 

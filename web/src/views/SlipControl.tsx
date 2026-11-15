@@ -1,4 +1,5 @@
 import React from 'react';
+import { parseUtc, lastStartDay } from '../data/science';
 import { usePlannerStore } from '../state/usePlannerStore';
 import { AlertTriangle, CheckCircle2, ShieldAlert, Sun, Radio, Moon, Sparkles } from 'lucide-react';
 
@@ -7,6 +8,8 @@ export const SlipControl: React.FC = () => {
     plannedDayIndex,
     slipDays,
     setSlipDays,
+    setPlannedDayIndex,
+    setSelectedSiteId,
     manifest,
     getSlipAnalysis,
     parameters,
@@ -19,7 +22,7 @@ export const SlipControl: React.FC = () => {
 
   if (!manifest || !analysis) return null;
 
-  const baseDate = new Date(manifest.time.t0_utc);
+  const baseDate = parseUtc(manifest.time.t0_utc);
 
   const plannedDate = new Date(baseDate);
   plannedDate.setUTCDate(plannedDate.getUTCDate() + analysis.plannedDayIndex);
@@ -53,14 +56,27 @@ export const SlipControl: React.FC = () => {
     );
   }
 
+  const maxDay = lastStartDay(manifest.time.n_steps, parameters.stay_days);
+  const minSlip = Math.max(-15, -plannedDayIndex);
+  const maxSlip = Math.min(60, maxDay - plannedDayIndex);
   const quickDeltas = [-7, -1, 0, 1, 3, 7, 14, 28];
 
   return (
-    <div className="border-t border-white/10 bg-[#080808]/90 backdrop-blur-xl p-4 space-y-3.5 select-none text-white">
+    <div className="slip-control border-t border-white/10 bg-[#080808]/90 backdrop-blur-xl p-4 space-y-3.5 select-none text-white">
+      <div className="flex flex-wrap gap-3 text-xs">
+        <label className="flex-1 min-w-0">Site
+          <select aria-label="Landing site" value={selectedSiteId} onChange={e => setSelectedSiteId(e.target.value)} className="block w-full mt-1 p-2 bg-neutral-900 rounded border border-white/20">
+            {sites.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+          </select>
+        </label>
+        <label>Planned landing (UTC)
+          <input aria-label="Planned landing date" type="date" value={plannedDateStr} min={manifest.time.t0_utc.slice(0,10)} max={new Date(baseDate.getTime() + maxDay * 86400000).toISOString().slice(0,10)} onChange={e => { if (e.target.value) setPlannedDayIndex(Math.round((parseUtc(e.target.value + 'T00:00:00').getTime() - baseDate.getTime()) / 86400000)); }} className="block mt-1 p-2 bg-neutral-900 rounded border border-white/20" />
+        </label>
+      </div>
       {/* Top row: Slip slider and date delta */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         {/* Date mapping */}
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="bg-white/[0.02] border border-white/10 rounded-2xl px-4 py-2">
             <div className="font-mono text-[9px] text-neutral-400 uppercase tracking-widest">
               Planned Launch
@@ -97,6 +113,7 @@ export const SlipControl: React.FC = () => {
             {quickDeltas.map((d) => (
               <button
                 key={d}
+                disabled={d < minSlip || d > maxSlip}
                 onClick={() => setSlipDays(d)}
                 className={`px-3 py-1 text-xs font-mono rounded-full transition duration-300 ease-snappy ${
                   slipDays === d
@@ -111,7 +128,7 @@ export const SlipControl: React.FC = () => {
         </div>
 
         {/* Primary Viability / Tolerance Badge */}
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div
             className={`px-4 py-2 rounded-2xl border flex items-center space-x-3 transition duration-300 ease-snappy ${
               analysis.isViable
@@ -189,20 +206,21 @@ export const SlipControl: React.FC = () => {
         </div>
         <input
           type="range"
-          min="-15"
-          max="60"
+          aria-label="Launch slip days"
+          min={minSlip}
+          max={maxSlip}
           step="1"
           value={slipDays}
           onChange={(e) => setSlipDays(parseInt(e.target.value))}
           className="w-full accent-[#8B5CF6] h-2 bg-white/10 rounded-full cursor-pointer"
         />
         <div className="flex justify-between font-mono text-[9px] uppercase tracking-widest text-neutral-500">
-          <span>-15d</span>
+          <span>{minSlip}d</span>
           <span>0d (Baseline)</span>
-          <span>+15d</span>
-          <span>+30d (1 lunar day)</span>
-          <span>+45d</span>
-          <span>+60d</span>
+
+          <span>Whole-day steps</span>
+
+          <span>+{maxSlip}d</span>
         </div>
       </div>
 

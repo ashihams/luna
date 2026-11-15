@@ -52,6 +52,8 @@ export interface SiteMeta {
 }
 
 export interface Manifest {
+  metrics_file: string;
+  pole_files: Record<string, string>;
   version: string;
   generated_utc: string;
   constants: Constants;
@@ -67,10 +69,11 @@ export interface HorizonVariant {
 }
 
 export interface HorizonData {
+  site_id: string;
   az_step_deg: number;
   n: number;
   obs_height_m: number;
-  variants: Record<string, HorizonVariant>;
+  variants: Record<string, number[]>;
 }
 
 export interface SiteTracks {
@@ -94,6 +97,7 @@ export interface PlannerParameters {
 }
 
 export interface CellMetrics {
+  complete: boolean;
   sun_fraction: number;
   earth_fraction: number;
   longest_dark_gap_h: number;

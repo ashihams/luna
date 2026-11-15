@@ -1,4 +1,5 @@
 import React from 'react';
+import { isLit, hasEarthLOS } from '../data/science';
 import { usePlannerStore } from '../state/usePlannerStore';
 import { SkyPlot } from '../charts/SkyPlot';
 import { SiteScene } from '../three/SiteScene';
@@ -15,6 +16,7 @@ export const SiteView: React.FC = () => {
     plannedDayIndex,
     slipDays,
     scrubStep,
+    parameters, detailLoading, detailError, setSelectedSiteId,
   } = usePlannerStore();
 
   const selectedSite = sites.find((s) => s.id === selectedSiteId);
@@ -24,6 +26,8 @@ export const SiteView: React.FC = () => {
 
   if (!selectedSite || !analysis || !manifest) return null;
 
+  if (detailError) return <div className="p-6" role="alert">{detailError}<button className="block p-3" onClick={() => setSelectedSiteId(selectedSiteId)}>Retry site data</button></div>;
+  if (detailLoading || !currentHorizon || !currentHelper?.tracks.sun_az.length) return <p className="p-6" role="status">Loading site sky and terrain…</p>;
   const metrics = analysis.cellMetrics;
   const numDays = 731;
   const slippedDayIndex = Math.max(0, Math.min(numDays - 1, plannedDayIndex + slipDays));
@@ -38,13 +42,13 @@ export const SiteView: React.FC = () => {
 
   if (currentHelper) {
     const tracks = currentHelper.tracks;
-    isCurrentlyLit = tracks.sun_vis_pct[currentStep] >= 50;
-    isCurrentlyLOS = tracks.earth_clearance[currentStep] >= 0;
+    isCurrentlyLit = isLit(tracks.sun_vis_pct[currentStep], parameters.lit_threshold_pct);
+    isCurrentlyLOS = hasEarthLOS(tracks.earth_clearance[currentStep], parameters.antenna_mask_deg);
 
     // Search forward for flip
     let flipStepSun = -1;
     for (let i = currentStep + 1; i < tracks.n_steps; i++) {
-      const lit = tracks.sun_vis_pct[i] >= 50;
+      const lit = isLit(tracks.sun_vis_pct[i], parameters.lit_threshold_pct);
       if (lit !== isCurrentlyLit) {
         flipStepSun = i;
         break;
@@ -56,7 +60,7 @@ export const SiteView: React.FC = () => {
 
     let flipStepEarth = -1;
     for (let i = currentStep + 1; i < tracks.n_steps; i++) {
-      const los = tracks.earth_clearance[i] >= 0;
+      const los = hasEarthLOS(tracks.earth_clearance[i], parameters.antenna_mask_deg);
       if (los !== isCurrentlyLOS) {
         flipStepEarth = i;
         break;
@@ -74,20 +78,21 @@ export const SiteView: React.FC = () => {
   const darkGapHorizon = metrics.dark_gap_start_horizon;
 
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row overflow-hidden bg-[#030303]">
+    <div className="site-view w-full h-full flex flex-col lg:flex-row overflow-hidden bg-[#030303]">
       {/* Left 60%: 3D Scene / Perspective View */}
-      <div className="flex-1 h-full relative flex flex-col bg-[#050508] border-r border-white/5">
+      <div className="site-scene-pane flex-1 h-full relative flex flex-col bg-[#050508] border-r border-white/5">
         {/* Top Info Bar */}
         <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-2 pointer-events-none">
           <div className="bg-[#030303]/80 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg shadow-lg pointer-events-auto">
             <div className="text-[10px] text-neutral-400 font-mono tracking-widest uppercase">Lander Location</div>
             <div className="text-sm font-serif font-bold text-white tracking-wide">{selectedSite.name}</div>
             <div className="text-[11px] font-mono text-cyan-400">
-              {selectedSite.lat_deg.toFixed(3)}°S, {selectedSite.lon_deg_east.toFixed(3)}°E •{' '}
+              {Math.abs(selectedSite.lat_deg).toFixed(3)}°S, {selectedSite.lon_deg_east.toFixed(3)}°E •{' '}
               {selectedSite.ground_height_m.toFixed(0)} m elev
             </div>
           </div>
 
+          <div data-testid="sun-status" className="bg-black/80 px-3 py-2 text-xs">{isCurrentlyLit ? "Sunlit" : "Dark"} · threshold {parameters.lit_threshold_pct}%</div>
           {/* Countdown Badges */}
           <div className="bg-[#030303]/80 backdrop-blur border border-white/10 px-3 py-1.5 rounded-lg shadow-lg flex items-center space-x-3 pointer-events-auto">
             <div className="flex items-center space-x-1.5">
@@ -111,7 +116,7 @@ export const SiteView: React.FC = () => {
                   {isCurrentlyLOS ? 'Time to Earthset' : 'Time to Earthrise'}
                 </div>
                 <div className="text-xs font-mono font-bold text-cyan-300">
-                  {hoursToEarthsetOrEarthrise > 0 ? `${hoursToEarthsetOrEarthrise.toFixed(1)} hrs` : 'Continuous LOS'}
+                  {hoursToEarthsetOrEarthrise > 0 ? `${hoursToEarthsetOrEarthrise.toFixed(1)} hrs` : 'No transition in data'}
                 </div>
               </div>
             </div>
@@ -125,9 +130,9 @@ export const SiteView: React.FC = () => {
       </div>
 
       {/* Right 40%: Sky Plot, Countdown Badges, and "Why" Box */}
-      <div className="w-full lg:w-[480px] h-full flex flex-col bg-[#030303] border-t lg:border-t-0 lg:border-l border-white/10">
+      <div className="site-analysis-pane w-full lg:w-[480px] h-full flex flex-col bg-[#030303] border-t lg:border-t-0 lg:border-l border-white/10">
         {/* Sky Plot Container */}
-        <div className="h-72 border-b border-white/10">
+        <div className="sky-pane h-72 border-b border-white/10">
           <SkyPlot />
         </div>
 
@@ -141,6 +146,7 @@ export const SiteView: React.FC = () => {
               </h4>
             </div>
 
+            {metrics.longest_dark_gap_h > 0 ? <>
             <p className="text-xs text-slate-300 leading-relaxed">
               At the start of the longest dark gap (
               <span className="font-mono text-violet-400 font-semibold">
@@ -157,20 +163,20 @@ export const SiteView: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Terrain Horizon Crest:</span>
-                <span className="text-cyan-300 font-semibold">+{darkGapHorizon.toFixed(2)}°</span>
+                <span className="text-cyan-300 font-semibold">{darkGapHorizon.toFixed(2)}°</span>
               </div>
               <div className="flex justify-between border-t border-white/10 pt-1 text-[11px]">
-                <span className="text-slate-400">Occlusion Dip:</span>
+                <span className="text-slate-400">Center clearance:</span>
                 <span className="text-rose-400 font-semibold">
-                  {(darkGapEl - darkGapHorizon).toFixed(2)}° below ridge
+                  {(darkGapEl - darkGapHorizon).toFixed(2)}° relative to terrain
                 </span>
               </div>
             </div>
 
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Real high-standing topography on the lunar rim rises above the low grazing solar vector,
-              causing complete solar power loss. Flat-horizon approximations falsely predict continuous sunlight here.
+              Visible solar disc falls below your {parameters.lit_threshold_pct}% threshold during this gap. Partial sunlight can remain; this threshold does not imply zero solar power.
             </p>
+            </> : <p className="text-sm text-emerald-300">No dark gap at the selected {parameters.lit_threshold_pct}% threshold during this mission.</p>}
           </div>
 
           {/* Mission Site Statistics Card */}

@@ -1,6 +1,6 @@
 """
 pipeline/validate/pgda_compare.py
-V4 Validation: Long-Term Illumination & Earth Visibility Comparison with Mazarico et al. (2011) / PGDA Product 69.
+Exploratory comparison (not independent V4 validation): Long-Term Illumination & Earth Visibility Comparison with Mazarico et al. (2011) / PGDA Product 69.
 Compares computed average solar illumination and Earth visibility across 5 curated sites.
 
 Target: absolute difference within 5 percentage points.
@@ -16,8 +16,8 @@ from pipeline.horizon import compute_horizon
 from pipeline.terrain import acquire_site_levels
 
 
-# Published Mazarico et al. 2011 / PGDA Product 69 values for key polar candidate sites
-# (Table 1 & Figures in Mazarico et al. 2011, Icarus 211, 1066)
+# Legacy manually entered reference values. Provenance and coordinate correspondence
+# are unverified. Never use this exploratory comparison to certify V4.
 PUBLISHED_PGDA_BENCHMARKS = {
     "shackleton-rim": {
         "name": "Peak near Shackleton (Site 04)",
@@ -120,32 +120,17 @@ def run_pgda_comparison(sites_dict: list[dict] = None):
 
     spice.kclear()
 
-    # Update docs/VALIDATION.md
-    val_md_path = project_root() / "docs" / "VALIDATION.md"
-    if val_md_path.exists():
-        with open(val_md_path, "r") as f:
-            content = f.read()
-
-        table_lines = [
-            "\n| Site | Our Sun Frac | PGDA Sun Frac | Δ Sun | Our Earth Frac | PGDA Earth Frac | Δ Earth | Pass |",
-            "|------|--------------|---------------|-------|----------------|-----------------|---------|------|"
-        ]
-        for r in results:
-            p_str = "PASS" if r["pass"] else "INVESTIGATE"
-            table_lines.append(f"| {r['site']} | {r['model_sun']}% | {r['pub_sun']}% | {r['delta_sun']}% | "
-                               f"{r['model_earth']}% | {r['pub_earth']}% | {r['delta_earth']}% | {p_str} |")
-
-        target_section = "## V4 – PGDA Map Comparison (Section 16)\n\n**Status**: PENDING\n\n| Site | Our Sun frac | PGDA Sun frac | Δ | Our Earth frac | PGDA Earth frac | Δ |\n|------|-------------|---------------|---|---------------|-----------------|---|"
-        replacement_section = f"## V4 – PGDA Map Comparison (Section 16)\n\n**Status**: {'PASS' if all_pass else 'DOCUMENTED'}\n" + "\n".join(table_lines)
-        if target_section in content:
-            new_content = content.replace(target_section, replacement_section)
-            with open(val_md_path, "w") as f:
-                f.write(new_content)
-
-    print("=" * 70)
-    print(f"V4 Comparison complete.")
+    # Preserve validation status: these constants are not independently sampled maps.
+    import json
+    from datetime import datetime, timezone
+    report = {"status": "INCOMPLETE", "generated_utc": datetime.now(timezone.utc).isoformat(),
+              "reason": "Reference percentages are unverified constants, not sampled PGDA rasters; periods and visibility definitions differ.",
+              "exploratory_results": results}
+    (project_root() / "docs" / "pgda-exploratory-results.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    print("V4 remains INCOMPLETE. Exploratory results saved; no validation PASS claimed.")
     return results
 
 
 if __name__ == "__main__":
     run_pgda_comparison()
+    raise SystemExit(2)  # Independent map validation remains incomplete.

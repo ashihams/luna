@@ -138,6 +138,11 @@ def export_manifest(sites_meta: list[dict],
     Write manifest.json conforming to Section 13.
     """
     cfg = load_config()
+    # The browser must not interpret these UTC epochs in its local timezone.
+    cfg = dict(cfg)
+    for key in ("T0_UTC", "T1_UTC"):
+        if not cfg[key].endswith("Z"):
+            cfg[key] += "Z"
     wdir = web_data_dir()
     out_path = wdir / "manifest.json"
 

@@ -1,457 +1,81 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react';
-import * as d3 from 'd3';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { usePlannerStore } from '../state/usePlannerStore';
-import { Play, Pause, SkipBack, SkipForward, Sun, Radio, Compass } from 'lucide-react';
+import { isLit, hasEarthLOS, parseUtc } from '../data/science';
 
 export const SkyPlot: React.FC = () => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const {
-    currentHorizon,
-    sites,
-    selectedSiteId,
-    plannedDayIndex,
-    slipDays,
-    scrubStep,
-    setScrubStep,
-    isPlaying,
-    setIsPlaying,
-    playbackSpeed,
-    setPlaybackSpeed,
-    parameters,
-    helpers,
-    manifest,
-  } = usePlannerStore();
-
-  const [size, setSize] = useState({ width: 700, height: 280 });
-
-  const selectedSiteIdx = sites.findIndex((s) => s.id === selectedSiteId);
-  const currentHelper = selectedSiteIdx >= 0 ? helpers[selectedSiteIdx] : null;
-
-  const windowSteps = Math.round(parameters.stay_days * 48);
-  const numDays = 731;
-  const slippedDayIndex = Math.max(0, Math.min(numDays - 1, plannedDayIndex + slipDays));
-  const startStep = slippedDayIndex * 48;
-  const currentStep = Math.min(startStep + scrubStep, (manifest?.time.n_steps || 35088) - 1);
-
-  // Playback timer
+  const { currentHorizon, sites, selectedSiteId, plannedDayIndex, slipDays, scrubStep,
+    setScrubStep, isPlaying, setIsPlaying, playbackSpeed, setPlaybackSpeed,
+    parameters, helpers, manifest } = usePlannerStore();
+  const host = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(440);
+  const tracks = helpers[sites.findIndex(s => s.id === selectedSiteId)]?.tracks;
+  const steps = Math.round(parameters.stay_days * 48);
+  const start = (plannedDayIndex + slipDays) * 48;
+  const current = start + scrubStep;
+  const horizon = currentHorizon?.variants.best;
+  useEffect(() => {
+    if (!host.current) return;
+    const observer = new ResizeObserver(([entry]) => setWidth(Math.max(240, entry.contentRect.width)));
+    observer.observe(host.current);
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     if (!isPlaying) return;
-    const interval = setInterval(() => {
-      setScrubStep((scrubStep + 1) % windowSteps);
-    }, 100 / playbackSpeed);
-
-    return () => clearInterval(interval);
-  }, [isPlaying, scrubStep, windowSteps, playbackSpeed, setScrubStep]);
-
-  // Resize observer
-  useEffect(() => {
-    const update = () => {
-      if (containerRef.current) {
-        setSize({
-          width: containerRef.current.clientWidth,
-          height: Math.max(220, containerRef.current.clientHeight - 45),
-        });
-      }
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-
-  // Compute stay window ephemeris tracks
-  const trackData = useMemo(() => {
-    if (!currentHelper) return null;
-    const tracks = currentHelper.tracks;
-
-    const sunSegments: [number, number][][] = [];
-    const earthSegments: [number, number][][] = [];
-
-    let currentSunSeg: [number, number][] = [];
-    let currentEarthSeg: [number, number][] = [];
-
-    const endStep = Math.min(startStep + windowSteps, tracks.n_steps);
-
-    for (let i = startStep; i < endStep; i++) {
-      const sAz = tracks.sun_az[i];
-      const sEl = tracks.sun_el[i];
-      const eAz = tracks.earth_az[i];
-      const eEl = tracks.earth_el[i];
-
-      // Sun path wrap check
-      if (currentSunSeg.length > 0) {
-        const prevAz = currentSunSeg[currentSunSeg.length - 1][0];
-        if (Math.abs(sAz - prevAz) > 180) {
-          sunSegments.push(currentSunSeg);
-          currentSunSeg = [];
-        }
-      }
-      currentSunSeg.push([sAz, sEl]);
-
-      // Earth path wrap check
-      if (currentEarthSeg.length > 0) {
-        const prevAz = currentEarthSeg[currentEarthSeg.length - 1][0];
-        if (Math.abs(eAz - prevAz) > 180) {
-          earthSegments.push(currentEarthSeg);
-          currentEarthSeg = [];
-        }
-      }
-      currentEarthSeg.push([eAz, eEl]);
-    }
-
-    if (currentSunSeg.length > 0) sunSegments.push(currentSunSeg);
-    if (currentEarthSeg.length > 0) earthSegments.push(currentEarthSeg);
-
-    return {
-      sunSegments,
-      earthSegments,
-      currentSun: {
-        az: tracks.sun_az[currentStep] || 0,
-        el: tracks.sun_el[currentStep] || 0,
-        visPct: tracks.sun_vis_pct[currentStep] || 0,
-      },
-      currentEarth: {
-        az: tracks.earth_az[currentStep] || 0,
-        el: tracks.earth_el[currentStep] || 0,
-        clearance: tracks.earth_clearance[currentStep] || 0,
-      },
-    };
-  }, [currentHelper, startStep, windowSteps, currentStep]);
-
-  // Current scrub UTC time
-  const currentUtcString = useMemo(() => {
-    if (!manifest) return '';
-    const base = new Date(manifest.time.t0_utc);
-    base.setUTCMinutes(base.getUTCMinutes() + currentStep * 30);
-    return base.toISOString().replace('.000Z', ' UTC').replace('T', ' ');
-  }, [manifest, currentStep]);
-
-  // Render D3 SVG Sky Plot
-  useEffect(() => {
-    if (!svgRef.current || !trackData) return;
-
-    const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
-
-    const margin = { top: 15, right: 25, bottom: 25, left: 35 };
-    const width = size.width - margin.left - margin.right;
-    const height = size.height - margin.top - margin.bottom;
-
-    if (width <= 0 || height <= 0) return;
-
-    const g = svg
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // Scales
-    // Azimuth: 0 to 360 deg
-    const xScale = d3.scaleLinear().domain([0, 360]).range([0, width]);
-    // Elevation: -5 to +10 deg
-    const yScale = d3.scaleLinear().domain([-5, 10]).range([height, 0]);
-
-    // Clip path for chart area
-    svg
-      .append('defs')
-      .append('clipPath')
-      .attr('id', 'sky-clip')
-      .append('rect')
-      .attr('width', width)
-      .attr('height', height);
-
-    const chartArea = g.append('g').attr('clip-path', 'url(#sky-clip)');
-
-    // Background Sky Gradient
-    const skyGrad = svg
-      .append('defs')
-      .append('linearGradient')
-      .attr('id', 'sky-grad')
-      .attr('x1', '0%')
-      .attr('y1', '0%')
-      .attr('x2', '0%')
-      .attr('y2', '100%');
-    skyGrad.append('stop').attr('offset', '0%').attr('stop-color', '#070b14');
-    skyGrad.append('stop').attr('offset', '100%').attr('stop-color', '#0f172a');
-
-    chartArea
-      .append('rect')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('fill', 'url(#sky-grad)');
-
-    // Elevation 0 deg line (Geometric local horizon)
-    chartArea
-      .append('line')
-      .attr('x1', 0)
-      .attr('x2', width)
-      .attr('y1', yScale(0))
-      .attr('y2', yScale(0))
-      .attr('stroke', '#334155')
-      .attr('stroke-width', 1)
-      .attr('stroke-dasharray', '3,3');
-
-    // Antenna Mask Line
-    if (parameters.antenna_mask_deg > 0) {
-      chartArea
-        .append('line')
-        .attr('x1', 0)
-        .attr('x2', width)
-        .attr('y1', yScale(parameters.antenna_mask_deg))
-        .attr('y2', yScale(parameters.antenna_mask_deg))
-        .attr('stroke', '#a855f7')
-        .attr('stroke-width', 1)
-        .attr('stroke-dasharray', '2,2');
-
-      chartArea
-        .append('text')
-        .attr('x', width - 5)
-        .attr('y', yScale(parameters.antenna_mask_deg) - 3)
-        .attr('text-anchor', 'end')
-        .attr('fill', '#a855f7')
-        .attr('font-size', '9px')
-        .attr('font-family', 'monospace')
-        .text(`Mask +${parameters.antenna_mask_deg}°`);
-    }
-
-    // Gridlines: Azimuth cardinal points (0=N, 90=E, 180=S, 270=W, 360=N)
-    const cardinals = [
-      { az: 0, label: 'N (0°)' },
-      { az: 90, label: 'E (90°)' },
-      { az: 180, label: 'S (180°)' },
-      { az: 270, label: 'W (270°)' },
-      { az: 360, label: 'N (360°)' },
-    ];
-
-    cardinals.forEach((c) => {
-      chartArea
-        .append('line')
-        .attr('x1', xScale(c.az))
-        .attr('x2', xScale(c.az))
-        .attr('y1', 0)
-        .attr('y2', height)
-        .attr('stroke', '#1e293b')
-        .attr('stroke-width', 1);
-    });
-
-    // Draw Terrain Horizon Silhouette
-    if (currentHorizon && currentHorizon.variants) {
-      const best = currentHorizon.variants['best'] || currentHorizon.variants['dem80'];
-      if (best && best.elev_deg) {
-        const elev = best.elev_deg;
-        const nAz = elev.length;
-        const dAz = 360 / nAz;
-
-        const horizonPoints: [number, number][] = [];
-        horizonPoints.push([0, -5]); // bottom left
-        for (let i = 0; i <= nAz; i++) {
-          const az = (i % nAz) * dAz;
-          const el = elev[i % nAz];
-          horizonPoints.push([az, el]);
-        }
-        horizonPoints.push([360, -5]); // bottom right
-
-        const areaGen = d3
-          .area<[number, number]>()
-          .x((d) => xScale(d[0]))
-          .y0(yScale(-5))
-          .y1((d) => yScale(d[1]));
-
-        chartArea
-          .append('path')
-          .datum(horizonPoints)
-          .attr('fill', '#0f141f')
-          .attr('stroke', '#38bdf8')
-          .attr('stroke-width', 1.5)
-          .attr('d', areaGen);
+    const timer = setInterval(() => setScrubStep((usePlannerStore.getState().scrubStep + 1) % steps), 100 / playbackSpeed);
+    return () => clearInterval(timer);
+  }, [isPlaying, steps, playbackSpeed, setScrubStep]);
+  const plot = useMemo(() => {
+    if (!tracks?.sun_az.length || !horizon) return null;
+    const sun: number[][][] = [[]], earth: number[][][] = [[]];
+    let min = Math.min(-5, ...horizon) - 1;
+    let max = Math.max(5, ...horizon.map(v => v + parameters.antenna_mask_deg)) + 1;
+    for (let i = start; i < Math.min(start + steps, tracks.n_steps); i++) {
+      for (const [segments, az, el] of [[sun, tracks.sun_az[i], tracks.sun_el[i]], [earth, tracks.earth_az[i], tracks.earth_el[i]]] as [number[][][], number, number][]) {
+        let segment = segments[segments.length - 1];
+        if (segment.length && Math.abs(segment[segment.length - 1][0] - az) > 180) { segment = []; segments.push(segment); }
+        segment.push([az, el]);
+        min = Math.min(min, el - 1.1); max = Math.max(max, el + 1.1);
       }
     }
-
-    // Line generator for tracks
-    const lineGen = d3
-      .line<[number, number]>()
-      .x((d) => xScale(d[0]))
-      .y((d) => yScale(d[1]))
-      .curve(d3.curveLinear);
-
-    // Sun Track Segments (Amber)
-    trackData.sunSegments.forEach((seg) => {
-      chartArea
-        .append('path')
-        .datum(seg)
-        .attr('fill', 'none')
-        .attr('stroke', '#f59e0b')
-        .attr('stroke-width', 1.5)
-        .attr('stroke-opacity', 0.6)
-        .attr('d', lineGen);
-    });
-
-    // Earth Track Segments (Cyan)
-    trackData.earthSegments.forEach((seg) => {
-      chartArea
-        .append('path')
-        .datum(seg)
-        .attr('fill', 'none')
-        .attr('stroke', '#06b6d4')
-        .attr('stroke-width', 1.5)
-        .attr('stroke-opacity', 0.6)
-        .attr('d', lineGen);
-    });
-
-    // Current Sun Disc Marker
-    const sunX = xScale(trackData.currentSun.az);
-    const sunY = yScale(trackData.currentSun.el);
-    const sunRadiusDeg = 0.26; // True angular radius ~0.26 deg
-    const sunRadiusPx = Math.max(3, (yScale(0) - yScale(sunRadiusDeg)) * 1.5);
-
-    chartArea
-      .append('circle')
-      .attr('cx', sunX)
-      .attr('cy', sunY)
-      .attr('r', sunRadiusPx)
-      .attr('fill', trackData.currentSun.visPct > 0 ? '#fbbf24' : '#78350f')
-      .attr('stroke', '#ffffff')
-      .attr('stroke-width', 1)
-      .attr('filter', trackData.currentSun.visPct > 0 ? 'drop-shadow(0px 0px 4px #f59e0b)' : 'none');
-
-    // Current Earth Disc Marker
-    const earthX = xScale(trackData.currentEarth.az);
-    const earthY = yScale(trackData.currentEarth.el);
-    const earthRadiusDeg = 0.95; // True angular radius ~0.95 deg
-    const earthRadiusPx = Math.max(4, (yScale(0) - yScale(earthRadiusDeg)) * 1.5);
-
-    chartArea
-      .append('circle')
-      .attr('cx', earthX)
-      .attr('cy', earthY)
-      .attr('r', earthRadiusPx)
-      .attr('fill', '#0284c7')
-      .attr('stroke', '#38bdf8')
-      .attr('stroke-width', 1)
-      .attr('filter', 'drop-shadow(0px 0px 4px #0ea5e9)');
-
-    // Axes
-    const xAxis = d3
-      .axisBottom(xScale)
-      .tickValues([0, 90, 180, 270, 360])
-      .tickFormat((d) => {
-        const val = Number(d);
-        if (val === 0 || val === 360) return 'N 0°';
-        if (val === 90) return 'E 90°';
-        if (val === 180) return 'S 180°';
-        if (val === 270) return 'W 270°';
-        return `${val}°`;
-      });
-
-    const yAxis = d3
-      .axisLeft(yScale)
-      .ticks(4)
-      .tickFormat((d) => `${d}°`);
-
-    g.append('g')
-      .attr('transform', `translate(0,${height})`)
-      .call(xAxis)
-      .attr('color', '#64748b')
-      .attr('font-size', '9px');
-
-    g.append('g')
-      .call(yAxis)
-      .attr('color', '#64748b')
-      .attr('font-size', '9px');
-  }, [size, trackData, currentHorizon, parameters.antenna_mask_deg]);
-
-  return (
-    <div ref={containerRef} className="h-full flex flex-col bg-[#050508] p-3 space-y-2 select-none">
-      {/* Top Header of Sky Plot */}
-      <div className="flex items-center justify-between text-xs border-b border-white/10 pb-2">
-        <div className="flex items-center space-x-2">
-          <Compass className="w-4 h-4 text-cyan-400" />
-          <span className="font-serif font-bold text-white tracking-wide">Sky Visibility Plot</span>
-          <span className="text-[10px] text-neutral-500 font-mono">
-            Azimuth 0°–360° × Elevation -5° to +10°
-          </span>
-        </div>
-
-        {/* Live Ephemeris Readout */}
-        {trackData && (
-          <div className="flex items-center space-x-4 text-[11px] font-mono">
-            <div className="flex items-center space-x-1.5 text-amber-300">
-              <Sun className="w-3.5 h-3.5" />
-              <span>
-                Sun: {trackData.currentSun.az.toFixed(1)}° / {trackData.currentSun.el.toFixed(2)}° (
-                {trackData.currentSun.visPct}%)
-              </span>
-            </div>
-
-            <div className="flex items-center space-x-1.5 text-cyan-300">
-              <Radio className="w-3.5 h-3.5" />
-              <span>
-                Earth: {trackData.currentEarth.az.toFixed(1)}° /{' '}
-                {trackData.currentEarth.el.toFixed(2)}° (clr:{' '}
-                {trackData.currentEarth.clearance.toFixed(2)}°)
-              </span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* SVG Canvas */}
-      <div className="flex-1 w-full overflow-hidden">
-        <svg ref={svgRef} className="w-full h-full block" />
-      </div>
-
-      {/* Time Scrubber Controls */}
-      <div className="flex items-center space-x-3 pt-1 border-t border-white/10/80 text-xs">
-        <div className="flex items-center space-x-1">
-          <button
-            onClick={() => setScrubStep(Math.max(0, scrubStep - 1))}
-            className="p-1 rounded hover:bg-white/10 text-neutral-300 transition"
-            title="Step backward (-30m)"
-          >
-            <SkipBack className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="p-1.5 rounded-full bg-violet-600 hover:bg-violet-500 shadow-violet-900/30 text-white transition shadow"
-            title={isPlaying ? 'Pause' : 'Play mission timeline'}
-          >
-            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-          </button>
-          <button
-            onClick={() => setScrubStep(Math.min(windowSteps - 1, scrubStep + 1))}
-            className="p-1 rounded hover:bg-white/10 text-neutral-300 transition"
-            title="Step forward (+30m)"
-          >
-            <SkipForward className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Speed button */}
-        <button
-          onClick={() => setPlaybackSpeed(playbackSpeed === 1 ? 2 : playbackSpeed === 2 ? 5 : 1)}
-          className="px-1.5 py-0.5 rounded bg-[#0a0a0a] border border-white/10 text-[10px] font-mono text-violet-300"
-          title="Playback speed"
-        >
-          {playbackSpeed}x
-        </button>
-
-        {/* Timeline Scrubber */}
-        <input
-          type="range"
-          min="0"
-          max={Math.max(1, windowSteps - 1)}
-          value={scrubStep}
-          onChange={(e) => setScrubStep(parseInt(e.target.value))}
-          className="flex-1 accent-violet-500 h-1.5 bg-white/10 rounded cursor-pointer"
-        />
-
-        {/* Timestamp & Step Label */}
-        <div className="font-mono text-[11px] text-neutral-300 whitespace-nowrap">
-          <span className="text-cyan-400 font-semibold">{currentUtcString}</span>
-          <span className="text-neutral-500 ml-2">
-            (+{(scrubStep * 0.5).toFixed(1)}h / {(parameters.stay_days * 24).toFixed(0)}h)
-          </span>
-        </div>
-      </div>
+    return { sun, earth, min: Math.floor(min), max: Math.ceil(max) };
+  }, [tracks, horizon, start, steps, parameters.antenna_mask_deg]);
+  if (!plot || !tracks || !manifest || !horizon) return <p role="status">Loading sky…</p>;
+  const height = 200, left = 38, right = width - 14, top = 10, bottom = 174;
+  const x = (az: number) => left + az / 360 * (right - left);
+  const y = (el: number) => bottom - (el - plot.min) / (plot.max - plot.min) * (bottom - top);
+  const line = (points: number[][]) => points.map(([az, el], i) => `${i ? 'L' : 'M'}${x(az)},${y(el)}`).join(' ');
+  const silhouette = Array.from({ length: horizon.length + 1 }, (_, i) => [i * 360 / horizon.length, horizon[i % horizon.length]]);
+  const sunLit = isLit(tracks.sun_vis_pct[current], parameters.lit_threshold_pct);
+  const earthLOS = hasEarthLOS(tracks.earth_clearance[current], parameters.antenna_mask_deg);
+  const time = new Date(parseUtc(manifest.time.t0_utc).getTime() + current * 1800000).toISOString().replace('T', ' ').slice(0,19);
+  return <div className="sky-plot h-full p-3 flex flex-col gap-2 bg-[#050508]" ref={host}>
+    <div className="text-sm font-serif">Sky Visibility Plot</div>
+    <div className="text-[11px] font-mono flex flex-wrap gap-x-3 gap-y-1">
+      <span className="text-amber-300">Sun: {tracks.sun_az[current].toFixed(1)}° / {tracks.sun_el[current].toFixed(2)}° ({tracks.sun_vis_pct[current]}%) · {sunLit ? 'Sunlit' : 'Dark'}</span>
+      <span className="text-cyan-300">Earth: {tracks.earth_az[current].toFixed(1)}° / {tracks.earth_el[current].toFixed(2)}° · {earthLOS ? 'LOS' : 'Blocked'}</span>
     </div>
-  );
+    <svg className="w-full block shrink-0" height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Sun and Earth centers above the terrain horizon">
+      <rect x={left} y={top} width={right-left} height={bottom-top} fill="#070b14" />
+      {[0,90,180,270,360].map((az,i) => <g key={az}>
+        <line x1={x(az)} x2={x(az)} y1={top} y2={bottom} stroke="#1e293b" />
+        <text x={x(az)} y={190} textAnchor="middle" fill="#94a3b8" fontSize="9">{['N','E','S','W','N'][i]} {az}°</text>
+      </g>)}
+      {[plot.min, 0, plot.max].map(el => <g key={el}><line x1={left} x2={right} y1={y(el)} y2={y(el)} stroke="#334155" strokeDasharray="3 3" /><text x={left-5} y={y(el)+3} textAnchor="end" fill="#94a3b8" fontSize="9">{el}°</text></g>)}
+      <path data-testid="terrain-silhouette" d={`${line(silhouette)} L${right},${bottom} L${left},${bottom} Z`} fill="#0f141f" stroke="#38bdf8" strokeWidth="1" />
+      {parameters.antenna_mask_deg > 0 && <path data-testid="antenna-mask" d={line(silhouette.map(([az,el]) => [az,el+parameters.antenna_mask_deg]))} fill="none" stroke="#a855f7" strokeDasharray="3 3" />}
+      {plot.sun.map((s,i) => <path key={`s${i}`} d={line(s)} fill="none" stroke="#f59e0b" strokeOpacity=".65" />)}
+      {plot.earth.map((s,i) => <path key={`e${i}`} d={line(s)} fill="none" stroke="#06b6d4" strokeOpacity=".65" />)}
+      <circle data-testid="sun-marker" cx={x(tracks.sun_az[current])} cy={y(tracks.sun_el[current])} r="4" fill={sunLit ? '#fbbf24' : '#78350f'} stroke="white" />
+      <circle cx={x(tracks.earth_az[current])} cy={y(tracks.earth_el[current])} r="4" fill={earthLOS ? '#06b6d4' : '#164e63'} stroke="white" />
+    </svg>
+    <div className="text-[10px] text-neutral-400">Markers show centers. Darkness: visible Sun &lt; {parameters.lit_threshold_pct}%. Earth mask: terrain + {parameters.antenna_mask_deg}°.</div>
+    <div className="flex items-center gap-2">
+      <button className="p-2" aria-label="Step backward" onClick={() => setScrubStep(scrubStep-1)}>−</button>
+      <button className="px-3 py-2 rounded bg-violet-700" onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? 'Pause' : 'Play'}</button>
+      <button className="p-2" aria-label="Step forward" onClick={() => setScrubStep(scrubStep+1)}>+</button>
+      <button className="p-2" aria-label="Playback speed" onClick={() => setPlaybackSpeed(playbackSpeed === 1 ? 2 : playbackSpeed === 2 ? 5 : 1)}>{playbackSpeed}x</button>
+      <input aria-label="Mission time" type="range" min="0" max={steps-1} value={scrubStep} onChange={e => setScrubStep(Number(e.target.value))} className="min-w-0 flex-1 accent-violet-500" />
+    </div>
+    <div className="text-[11px] font-mono text-cyan-300">{time} UTC · +{(scrubStep*.5).toFixed(1)}h</div>
+  </div>;
 };

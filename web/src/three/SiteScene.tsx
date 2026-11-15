@@ -24,9 +24,9 @@ export const SiteScene: React.FC = () => {
 
   // 3D Visual Sliders
   const [verticalExag, setVerticalExag] = useState<number>(1.0);
-  const [celestialExag, setCelestialExag] = useState<number>(2.0);
-  const [shadowResolution, setShadowResolution] = useState<number>(4096);
-  const [showControls, setShowControls] = useState<boolean>(true);
+  const [celestialExag, setCelestialExag] = useState<number>(1.0);
+  const [shadowResolution, setShadowResolution] = useState<number>(window.innerWidth < 768 ? 2048 : 4096);
+  const [showControls, setShowControls] = useState<boolean>(false);
 
   // Camera look angles (degrees)
   const [yawDeg, setYawDeg] = useState<number>(180); // Default looking South towards the pole
@@ -120,6 +120,9 @@ export const SiteScene: React.FC = () => {
     tex.wrapT = THREE.ClampToEdgeWrapping;
     return tex;
   }, []);
+
+  const live = useRef({ yawDeg, pitchDeg, sunData, earthData, celestialExag });
+  live.current = { yawDeg, pitchDeg, sunData, earthData, celestialExag };
 
   // Three.js Scene Setup & Animation Loop
   useEffect(() => {
@@ -234,8 +237,8 @@ export const SiteScene: React.FC = () => {
     let horizonMesh: THREE.Mesh | null = null;
     if (currentHorizon && currentHorizon.variants) {
       const best = currentHorizon.variants['best'] || currentHorizon.variants['dem80'];
-      if (best && best.elev_deg) {
-        const elev = best.elev_deg;
+      if (best && best.length) {
+        const elev = best;
         const nAz = elev.length;
         const dAz = (2 * Math.PI) / nAz;
         const R = 19000;
@@ -358,12 +361,15 @@ export const SiteScene: React.FC = () => {
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
     };
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
     window.addEventListener('resize', handleResize);
 
     // Render loop
     let animId: number;
     const render = () => {
       animId = requestAnimationFrame(render);
+      const { yawDeg, pitchDeg, sunData, earthData, celestialExag } = live.current;
 
       // Update camera orientation from yaw and pitch
       const yawRad = (yawDeg * Math.PI) / 180;
@@ -387,7 +393,7 @@ export const SiteScene: React.FC = () => {
         -Math.cos(sunElRad) * Math.cos(sunAzRad)
       ).normalize();
 
-      const sunDistance = 18000;
+      const sunDistance = 24000;
       sunSprite.position.copy(sunDir).multiplyScalar(sunDistance);
 
       // Sun angular diameter ~ 0.52 deg (radius ~ 0.26 deg)
@@ -400,9 +406,9 @@ export const SiteScene: React.FC = () => {
       sunLight.position.copy(sunDir).multiplyScalar(lightDist);
       sunLight.target.position.set(0, 0, 0);
 
-      const isSunAbove = sunData.el > -0.5 && sunData.visPct > 0;
+      const isSunAbove = sunData.visPct > 0;
       sunLight.intensity = isSunAbove ? (sunData.visPct / 100.0) * 2.8 : 0;
-      sunSprite.visible = sunData.el > -2.0;
+      sunSprite.visible = sunData.visPct > 0;
 
       // Update Earth position & sprite
       const earthAzRad = (earthData.az * Math.PI) / 180;
@@ -414,14 +420,14 @@ export const SiteScene: React.FC = () => {
         -Math.cos(earthElRad) * Math.cos(earthAzRad)
       ).normalize();
 
-      const earthDistance = 18000;
+      const earthDistance = 26000;
       earthSprite.position.copy(earthDir).multiplyScalar(earthDistance);
 
       // Earth angular diameter ~ 1.9 deg (radius ~ 0.95 deg)
       const baseEarthDiameter = 2 * earthDistance * Math.tan((0.95 * Math.PI) / 180);
       const earthScale = baseEarthDiameter * celestialExag;
       earthSprite.scale.set(earthScale, earthScale, 1);
-      earthSprite.visible = earthData.el > -4.0;
+      earthSprite.visible = true;
 
       renderer.render(scene, camera);
     };
@@ -430,7 +436,9 @@ export const SiteScene: React.FC = () => {
     return () => {
       destroyed = true;
       cancelAnimationFrame(animId);
+      resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
+      sunLight.shadow.dispose();
       if (renderer.domElement.parentNode) {
         renderer.domElement.parentNode.removeChild(renderer.domElement);
       }
@@ -454,17 +462,13 @@ export const SiteScene: React.FC = () => {
     manifest,
     currentHorizon,
     verticalExag,
-    celestialExag,
     shadowResolution,
-    yawDeg,
-    pitchDeg,
-    sunData,
-    earthData,
     earthTexture,
   ]);
 
   // Pointer drag to look around (First-person camera controls)
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest('button, input')) return;
     isDraggingRef.current = true;
     lastMousePosRef.current = { x: e.clientX, y: e.clientY };
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -506,7 +510,8 @@ export const SiteScene: React.FC = () => {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      className="w-full h-full relative cursor-grab active:cursor-grabbing select-none overflow-hidden"
+      onPointerCancel={handlePointerUp}
+      className="touch-none w-full h-full relative cursor-grab active:cursor-grabbing select-none overflow-hidden"
     >
       {/* 3D Scene Compass & Orientation HUD */}
       <div className="absolute top-3 right-3 z-10 flex items-center space-x-2">

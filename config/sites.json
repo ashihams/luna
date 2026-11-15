@@ -66,17 +66,6 @@
     "has_5m_dem": false
   },
   {
-    "id": "peak-near-shackleton",
-    "name": "Peak near Shackleton (Site 07)",
-    "lat_deg": -89.02,
-    "lon_deg_east": 141.0,
-    "program": "artemis",
-    "source": "PGDA Product 78 Site07; Mazarico et al. 2011",
-    "notes": "5m DEM available (Site07_final_adj_5mpp_surf.tif). Distinct from Site04; on far-side flank of Shackleton. Coordinates approximate — refine from DEM header.",
-    "obs_height_m": 2.0,
-    "has_5m_dem": true
-  },
-  {
     "id": "haworth",
     "name": "Haworth",
     "lat_deg": -86.75,

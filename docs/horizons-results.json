@@ -1,0 +1,153 @@
+{
+  "generated_utc": "2026-11-15T05:20:20.638289+00:00",
+  "status": "PASS",
+  "expected_count": 12,
+  "completed_count": 12,
+  "results": [
+    {
+      "site": "shackleton-rim",
+      "date": "2027-01-01 00:00",
+      "body": "SUN",
+      "spice_az": 138.444,
+      "spice_el": 0.123,
+      "horizons_az": 138.444,
+      "horizons_el": 0.123,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "shackleton-rim",
+      "date": "2027-01-01 00:00",
+      "body": "EARTH",
+      "spice_az": 242.622,
+      "spice_el": -6.796,
+      "horizons_az": 242.622,
+      "horizons_el": -6.796,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "shackleton-rim",
+      "date": "2027-07-01 00:00",
+      "body": "SUN",
+      "spice_az": 92.08,
+      "spice_el": -0.913,
+      "horizons_az": 92.08,
+      "horizons_el": -0.913,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "shackleton-rim",
+      "date": "2027-07-01 00:00",
+      "body": "EARTH",
+      "spice_az": 228.843,
+      "spice_el": 5.504,
+      "horizons_az": 228.843,
+      "horizons_el": 5.504,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "shackleton-rim",
+      "date": "2028-01-01 00:00",
+      "body": "SUN",
+      "spice_az": 8.552,
+      "spice_el": 1.806,
+      "horizons_az": 8.552,
+      "horizons_el": 1.806,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "shackleton-rim",
+      "date": "2028-01-01 00:00",
+      "body": "EARTH",
+      "spice_az": 234.118,
+      "spice_el": 1.729,
+      "horizons_az": 234.118,
+      "horizons_el": 1.729,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "connecting-ridge",
+      "date": "2027-01-01 00:00",
+      "body": "SUN",
+      "spice_az": 139.499,
+      "spice_el": 0.485,
+      "horizons_az": 139.499,
+      "horizons_el": 0.485,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "connecting-ridge",
+      "date": "2027-01-01 00:00",
+      "body": "EARTH",
+      "spice_az": 243.63,
+      "spice_el": -6.557,
+      "horizons_az": 243.63,
+      "horizons_el": -6.557,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "connecting-ridge",
+      "date": "2027-07-01 00:00",
+      "body": "SUN",
+      "spice_az": 93.145,
+      "spice_el": -0.908,
+      "horizons_az": 93.145,
+      "horizons_el": -0.908,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "connecting-ridge",
+      "date": "2027-07-01 00:00",
+      "body": "EARTH",
+      "spice_az": 229.937,
+      "spice_el": 5.839,
+      "horizons_az": 229.937,
+      "horizons_el": 5.839,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "connecting-ridge",
+      "date": "2028-01-01 00:00",
+      "body": "SUN",
+      "spice_az": 9.607,
+      "spice_el": 1.314,
+      "horizons_az": 9.607,
+      "horizons_el": 1.314,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    },
+    {
+      "site": "connecting-ridge",
+      "date": "2028-01-01 00:00",
+      "body": "EARTH",
+      "spice_az": 235.19,
+      "spice_el": 2.029,
+      "horizons_az": 235.19,
+      "horizons_el": 2.029,
+      "delta_az": 0.0,
+      "delta_el": 0.0,
+      "pass": true
+    }
+  ],
+  "errors": []
+}

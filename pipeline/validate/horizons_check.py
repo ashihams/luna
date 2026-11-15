@@ -101,7 +101,7 @@ def run_horizons_cross_check():
 
     sites_to_test = [
         {"id": "shackleton-rim", "name": "Shackleton Rim", "lat_deg": -88.81, "lon_deg_east": 124.68, "z0_km": 0.0},
-        {"id": "connecting-ridge", "name": "Connecting Ridge", "lat_deg": -89.46, "lon_deg_east": 136.68, "z0_km": 0.0}
+        {"id": "connecting-ridge", "name": "Connecting Ridge", "lat_deg": -89.305, "lon_deg_east": 123.623, "z0_km": 0.0}
     ]
 
     dates_to_test = [
@@ -112,6 +112,7 @@ def run_horizons_cross_check():
 
     log_rows = []
     all_pass = True
+    errors = []
 
     print("=" * 70)
     print("V3 Validation: JPL Horizons Cross-Check (SPICE MOON_ME vs JPL Horizons)")
@@ -144,6 +145,8 @@ def run_horizons_cross_check():
                     h_az, h_el = query_horizons_api(body_cmd, lat, lon, 0.002, d_str)
                 except Exception as e:
                     print(f"  [ERROR] Horizons API query failed for {body_name} at {sid} {d_str}: {e}")
+                    all_pass = False
+                    errors.append({"site": sid, "date": d_str, "body": body_name, "error": str(e)})
                     continue
 
                 d_az = abs(spice_az - h_az)
@@ -176,27 +179,25 @@ def run_horizons_cross_check():
 
     spice.kclear()
 
-    # Update docs/VALIDATION.md
-    val_md_path = project_root() / "docs" / "VALIDATION.md"
-    if val_md_path.exists():
-        with open(val_md_path, "r") as f:
-            content = f.read()
-
-        table_lines = ["\n| Site | Date | Body | SPICE az/el | Horizons az/el | Δ az | Δ el | Pass |",
-                       "|------|------|------|-------------|----------------|------|------|------|"]
-        for r in log_rows:
-            p_str = "PASS" if r["pass"] else "FAIL"
-            table_lines.append(f"| {r['site']} | {r['date']} | {r['body']} | "
-                               f"{r['spice_az']}° / {r['spice_el']}° | "
-                               f"{r['horizons_az']}° / {r['horizons_el']}° | "
-                               f"{r['delta_az']}° | {r['delta_el']}° | {p_str} |")
-
-        target_section = "## V3 – Horizons Cross-Check (Section 16)\n\n**Status**: PENDING\n\n| Site | Date | Body | SPICE az/el | Horizons az/el | Δ az | Δ el |\n|------|------|------|-------------|----------------|------|------|"
-        replacement_section = f"## V3 – Horizons Cross-Check (Section 16)\n\n**Status**: {'PASS' if all_pass else 'FAIL'}\n" + "\n".join(table_lines)
-        if target_section in content:
-            new_content = content.replace(target_section, replacement_section)
-            with open(val_md_path, "w") as f:
-                f.write(new_content)
+    expected_count = len(sites_to_test) * len(dates_to_test) * 2
+    all_pass = all_pass and len(log_rows) == expected_count
+    status = "INCOMPLETE" if errors or len(log_rows) != expected_count else ("PASS" if all_pass else "FAIL")
+    report = {
+        "generated_utc": datetime.now(__import__('datetime').timezone.utc).isoformat(),
+        "status": status, "expected_count": expected_count, "completed_count": len(log_rows),
+        "results": log_rows, "errors": errors,
+    }
+    report_path = project_root() / "docs" / "horizons-results.json"
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    table = ["| Site | Date (UTC) | Body | SPICE az/el | Horizons az/el | Delta az | Delta el | Pass |",
+             "|---|---|---|---|---|---|---|---|"]
+    for r in log_rows:
+        table.append(f"| {r['site']} | {r['date']} | {r['body']} | {r['spice_az']} / {r['spice_el']} | {r['horizons_az']} / {r['horizons_el']} | {r['delta_az']} | {r['delta_el']} | {r['pass']} |")
+    section = f"## V3 – Horizons Cross-Check (Section 16)\n\n**Status**: {status} ({len(log_rows)}/{expected_count} comparisons completed).\n\nMachine-readable results and API errors: [horizons-results.json](horizons-results.json).\n\n" + "\n".join(table) + "\n\n---\n\n"
+    val_path = project_root() / "docs" / "VALIDATION.md"
+    content = val_path.read_text(encoding="utf-8")
+    content = re.sub(r"## V3 .*?(?=## V4 )", lambda _: section, content, flags=re.DOTALL)
+    val_path.write_text(content, encoding="utf-8")
 
     print("=" * 70)
     print(f"V3 Horizons Cross-Check overall: {'ALL PASSED' if all_pass else 'SOME FAILED'}")
@@ -204,4 +205,4 @@ def run_horizons_cross_check():
 
 
 if __name__ == "__main__":
-    run_horizons_cross_check()
+    raise SystemExit(0 if run_horizons_cross_check() else 1)

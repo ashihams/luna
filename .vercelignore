@@ -8,3 +8,7 @@ research
 docs
 node_modules
 web/node_modules
+.audit
+tests
+pyproject.toml
+requirements.txt

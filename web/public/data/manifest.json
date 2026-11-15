@@ -7,8 +7,8 @@
     "R_EARTH_KM": 6371.0,
     "OBS_HEIGHT_M": 2.0,
     "AZ_STEP_DEG": 0.5,
-    "T0_UTC": "2027-01-01T00:00:00",
-    "T1_UTC": "2029-01-01T00:00:00",
+    "T0_UTC": "2027-01-01T00:00:00Z",
+    "T1_UTC": "2029-01-01T00:00:00Z",
     "STEP_MIN": 30,
     "N_STEPS": 35088,
     "DISC_SAMPLES": 32,
@@ -17,8 +17,8 @@
     "ABCORR": "LT+S"
   },
   "time": {
-    "t0_utc": "2027-01-01T00:00:00",
-    "t1_utc": "2029-01-01T00:00:00",
+    "t0_utc": "2027-01-01T00:00:00Z",
+    "t1_utc": "2029-01-01T00:00:00Z",
     "step_min": 30,
     "n_steps": 35088,
     "days": 731.0
@@ -410,80 +410,6 @@
         "horizon": "data/horizon_faustini-rim-a.json",
         "tracks": "data/tracks_faustini-rim-a.bin",
         "terrain": "data/terrain_faustini-rim-a.bin"
-      },
-      "variants": [
-        "best",
-        "dem80",
-        "flat"
-      ],
-      "tracks_layout": [
-        {
-          "name": "sun_az",
-          "dtype": "uint16",
-          "byte_offset": 0,
-          "length": 35088,
-          "byte_length": 70176
-        },
-        {
-          "name": "sun_el",
-          "dtype": "int16",
-          "byte_offset": 70176,
-          "length": 35088,
-          "byte_length": 70176
-        },
-        {
-          "name": "earth_az",
-          "dtype": "uint16",
-          "byte_offset": 140352,
-          "length": 35088,
-          "byte_length": 70176
-        },
-        {
-          "name": "earth_el",
-          "dtype": "int16",
-          "byte_offset": 210528,
-          "length": 35088,
-          "byte_length": 70176
-        },
-        {
-          "name": "earth_clearance",
-          "dtype": "int16",
-          "byte_offset": 280704,
-          "length": 35088,
-          "byte_length": 70176
-        },
-        {
-          "name": "sun_vis_pct",
-          "dtype": "uint8",
-          "byte_offset": 350880,
-          "length": 35088,
-          "byte_length": 35088
-        },
-        {
-          "name": "earth_vis_pct",
-          "dtype": "uint8",
-          "byte_offset": 385968,
-          "length": 35088,
-          "byte_length": 35088
-        }
-      ]
-    },
-    {
-      "id": "peak-near-shackleton",
-      "name": "Peak near Shackleton (Site 07)",
-      "lat_deg": -89.02,
-      "lon_deg_east": 141.0,
-      "program": "artemis",
-      "source": "PGDA Product 78 Site07; Mazarico et al. 2011",
-      "obs_height_m": 2.0,
-      "ground_height_m": 370.76,
-      "effective_radius_km": 300.0,
-      "terrain_z_min": -1273.98,
-      "terrain_z_max": 1245.36,
-      "files": {
-        "horizon": "data/horizon_peak-near-shackleton.json",
-        "tracks": "data/tracks_peak-near-shackleton.bin",
-        "terrain": "data/terrain_peak-near-shackleton.bin"
       },
       "variants": [
         "best",

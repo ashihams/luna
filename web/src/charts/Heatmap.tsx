@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
+import { parseUtc, lastStartDay } from '../data/science';
 import { usePlannerStore } from '../state/usePlannerStore';
 import { CellMetrics } from '../types';
 
@@ -52,8 +53,9 @@ export const Heatmap: React.FC = () => {
       }
     };
     updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    const observer = new ResizeObserver(updateSize);
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, []);
 
   // Month boundaries for 2027 and 2028
@@ -80,6 +82,7 @@ export const Heatmap: React.FC = () => {
   // Colormaps for metric modes
   const getColor = useCallback(
     (cell: CellMetrics, mode: string) => {
+      if (!cell.complete) return '#27272a';
       let val = 0;
       if (mode === 'power') val = cell.sun_fraction;
       else if (mode === 'comms') val = cell.earth_fraction;
@@ -281,6 +284,7 @@ export const Heatmap: React.FC = () => {
       const clickedDay = Math.floor((x - LEFT_MARGIN) / cellW);
       const clickedSiteIdx = Math.floor((y - TOP_MARGIN) / cellH);
 
+      if (!heatmapMatrix?.[clickedSiteIdx]?.[clickedDay]?.complete) return;
       if (clickedDay >= 0 && clickedDay < numDays) {
         setPlannedDayIndex(clickedDay);
       }
@@ -313,7 +317,7 @@ export const Heatmap: React.FC = () => {
       if (dayIdx >= 0 && dayIdx < numDays && siteIdx >= 0 && siteIdx < numSites) {
         const metrics = heatmapMatrix[siteIdx]?.[dayIdx];
         if (metrics) {
-          const baseDate = new Date(manifest.time.t0_utc);
+          const baseDate = parseUtc(manifest.time.t0_utc);
           baseDate.setUTCDate(baseDate.getUTCDate() + dayIdx);
           const dateStr = baseDate.toISOString().split('T')[0];
 
@@ -340,6 +344,7 @@ export const Heatmap: React.FC = () => {
   // Keyboard navigation for arrow keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement).closest('input, select, button, textarea')) return;
       if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
         e.preventDefault();
         if (e.key === 'ArrowLeft') {
@@ -362,12 +367,12 @@ export const Heatmap: React.FC = () => {
   }, [plannedDayIndex, selectedSiteIdx, numSites, sites, setPlannedDayIndex, setSelectedSiteId]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full flex flex-col select-none rounded-2xl overflow-hidden border border-white/10 bg-[#080808]">
+    <div ref={containerRef} className="heatmap-chart relative w-full h-full flex flex-col select-none rounded-2xl overflow-hidden border border-white/10 bg-[#080808]">
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0a0a0a]/90 backdrop-blur-xl text-xs">
         <div className="flex items-center space-x-2">
           <span className="font-serif text-white font-normal text-sm">Landing Feasibility Heatmap</span>
           <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-400">
-            (14 sites × 731 days, 2027–2028 | Click or Arrow keys to navigate)
+            (13 sites × 731 days, 2027–2028 | Click or Arrow keys to navigate)
           </span>
         </div>
 
@@ -416,7 +421,7 @@ export const Heatmap: React.FC = () => {
                     : 'bg-rose-950 text-rose-400 border border-rose-500/50'
                 }`}
               >
-                {tooltip.metrics.viable ? 'VIABLE' : 'FAILED'}
+                {!tooltip.metrics.complete ? 'INSUFFICIENT DATA' : tooltip.metrics.viable ? 'VIABLE' : 'FAILED'}
               </span>
             </div>
 
