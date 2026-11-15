@@ -4,9 +4,9 @@
 
 The planner uses precomputed LOLA 80 m terrain horizons and NAIF SPICE tracks. All 13 production sites were regenerated after correcting pixel registration, cache-coordinate handling, and site provenance. The API cross-check and production reproduction results are linked in [VALIDATION.md](VALIDATION.md).
 
-The current published-map comparison has a median absolute Sun difference of 1.06 percentage points; 3 body/site values remain outside the sampled 3×3 neighborhood. Comparison completion is not a pass certificate. Micro-siting is a hypothesis, not an established explanation.
+The corrected published-map comparison (using any-disc boundary search, documented in [PGDA_RERUN_RESULTS.md](PGDA_RERUN_RESULTS.md)) has a median absolute Sun difference of 1.07 percentage points and Earth difference of 0.18 percentage points; 7 sites agree within 1.1 points for Sun, and 8 sites agree within 0.4 points for Earth. Comparison completion is not a pass certificate. Micro-siting is a hypothesis, not an established explanation.
 
-Individual center-pixel disagreements remain large: 32.33 points for Connecting Ridge Sun and 26.23 for the alternate Malapert Sun estimate. Neighborhood inclusion does not validate either prediction.
+Individual center-pixel disagreements remain large: 32.31 points for Connecting Ridge Sun (44.47% vs 76.78%) and 26.20 for the alternate Malapert Sun estimate (54.76% vs 80.96%). Neighborhood inclusion does not validate either prediction.
 
 The old 20 m sensitivity report is withdrawn because misplaced windows and silent missing-data fallbacks invalidated it. Higher resolution has not been shown to improve accuracy. Production remains 80 m and shows a provisional uncertainty notice.
 

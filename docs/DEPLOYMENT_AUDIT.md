@@ -41,9 +41,9 @@ The landing page's fixed example result was removed and its copied code now uses
 
 ## Scientific status (replaces stale item 8)
 
-`pgda_compare.py` samples actual PGDA Product 69 rasters; the former claim that it uses only hardcoded reference constants is obsolete. The corrected comparison is completed, with a median absolute Sun difference of 1.06 points. Use the individual final rows in [VALIDATION.md](VALIDATION.md); earlier aggregate agreement-count claims are not used in the submission.
+`pgda_compare.py` samples actual PGDA Product 69 rasters; the former claim that it uses only hardcoded reference constants is obsolete. The corrected comparison using `any_disc_visible` is completed, with a median absolute Sun difference of 1.07 points and Earth difference of 0.18 points. Complete results are archived in [PGDA_RERUN_RESULTS.md](PGDA_RERUN_RESULTS.md) and [VALIDATION.md](VALIDATION.md); earlier aggregate agreement-count claims are not used in the submission.
 
-Accuracy is still not established: Connecting Ridge Sun differs from its published center pixel by **32.33 points**, the alternate Malapert point by **26.23 points**, and three body/site results lie outside their 3×3 ranges. Micro-siting remains a hypothesis. The 20 m study is withdrawn because 11/13 near windows excluded the observer and missing-data fallbacks contaminated the result. Valid 20 m comparison remains pending after source download timeout. Production remains 80 m; the displayed ±10–30-point ridge caution is provisional, not a measured confidence interval or a guaranteed bound.
+Accuracy is still not established: Connecting Ridge Sun differs from its published center pixel by **32.31 points** (44.47% vs 76.78%), the alternate Malapert point by **26.20 points** (54.76% vs 80.96%), and three body/site results lie outside their 3×3 ranges. Micro-siting remains a hypothesis. The 20 m study is withdrawn because 11/13 near windows excluded the observer and missing-data fallbacks contaminated the result. Valid 20 m comparison remains pending after source download timeout. Production remains 80 m; the displayed ±10–30-point ridge caution is provisional, not a measured confidence interval or a guaranteed bound.
 
 ## Reproduce
 

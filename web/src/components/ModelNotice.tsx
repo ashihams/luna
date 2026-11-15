@@ -10,8 +10,9 @@ export const ModelNotice: React.FC = () => (
       and has been withdrawn; higher resolution has not been shown to improve these results.
       Site coordinates are selected study points, and mission thresholds are editable assumptions.
       Earth LOS is geometric visibility of Earth’s center, not a radio-link guarantee.
-      The published-map comparator can miss disc visibility beside steep horizons; a corrected
-      rerun is pending—existing comparison figures are approximate.
+      The published-map comparison has been rerun with the corrected any-disc comparator
+      (median absolute Sun difference 1.07 pp; see docs); large ridge-crest disagreements
+      (±26–32 pp) remain due to DEM resolution and extreme local slopes.
     </p>
   </details>
 );

@@ -97,3 +97,24 @@ $env:PYTHONDONTWRITEBYTECODE='1'
 ```
 
 The witness reproduction uses the committed frozen historical horizon in `research/accuracy/`, checks its expected hash before running, and does not regenerate it. Raw vectors, test workspaces and logs stay under ignored `data/out_accuracy/`. Source snapshots, evidence, tests and this report are reviewable on the branch. Maintainer review is the next step required by rule 6.
+
+---
+
+## Addendum — Completed Full-Span Rerun (2026-11-15)
+
+The full 18.6-year rerun (163,165 hourly steps from 2009-07-13T17:33:17 UTC) using `pipeline/validate/accuracy_disc.py::any_disc_visible` has now been executed across all 13 candidate sites; see [PGDA_RERUN_RESULTS.md](PGDA_RERUN_RESULTS.md).
+
+Key empirical findings of the rerun:
+1. **Measured Aggregate Impact**:
+   - Solar Illumination: +0.00 to +0.04 percentage points across all sites (+0.02 pp at Connecting Ridge, corresponding to ~33 hours over 18.6 years).
+   - Earth Line-of-Sight: +0.00 to +0.18 percentage points across all sites (+0.04 pp at Connecting Ridge, +0.18 pp at Nobile Rim 1).
+2. **Persistence of Large Ridge Discrepancies**:
+   - Connecting Ridge Sun: 44.47% model vs 76.78% published (−32.31 pp).
+   - Malapert Site 23 Sun: 54.76% model vs 80.96% published (−26.20 pp).
+   - Malapert Site 23 Earth: 52.40% model vs 62.85% published (−10.45 pp).
+   These differences are confirmed to result from topographic grid resolution (80 m DEM vs 240 m smoothed raster) and extreme local slopes (>40 pp across 240 m), not from comparator search failure.
+3. **Summary Metrics**:
+   - Median absolute Sun difference: **1.07 pp** (was 1.06 pp).
+   - Median absolute Earth difference: **0.18 pp** (was 0.13 pp).
+   - 7 of 13 sites agree within <= 1.1 pp for Sun; 8 of 13 sites agree within <= 0.4 pp for Earth.
+
