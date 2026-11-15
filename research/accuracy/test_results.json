@@ -1,0 +1,82 @@
+{
+  "suites": [
+    {
+      "suite": "pytest",
+      "command": [
+        "D:\\project\\nasa space apps\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "pipeline/validate",
+        "-vv",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=data/out_accuracy/pytest-full"
+      ],
+      "cwd": "D:\\project\\nasa space apps",
+      "exit_code": 0,
+      "log": "data/out_accuracy/pytest.log"
+    },
+    {
+      "suite": "npm",
+      "command": [
+        "npm.cmd",
+        "test"
+      ],
+      "cwd": "D:\\project\\nasa space apps\\data\\out_accuracy\\npm-test-workspace",
+      "exit_code": 0,
+      "log": "data/out_accuracy/npm.log"
+    }
+  ],
+  "original_production_data_unchanged": true,
+  "production_file_count": 48,
+  "production_sha256": {
+    "web/public/data/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "web/public/data/catalog.json": "62ed210c756bf447bc92a7669e4204b2e8cd71648a653f08dcdba6d0bbf9a4e8",
+    "web/public/data/horizon_connecting-ridge-ext.json": "ad503a7e656ecf208a7da0b2a752cbc8289dac0a66c2cf1e2ee60483013c4294",
+    "web/public/data/horizon_connecting-ridge.json": "e4471130c43ba0050faf833860576e5595314f22f2855f29bfda7bda9430be65",
+    "web/public/data/horizon_de-gerlache-rim1.json": "2e8332cf3873367b98e6b0eb1dcdcb04565043eb8a4f0eaaba14529558204e03",
+    "web/public/data/horizon_de-gerlache-rim2.json": "4babb0ac8bd49069a5be969aa30f39e52fd0ac7e0d0a3fd6a0bbb67e68aa1ed3",
+    "web/public/data/horizon_faustini-rim-a.json": "ad1731c2f6b96efaf0206dd03ae4901a2dcbfa4dc4e386bd1e1b8d00eaad5232",
+    "web/public/data/horizon_haworth.json": "dc6165a7d9fcd21491ec54fd5632765b68814711f79083d8af3f3c5faecd82a0",
+    "web/public/data/horizon_leibnitz-beta.json": "75826fa976cc8e748491064d5e89e012882f79e7bad0874a2f24f38cb6056410",
+    "web/public/data/horizon_malapert-massif.json": "1976461fc0848dcd6dcd6004fb0247cbdd88e11d65c51273f9db1ef0ed9c21d6",
+    "web/public/data/horizon_malapert-site23.json": "0d41378b9c9e1a1b3d9c08c7f9a197c6d1ed929c87ecde5610a68843c9beef11",
+    "web/public/data/horizon_nobile-rim1.json": "25f0f434416b2d12118c0d196b021405280f3da8fb2ad838470a3d4fe494b814",
+    "web/public/data/horizon_nobile-rim2.json": "450d5f52720793d96afb78b9f32a5d7c2024df486420d88ba2045f6486dd3ffc",
+    "web/public/data/horizon_shackleton-rim.json": "a2889c1ab21d68fa8a498a5ded7e4264bce16a127d770935d7ea23d9da68c3a7",
+    "web/public/data/horizon_slater-plain.json": "adc6d2f4eaf3d795db59a2e2b5ca26befd8ac0f2c662d210ffb057033a5773a8",
+    "web/public/data/manifest.json": "090ef1747aa0198d47a2f45e4605aa62b4f25dc9237103ca301b6797af284a30",
+    "web/public/data/metrics-228a4c8673e3a1ab.bin": "228a4c8673e3a1abfc9ba9d12278b3c12f3db072544683a6c986fe9dc31fdb9e",
+    "web/public/data/metrics-6ea949ec6bf9cd56.bin": "6ea949ec6bf9cd565fe8ddeacec168a1e8337e8cbfce9ebd8b51440ab891db46",
+    "web/public/data/metrics-8bed5fdbcab2f638.bin": "8bed5fdbcab2f6387262bfd8ac7b7a36da0a252d67554d4949ee1402e4ed8cbc",
+    "web/public/data/metrics-fc78c2adf32da283.bin": "fc78c2adf32da283bbe18059010bddcf14b95f0d2cc57e7af6570f6d7f983680",
+    "web/public/data/pole_overview.bin": "894aa26566bfb4c67a03633ce8802a18e2467c24e8b5b03ec34946190cd17caf",
+    "web/public/data/pole_overview_meta.json": "16abb1dbe6305cf13f7d6e1d8963fb65ba4ced5aa450fa878d275a29f820734b",
+    "web/public/data/terrain_connecting-ridge-ext.bin": "1968ca216f88bbf214be03b28796d257474314f50329c7c7cf8418a38fe28dc5",
+    "web/public/data/terrain_connecting-ridge.bin": "e8770ee3b940fd0546b7dc41a91d017d6bfef8bbb186c656eb818f3e16a515f0",
+    "web/public/data/terrain_de-gerlache-rim1.bin": "00934018511d8b41fdb6fe5031a975e763658c5a272572eb46ac2c1600379ebc",
+    "web/public/data/terrain_de-gerlache-rim2.bin": "5086687b09f517a3db1b945d9d2f0195b9815288f6e023a02f8854f7a07132f7",
+    "web/public/data/terrain_faustini-rim-a.bin": "b632808c39b5892cea1708c9d0d0cdd096b7ee02087deabc168f16393b38c3c2",
+    "web/public/data/terrain_haworth.bin": "5baa8d4a945dcaddd4b1f1d93edbdeac99689f9fa55f59655691f13e7f60808f",
+    "web/public/data/terrain_leibnitz-beta.bin": "309d8701ee832a946d58c2e1b0226e9ddf089cf07a7526d9a078969ea345c575",
+    "web/public/data/terrain_malapert-massif.bin": "cf0416ea4c538dadb3cd92d019d1b23cf16d98fd92acc653f1a9fbf3609f4a54",
+    "web/public/data/terrain_malapert-site23.bin": "c9742ee769e28d90e7debe16d0fb71cbc5ff76fa24c93ba43ab2e44ee403b737",
+    "web/public/data/terrain_nobile-rim1.bin": "d08b9b8918cbf0242440802950d83fe3fdca27c8b05a09e756d333806448f9ac",
+    "web/public/data/terrain_nobile-rim2.bin": "a56fa7f9436f8a0b3ff93b776fdf5a585d2a9215822c85047f4cd114bc603a05",
+    "web/public/data/terrain_shackleton-rim.bin": "27de2b0e93d9f1588af830669bf64a0fd2f949dedb8933a7b5a0982021ffa4f6",
+    "web/public/data/terrain_slater-plain.bin": "10773b530b4bc7a90a306b169b4ab6179291925ee62d25e1bdc6cfb21d5edd44",
+    "web/public/data/tracks_connecting-ridge-ext.bin": "ab719f42cd565b173db2c9a7159f163a68e1d6d9cd22b48f3f3eca09e7ac955c",
+    "web/public/data/tracks_connecting-ridge.bin": "3770e635308a45d791d0542cd48143f19010d812c53c002413ea92969a5fb6e5",
+    "web/public/data/tracks_de-gerlache-rim1.bin": "ecade457734417427d5a0c9198cdf98a777f383220b26e44ec20dc28d9f823a1",
+    "web/public/data/tracks_de-gerlache-rim2.bin": "b9b4dcb0dd067e706a6b0bf779a7367d471cd1aa976e737d85e4c2bed68483c1",
+    "web/public/data/tracks_faustini-rim-a.bin": "acde69eaf99e25618b5014868f43f0c21c7d413d0ecf10cbb80e04a1f6d41395",
+    "web/public/data/tracks_haworth.bin": "c4ac505ff303bbcea0db6b4410c3ab402c003be7473b49fd073c58a2ae9cc78d",
+    "web/public/data/tracks_leibnitz-beta.bin": "9441ca6742772b2b93e418fa162d0efaec3219a2175cd6352fe3864048757d51",
+    "web/public/data/tracks_malapert-massif.bin": "8e41aa9b8a9ba04236a7001804ad9902d54c97065626f13ce2fde1dfae6390ad",
+    "web/public/data/tracks_malapert-site23.bin": "3365109da3240f3c09fc37f9be6217d6f3466cfeeef800d48e040107f1a879f3",
+    "web/public/data/tracks_nobile-rim1.bin": "e9bd583cde3baa79a794b11ff0d13545412abdb30930c386e7e670b9bfff4b2e",
+    "web/public/data/tracks_nobile-rim2.bin": "00658151a58dd62f0700262601468688d4a5b529106cc45ed0354b58395138b7",
+    "web/public/data/tracks_shackleton-rim.bin": "152b86be2017c7a83a0eb9cecb5a520dc7b622a742de2863e5ff4c2285df4ba3",
+    "web/public/data/tracks_slater-plain.bin": "6b6062bd894230c2ad3352401118809bcea835e132b993e283a64d9d5284f540"
+  }
+}

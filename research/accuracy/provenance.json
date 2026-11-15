@@ -1,0 +1,202 @@
+{
+  "sources": [
+    {
+      "path": "research/accuracy/sources/product69.html",
+      "url": "https://pgda.gsfc.nasa.gov/products/69",
+      "accessed": "2026-11-15",
+      "sha256": "aca046555f29da9fcbe926c0b90450ce69e78a44cc406bc2a60d9a010eb3fe42",
+      "bytes": 27981,
+      "access": "Downloaded source"
+    },
+    {
+      "path": "research/accuracy/sources/README_ILLUMINATION_2016.TXT",
+      "url": "https://imbrium.mit.edu/EXTRAS/ILLUMINATION/README_ILLUMINATION_2016.TXT",
+      "accessed": "2026-11-15",
+      "sha256": "f806f9c7fb410b17dd75c2f44f91755b5ca890ac047004a1e8fbb819c24b9ec6",
+      "bytes": 2016,
+      "access": "Downloaded source"
+    },
+    {
+      "path": "research/accuracy/sources/AVGVISIB_65S_240M_201608.LBL",
+      "url": "https://imbrium.mit.edu/EXTRAS/ILLUMINATION/IMG/AVGVISIB_65S_240M_201608.LBL",
+      "accessed": "2026-11-15",
+      "sha256": "10b0d6d881713d6bd4d61a30cc64da6d53934e2c9a8cc702b36a5cd758751b03",
+      "bytes": 4096,
+      "access": "Downloaded source"
+    },
+    {
+      "path": "research/accuracy/sources/AVGVISIB_65S_240M_201608_EARTH.LBL",
+      "url": "https://imbrium.mit.edu/EXTRAS/ILLUMINATION/IMG/AVGVISIB_65S_240M_201608_EARTH.LBL",
+      "accessed": "2026-11-15",
+      "sha256": "eb99d4e4a0bd3508e95dc87e0f65663452db0c20dcadaf272ebf27c7ce418913",
+      "bytes": 4114,
+      "access": "Downloaded source"
+    },
+    {
+      "path": "research/accuracy/sources/polar-img-index.html",
+      "url": "https://imbrium.mit.edu/DATA/LOLA_GDR/POLAR/IMG/",
+      "accessed": "2026-11-15",
+      "sha256": "37a6cbec0a4df082239e180c89758e32338cb2666ad5940d17cbbcf4eb7e07f2",
+      "bytes": 23551,
+      "access": "Downloaded source"
+    },
+    {
+      "path": "research/accuracy/sources/LDEM_60S_240M.LBL",
+      "url": "https://imbrium.mit.edu/DATA/LOLA_GDR/POLAR/IMG/LDEM_60S_240M.LBL",
+      "accessed": "2026-11-15",
+      "sha256": "dde15a7f2a64ff8d744913c31d606ef572a992c74a44a72356ff91ca9cf4bfcb",
+      "bytes": 4991,
+      "access": "Downloaded source"
+    },
+    {
+      "path": "research/accuracy/sources/gdal-geotransforms.html",
+      "url": "https://gdal.org/en/stable/tutorials/geotransforms_tut.html",
+      "accessed": "2026-11-15",
+      "sha256": "a34a6497b82d7c02cfea80d8bf5db806b7c389207249ed234fcbc386f2e774d9",
+      "bytes": 13935,
+      "access": "Downloaded source"
+    },
+    {
+      "path": "data/cache/pgda69/AVGVISIB_65S_240M_201608.TIF",
+      "url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608.TIF",
+      "accessed": "2026-11-15",
+      "sha256": "822fbf4618852311d4f494012e74e9cfb0147807a54ecb3302293c4266d2068d",
+      "bytes": 60394652,
+      "access": "Read previously downloaded file; no new download"
+    },
+    {
+      "path": "data/cache/pgda69/AVGVISIB_65S_240M_201608_EARTH.TIF",
+      "url": "https://pgda.gsfc.nasa.gov/data/MoonIllumination/AVGVISIB_65S_240M_201608_EARTH.TIF",
+      "accessed": "2026-11-15",
+      "sha256": "8a6d5fa8079c83e2159adf58ce33cd1cd9c09be6c19023bf5b6cc304f51568b7",
+      "bytes": 22963503,
+      "access": "Read previously downloaded file; no new download"
+    },
+    {
+      "path": "data/cache/kernels/naif0012.tls",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls",
+      "accessed": "2026-11-15",
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "bytes": 5257,
+      "access": "Read previously downloaded kernel; used only for frozen-horizon reproduction"
+    },
+    {
+      "path": "data/cache/kernels/pck00011.tpc",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/pck00011.tpc",
+      "accessed": "2026-11-15",
+      "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1",
+      "bytes": 131226,
+      "access": "Read previously downloaded kernel; used only for frozen-horizon reproduction"
+    },
+    {
+      "path": "data/cache/kernels/de421.bsp",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/a_old_versions/de421.bsp",
+      "accessed": "2026-11-15",
+      "sha256": "08b20db2ae22488650641c5a9033e5bfda4b1c4b440cfeaf20f621cfa18ecdb3",
+      "bytes": 16790528,
+      "access": "Read previously downloaded kernel; used only for frozen-horizon reproduction"
+    },
+    {
+      "path": "data/cache/kernels/moon_pa_de421_1900-2050.bpc",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/moon_pa_de421_1900-2050.bpc",
+      "accessed": "2026-11-15",
+      "sha256": "656f90616403d75a75f0cd6c8830fc5b44f8cb4facb5ccb8915e752b397520cf",
+      "bytes": 1770496,
+      "access": "Read previously downloaded kernel; used only for frozen-horizon reproduction"
+    },
+    {
+      "path": "data/cache/kernels/moon_080317.tf",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/satellites/moon_080317.tf",
+      "accessed": "2026-11-15",
+      "sha256": "78732477b96f9863e7b0d65bcee3c22b8707ca5ed0db56d1173319cb2e8c7993",
+      "bytes": 21437,
+      "access": "Read previously downloaded kernel; used only for frozen-horizon reproduction"
+    }
+  ],
+  "published_raster_metadata": {
+    "AVGVISIB_65S_240M_201608.TIF": {
+      "crs_wkt": "PROJCS[\"Moon2000_spole\",GEOGCS[\"GCS_Moon\",DATUM[\"D_Moon_2000\",SPHEROID[\"Moon_2000_IAU_IAG\",1737400,0]],PRIMEM[\"Reference_Meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH]]",
+      "geotransform": [
+        -770400.0,
+        240.0,
+        0.0,
+        770400.0,
+        0.0,
+        -240.0
+      ],
+      "shape": [
+        6420,
+        6420
+      ],
+      "scales": [
+        4e-05
+      ],
+      "offsets": [
+        0.0
+      ],
+      "nodata": -32768.0,
+      "tags": {
+        "DATA_SET_ID": "\"LRO-L-LOLA-4-GDR-V1.0\"",
+        "INSTRUMENT_ID": "\"LOLA\"",
+        "INSTRUMENT_NAME": "\"LUNAR ORBITER LASER ALTIMETER\"",
+        "PRODUCER_INSTITUTION_NAME": "\"GODDARD SPACE FLIGHT CENTER\"",
+        "PRODUCT_CREATION_TIME": "2016-09-15T00:00:00",
+        "PRODUCT_ID": "\"AVGVISIB_65S_240M_201608\"",
+        "START_TIME": "2009-07-13T17:33:17.246",
+        "STOP_TIME": "2013-07-18T14:12:13",
+        "TARGET_NAME": "MOON",
+        "AREA_OR_POINT": "Area"
+      },
+      "first_pixel_center": [
+        -770280.0,
+        770280.0
+      ],
+      "first_pixel_corner": [
+        -770400.0,
+        770400.0
+      ]
+    },
+    "AVGVISIB_65S_240M_201608_EARTH.TIF": {
+      "crs_wkt": "PROJCS[\"Moon2000_spole\",GEOGCS[\"GCS_Moon\",DATUM[\"D_Moon_2000\",SPHEROID[\"Moon_2000_IAU_IAG\",1737400,0]],PRIMEM[\"Reference_Meridian\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH]]",
+      "geotransform": [
+        -770400.0,
+        240.0,
+        0.0,
+        770400.0,
+        0.0,
+        -240.0
+      ],
+      "shape": [
+        6420,
+        6420
+      ],
+      "scales": [
+        4e-05
+      ],
+      "offsets": [
+        0.0
+      ],
+      "nodata": -32768.0,
+      "tags": {
+        "DATA_SET_ID": "\"LRO-L-LOLA-4-GDR-V1.0\"",
+        "INSTRUMENT_ID": "\"LOLA\"",
+        "INSTRUMENT_NAME": "\"LUNAR ORBITER LASER ALTIMETER\"",
+        "PRODUCER_INSTITUTION_NAME": "\"GODDARD SPACE FLIGHT CENTER\"",
+        "PRODUCT_CREATION_TIME": "2016-09-15T00:00:00",
+        "PRODUCT_ID": "\"AVGVISIB_65S_240M_201608_EARTH\"",
+        "START_TIME": "2009-07-13T17:33:17.246",
+        "STOP_TIME": "2013-07-18T14:12:13",
+        "TARGET_NAME": "MOON",
+        "AREA_OR_POINT": "Area"
+      },
+      "first_pixel_center": [
+        -770280.0,
+        770280.0
+      ],
+      "first_pixel_corner": [
+        -770400.0,
+        770400.0
+      ]
+    }
+  }
+}
