@@ -23,6 +23,7 @@ import spiceypy as spice
 
 from pipeline.config_loader import load_config, load_sites, project_root, cache_dir
 from pipeline.ephemeris import furnish_kernels
+from pipeline.validate.accuracy_disc import any_disc_visible
 from pipeline.terrain import acquire_site_levels
 from pipeline.horizon import compute_horizon, get_site_local_frame
 
@@ -129,11 +130,18 @@ def evaluate_visibility(az: np.ndarray,
                         rho: np.ndarray,
                         horizon_deg: np.ndarray,
                         az_step_deg: float = 0.5) -> tuple[float, float]:
-    """
-    Evaluate visibility over horizon profile.
+    """Evaluate visibility over horizon profile using per-timestep disc search.
+
+    Uses any_disc_visible from accuracy_disc.py, which searches the full
+    apparent disc boundary across each horizon segment and can find clearance
+    beside a ridge, not only at the center azimuth.  The old center-azimuth
+    upper-limb shortcut (el + rho > horizon at center az) is kept as the second
+    return value for regression comparison and diagnostics.
+
     Returns:
-      any_fraction_pct: upper limb (el + rho > horizon) visible percentage
-      center_pct: center (el > horizon) visible percentage
+      any_frac_pct: fraction of timesteps (%) where any part of disc clears horizon
+      center_pct:   fraction (%) where the upper limb at center azimuth clears
+                    horizon (legacy approximate comparator; retained for diagnostics)
     """
     n_az = len(horizon_deg)
     idx = (az / az_step_deg) % n_az
@@ -142,9 +150,30 @@ def evaluate_visibility(az: np.ndarray,
     f = idx - i0
     h_interp = (1.0 - f) * horizon_deg[i0] + f * horizon_deg[i1]
 
-    any_frac_pct = float(np.mean(el + rho > h_interp) * 100.0)
-    center_pct = float(np.mean(el > h_interp) * 100.0)
+    # Legacy comparator: upper limb at center azimuth only
+    center_pct = float(np.mean(el + rho > h_interp) * 100.0)
 
+    # Corrected comparator: search the spherical disc boundary per timestep.
+    # Skip the full search when disc is comfortably above or below the horizon
+    # at the center azimuth to keep cost proportional to near-horizon count.
+    h_arr = np.asarray(horizon_deg, dtype=float)
+    vis_flags = np.empty(len(az), dtype=bool)
+    for i in range(len(az)):
+        center_clear = bool(el[i] + rho[i] > h_interp[i])
+        if center_clear:
+            vis_flags[i] = True
+        elif el[i] + rho[i] < h_interp[i] - 2.0 * rho[i]:
+            # Too far below even with disc width; skip expensive search
+            vis_flags[i] = False
+        else:
+            try:
+                vis_flags[i], _ = any_disc_visible(float(az[i]), float(el[i]),
+                                                    float(rho[i]), h_arr, az_step_deg)
+            except (ValueError, RuntimeError):
+                # Polar or degenerate geometry: fall back to center-azimuth test
+                vis_flags[i] = center_clear
+
+    any_frac_pct = float(np.mean(vis_flags) * 100.0)
     return any_frac_pct, center_pct
 
 

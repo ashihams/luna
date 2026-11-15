@@ -1,0 +1,31 @@
+{
+  "status": "STOPPED_FOR_MAINTAINER_REVIEW",
+  "date": "2026-11-15",
+  "branch": "accuracy-diagnostics",
+  "reason": "Task 1 exposed a systematic false-negative defect in the published-map visibility comparator. Rule 6 requires stopping before later tasks.",
+  "engine_verdict": "unknown: terrain horizon accuracy not determined; comparator definition mismatch demonstrated",
+  "like_for_like_run_performed": false,
+  "terrain_input": null,
+  "sample_selection_performed": false,
+  "requested_sampling": {"site_neighborhoods": 13, "pixels_per_neighborhood": 9, "additional_random_pixels": 300, "random_latitude_band_deg": [-90, -85]},
+  "center_convention": "affine(column + 0.5, row + 0.5)",
+  "corner_convention": "affine(column, row), upper-left corner",
+  "convention_unit_test_passed": true,
+  "center_visibility_run_performed": false,
+  "corner_visibility_run_performed": false,
+  "per_pixel": [],
+  "statistics": {
+    "center": {"Sun": null, "Earth": null},
+    "corner": {"Sun": null, "Earth": null}
+  },
+  "uncomputed_statistics": ["median_absolute_difference_pp", "p90_absolute_difference_pp", "maximum_absolute_difference_pp", "fraction_within_1_pp", "fraction_within_3_pp"],
+  "scatter_plot": null,
+  "source_metadata": "research/accuracy/provenance.json",
+  "separate_frozen_80m_comparator_reproduction": "research/accuracy/criterion_diagnostic.json",
+  "aggregate_impact_of_comparator_defect_pp": null,
+  "source_unknowns": ["exact LDEM_65S_240M revision", "observer height", "exact illumination simulation epoch and endpoint convention", "ephemeris kernels and aberration convention", "reference horizon sampling and finite-disc algorithm"],
+  "task_2": "NOT_STARTED_REVIEW_GATE",
+  "task_3": "NOT_STARTED_REVIEW_GATE",
+  "task_4": "NOT_STARTED_REVIEW_GATE",
+  "task_5": "NOT_STARTED_REVIEW_GATE"
+}

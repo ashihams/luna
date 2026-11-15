@@ -55,6 +55,8 @@ The old 20 m sensitivity study is withdrawn: misplaced windows and silent zero-g
 
 Connecting Ridge is now −89.46°, −136.68°; the extension is −88.99°, −104.47°. The previous positive longitudes were wrong. Peak near Shackleton is associated with PGDA Site07, not Site04. All 13 production sites were rebuilt with corrected pixel-center sampling. See [SOURCES.md](docs/SOURCES.md) and [the self-review](docs/TIER1_REPORT.md).
 
+> **Comparator limitation (pending rerun):** The published-map comparator previously checked only the top of each disc at the body’s center azimuth. It can miss disc visibility beside a ridge, so it can undercount any-disc visible timesteps (never overcount). Two concrete counterexamples at Connecting Ridge are documented in [ACCURACY_REPORT.md](docs/ACCURACY_REPORT.md). The corrected comparator (`accuracy_disc.any_disc_visible`) is now used in `pgda_compare.py`; a full 18.6-year rerun is pending to quantify the aggregate effect. Existing V4 figures in VALIDATION.md are labeled as historical outputs of the approximate comparator.
+
 ## 5. Reading the results
 
 Sun fraction is the average fraction of the solar disc visible during the selected stay. Dark gaps use the selected disc threshold. Earth LOS tests Earth's center against terrain plus the antenna mask. These are geometric outputs; the app does not simulate battery survival, lander safety, terrain traversability, or a radio link budget.

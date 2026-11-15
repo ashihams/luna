@@ -29,7 +29,11 @@ The test uses the configured site coordinates and a reference-sphere altitude of
 
 ## V4 — Published map comparison
 
-**Status: comparison completed; disagreements remain.** Current results: [pgda_comparison.json](pgda_comparison.json). Source: [NASA PGDA Product 69](https://pgda.gsfc.nasa.gov/products/69).
+**Status: HISTORICAL APPROXIMATE — comparator limitation identified; rerun pending.**
+
+> **Note:** A concrete definition mismatch in the comparator was demonstrated after this comparison was run: the evaluator checked the disc's upper limb only at its center azimuth, missing visibility beside steep ridges. Two false-negative timesteps at Connecting Ridge (Sun and Earth) are documented in [ACCURACY_REPORT.md](ACCURACY_REPORT.md). The corrected comparator (`accuracy_disc.any_disc_visible`) is now in production in `pgda_compare.py`. The aggregate impact on the numbers below has not been measured. The existing table is retained as a historical record; it should not be used as a final accuracy figure.
+
+**Previous status:** comparison completed; disagreements remain. Current results: [pgda_comparison.json](pgda_comparison.json). Source: [NASA PGDA Product 69](https://pgda.gsfc.nasa.gov/products/69).
 
 We sample actual 240 m Sun/Earth rasters at each configured point, including the center and 3×3 neighborhood. The model uses corrected 80 m terrain, a 0 m observer, 163,165 hourly steps from 2009-07-13T17:33:17 UTC, and an upper-limb visibility approximation. The exact epoch equivalence to the reference map has not been independently established. The upper-limb test at center azimuth approximates visibility of any part of the disc across a varying skyline. These are limitations, not established causes of the differences.
 

@@ -1,0 +1,59 @@
+{
+  "status": "comparator_defect_reproduced",
+  "scope": "Frozen 80 m Connecting Ridge horizon; NOT a like-for-like published-map test",
+  "horizon_file": "research/accuracy/frozen_horizon_0m_connecting-ridge.json",
+  "horizon_sha256": "fb12650208a29fa726a2ac9502eaca8c4d7e81581eadf2ebe1633be3ac42d5fc",
+  "original_horizon_file": "data/out_longrun_dem80/horizon_0m_connecting-ridge.json",
+  "config_sha256": "b51078756baa4260439d4e0eb315bfb0cce4df2a02371724761a6bbbafdb8a98",
+  "sites_sha256": "91cf771ae541d9bfe58674e1c74f0bd9445be33c33ea10e338c37a0914a443dc",
+  "kernel_sha256": {
+    "naif0012.tls": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+    "pck00011.tpc": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1",
+    "de421.bsp": "08b20db2ae22488650641c5a9033e5bfda4b1c4b440cfeaf20f621cfa18ecdb3",
+    "moon_pa_de421_1900-2050.bpc": "656f90616403d75a75f0cd6c8830fc5b44f8cb4facb5ccb8915e752b397520cf",
+    "moon_080317.tf": "78732477b96f9863e7b0d65bcee3c22b8707ca5ed0db56d1173319cb2e8c7993"
+  },
+  "epoch_utc": "2009-07-13T17:33:17",
+  "steps": 163165,
+  "cadence_seconds": 3600,
+  "observer_height_m": 0,
+  "ground_height_m": 1945.05,
+  "aberration": "LT+S",
+  "moon_vector_sha256": "d9ae3fb42fbd5ffa540ae61849634ebc7bc42b37882b18842584f9a4d99dc45f",
+  "results": [
+    {
+      "body": "Sun",
+      "sample_index": 5606,
+      "utc": "2010-03-04T07:33:16.998",
+      "center_az_deg": 94.1588243792005,
+      "center_el_deg": -1.3200269800135789,
+      "radius_deg": 0.268289939666136,
+      "center_horizon_deg": -1.0482590121825102,
+      "old_upper_limb_visible": false,
+      "proposed_any_disc_visible": true,
+      "witness_az_deg": 94.21699314208789,
+      "witness_el_deg": -1.0581160223515609,
+      "witness_horizon_deg": -1.0611724775435107,
+      "witness_separation_deg": 0.2682899396679596,
+      "witness_clearance_deg": 0.0030564551919498584
+    },
+    {
+      "body": "Earth",
+      "sample_index": 2188,
+      "utc": "2009-10-12T21:33:17.001",
+      "center_az_deg": 136.73641742087202,
+      "center_el_deg": -2.189036432920847,
+      "radius_deg": 0.9885137568354134,
+      "center_horizon_deg": -1.1986783235159484,
+      "old_upper_limb_visible": false,
+      "proposed_any_disc_visible": true,
+      "witness_az_deg": 136.5,
+      "witness_el_deg": -1.2291836945003418,
+      "witness_horizon_deg": -1.254,
+      "witness_separation_deg": 0.9885137568344993,
+      "witness_clearance_deg": 0.024816305499658187
+    }
+  ],
+  "aggregate_impact_pp": null,
+  "reason": "Stop after first witness per body; overall impact not measured"
+}

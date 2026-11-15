@@ -37,3 +37,11 @@ web/public/data/catalog.json
 web/public/data/metrics-*.bin
 
 temp_pytest/
+
+# Accuracy diagnostics: raw inputs, vectors and isolated test workspaces
+data/out_accuracy/
+research/accuracy/**/*.tif
+research/accuracy/**/*.TIF
+research/accuracy/**/*.IMG
+research/accuracy/**/*.npy
+research/accuracy/**/*.npz
