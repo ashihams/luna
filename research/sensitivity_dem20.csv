@@ -1,0 +1,40 @@
+Site ID,Site Name,Variant,Sun Fraction (%),Earth LOS (%),Max Dark Gap (h),Viable Windows,Slip Tolerance (days)
+connecting-ridge,Connecting Ridge (Site 01),flat,53.57,48.63,3278.0,187,14
+connecting-ridge,Connecting Ridge (Site 01),dem80,71.53,53.4,258.5,281,15
+connecting-ridge,Connecting Ridge (Site 01),dem20,55.07,53.38,370.5,205,15
+connecting-ridge-ext,Connecting Ridge Extension,flat,53.39,49.26,2029.0,188,14
+connecting-ridge-ext,Connecting Ridge Extension,dem80,20.35,33.4,635.5,36,5
+connecting-ridge-ext,Connecting Ridge Extension,dem20,34.54,49.26,2029.0,141,14
+shackleton-rim,Peak near Shackleton (Site 04),flat,53.44,47.19,1963.0,180,13
+shackleton-rim,Peak near Shackleton (Site 04),dem80,67.57,49.02,359.0,236,12
+shackleton-rim,Peak near Shackleton (Site 04),dem20,68.74,52.05,221.5,248,13
+de-gerlache-rim1,de Gerlache Rim 1 (Site 11),flat,52.43,52.98,650.5,190,15
+de-gerlache-rim1,de Gerlache Rim 1 (Site 11),dem80,43.18,57.07,375.0,169,14
+de-gerlache-rim1,de Gerlache Rim 1 (Site 11),dem20,44.0,51.31,665.5,173,15
+de-gerlache-rim2,de Gerlache Rim 2,flat,52.04,54.18,536.5,189,15
+de-gerlache-rim2,de Gerlache Rim 2,dem80,37.59,51.48,497.0,135,12
+de-gerlache-rim2,de Gerlache Rim 2,dem20,48.97,52.19,536.5,177,15
+faustini-rim-a,Faustini Rim A,flat,52.32,50.48,497.0,177,13
+faustini-rim-a,Faustini Rim A,dem80,37.56,47.23,519.0,134,12
+faustini-rim-a,Faustini Rim A,dem20,50.34,47.08,497.0,157,12
+haworth,Haworth,flat,50.7,64.58,446.0,210,17
+haworth,Haworth,dem80,31.47,36.9,505.0,62,8
+haworth,Haworth,dem20,28.2,64.58,496.0,92,10
+malapert-massif,Malapert Massif,flat,50.5,70.37,427.0,226,17
+malapert-massif,Malapert Massif,dem80,34.46,64.61,584.5,114,9
+malapert-massif,Malapert Massif,dem20,39.17,70.37,491.0,169,13
+leibnitz-beta,Leibnitz Beta Plateau (Site 20),flat,50.68,70.28,417.5,227,16
+leibnitz-beta,Leibnitz Beta Plateau (Site 20),dem80,34.53,45.83,668.5,93,11
+leibnitz-beta,Leibnitz Beta Plateau (Site 20),dem20,43.28,63.31,499.5,188,15
+nobile-rim1,Nobile Rim 1,flat,50.74,68.89,417.5,222,16
+nobile-rim1,Nobile Rim 1,dem80,31.42,33.63,508.0,54,7
+nobile-rim1,Nobile Rim 1,dem20,45.63,56.99,489.5,183,15
+nobile-rim2,Nobile Rim 2,flat,50.81,66.89,401.5,220,15
+nobile-rim2,Nobile Rim 2,dem80,45.42,65.9,423.0,185,13
+nobile-rim2,Nobile Rim 2,dem20,46.52,66.89,435.5,192,14
+malapert-site23,Malapert Massif (Site 23),flat,50.51,70.29,427.5,228,17
+malapert-site23,Malapert Massif (Site 23),dem80,76.49,56.2,316.0,289,17
+malapert-site23,Malapert Massif (Site 23),dem20,38.09,70.28,496.0,166,13
+slater-plain,Slater Plain,flat,52.24,57.52,549.5,204,17
+slater-plain,Slater Plain,dem80,12.42,44.15,2105.0,50,9
+slater-plain,Slater Plain,dem20,41.52,53.79,530.0,178,15

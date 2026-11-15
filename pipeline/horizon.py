@@ -184,7 +184,7 @@ def compute_horizon_for_raster_level(level: dict,
 
     # Invert affine transform to get fractional pixel row/col indices:
     inv_transform = ~transform
-    cols, rows = inv_transform @ (proj_x, proj_y)
+    cols, rows = inv_transform * (proj_x, proj_y)
 
     # Sample heights using bilinear interpolation (order=1)
     # Any point outside the raster bounds is marked as NaN
@@ -294,6 +294,12 @@ def compute_horizon(site: dict,
                 ("mid", (15000.0, 60000.0, 120.0)),
                 ("far", (60000.0, 300000.0, 400.0))
             ]
+    elif variant == "dem20":
+        levels_to_run = [
+            ("near", (20.0, 15000.0, 40.0)),
+            ("mid", (15000.0, 60000.0, 120.0)),
+            ("far", (60000.0, 300000.0, 400.0))
+        ]
     else:
         for lvl_name in ["near", "mid", "far"]:
             if lvl_name in levels and levels[lvl_name] is not None:
@@ -338,7 +344,7 @@ def sample_point_height(level: dict, lat_deg: float, lon_deg_east: float, R_moon
 
     x, y = transformer.transform(lon_deg_east, lat_deg)
     inv_t = ~transform
-    col, row = inv_t @ (x, y)
+    col, row = inv_t * (x, y)
 
     H, W = data.shape
     if 0 <= row < H - 1 and 0 <= col < W - 1:

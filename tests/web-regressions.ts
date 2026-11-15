@@ -128,4 +128,4 @@ assert.equal(usePlannerStore.getState().slipDays,0);
 // Racing selections must retain the last requested site's horizon and tracks.
 await Promise.all([usePlannerStore.getState().setSelectedSiteId('shackleton-rim'),usePlannerStore.getState().setSelectedSiteId('nobile-rim2')]);
 assert.equal(usePlannerStore.getState().currentHorizon?.site_id,'nobile-rim2');
-console.log('PASS: UTC, horizon schema/interpolation, 10,234 compact/full window comparisons, thresholds, data boundaries, rescue filtering, site-selection races, lunar great-circle distance & rescue ranking (Task A).');
+console.log('PASS: UTC, horizon schema/interpolation, 9,503 compact/full window comparisons, thresholds, data boundaries, rescue filtering, site-selection races, lunar great-circle distance & rescue ranking (Task A).');

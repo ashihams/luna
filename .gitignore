@@ -11,6 +11,8 @@ venv/
 # Data cache (large raw DEMs and kernels)
 data/cache/*
 !data/cache/.gitignore
+data/out_longrun/
+data/out_dem20/
 
 # Generated web data (tracked for zero-setup static deployment)
 # web/public/data/ is included so static site works directly without running 180MB DEM pipeline

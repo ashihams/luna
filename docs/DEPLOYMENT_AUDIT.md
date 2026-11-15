@@ -10,13 +10,13 @@ Initial verdict: genuine precomputed data and functioning desktop metrics, with 
 - Shared Sun/Earth threshold functions now drive metrics, sky markers, live status, and countdowns. The antenna mask follows terrain, the elevation axis adapts to the displayed tracks, and the 3D illumination no longer applies an arbitrary −0.5° cutoff. The Why Box distinguishes partial illumination from a threshold-defined dark gap.
 - Added mobile constraint/rescue panels, always-accessible site/date controls, a scrollable heatmap, and an explicit-height 3D scene. Fixed arrow-key handling so sliders retain keyboard input. Time scrubbing updates an existing WebGL canvas rather than rebuilding it.
 - Made all exported timestamps explicitly UTC, with defensive UTC parsing. Day and slip limits account for stay duration; incomplete windows are gray/unavailable and excluded from rescue candidates.
-- Replaced eager fetching of all full tracks with a lossless compact visibility bundle plus the selected site's full track. All 10,234 windows produce identical complete-window metrics to the full-track calculation. All-site visibility transfer falls from about 1.98 MB to 329 KB compressed. Initial JS is about 69 KB compressed; Three.js loads on demand.
+- Replaced eager fetching of all full tracks with a lossless compact visibility bundle plus the selected site's full track. All 9,503 windows (13 sites × 731 days) produce identical complete-window metrics to the full-track calculation. All-site visibility transfer falls from about 1.98 MB to 329 KB compressed. Initial JS is about 69 KB compressed; Three.js loads on demand.
 - Added a revalidated catalog and content-versioned data requests, avoiding the previous immutable-manifest cache trap. Stable data paths now revalidate.
 - Removed unsupported published-map and timing claims from the landing page/README and refreshed the demo script. The exploratory PGDA script cannot certify V4 or overwrite its status with PASS. The Horizons checker records errors, requires all 12 comparisons, refreshes existing documentation, and exits nonzero on incomplete/failed runs.
 
 ### Verification of fixes
 
-- `npm test`: UTC parsing, horizon schema and wrap interpolation, 10,234 compact/full window comparisons, independently scanned thresholds, invalid-window rejection, rescue limits, and concurrent site-selection regression checks pass.
+- `npm test`: UTC parsing, horizon schema and wrap interpolation, 9,503 compact/full window comparisons, independently scanned thresholds, invalid-window rejection, rescue limits, and concurrent site-selection regression checks pass.
 - Python validation: **9 tests pass**, including a regression that makes all Horizons queries fail and verifies the result is INCOMPLETE rather than PASS.
 - Live NASA Horizons run: **12/12 comparisons pass**; recorded in [horizons-results.json](horizons-results.json) and [VALIDATION.md](VALIDATION.md).
 - Production build succeeds with 3D split into separate chunks.
